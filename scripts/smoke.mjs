@@ -1,5 +1,5 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
-const files=['dist/index.html','dist/discord-colored-text-generator.html','dist/privacy.html','dist/terms-of-service.html','dist/sitemap.xml','dist/robots.txt','dist/_redirects'];
+const files=['dist/index.html','dist/discord-colored-text-generator.html','dist/privacy.html','dist/terms-of-service.html','dist/sitemap.xml','dist/robots.txt','dist/_redirects','functions/_middleware.js'];
 for (const f of files) { if (!existsSync(f)) throw new Error(`missing ${f}`); }
 if (!existsSync('functions/_middleware.js')) throw new Error('missing Pages middleware for host canonicalization');
 const assetDir='dist/assets';
@@ -40,7 +40,19 @@ for (const forbidden of ['free font downloads','download TTF','install fonts','w
   if (home.toLowerCase().includes(forbidden.toLowerCase())) throw new Error(`home contains forbidden claim: ${forbidden}`);
 }
 if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('Sitemap: https://fontgenerators.app/sitemap.xml')) throw new Error('robots missing noindex/ sitemap signals');
-if (redirects.includes('www.fontgenerators.app')) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level www-to-apex redirects; use Cloudflare Redirect/Bulk Redirect rules instead');
-for (const s of ['/discord-colored-text-generator/ /discord-colored-text-generator 301','/privacy/ /privacy 301','/terms-of-service/ /terms-of-service 301']) if (!redirects.includes(s)) throw new Error(`redirects missing clean URL rule: ${s}`);
-if (!middleware.includes("WWW_HOST = 'www.fontgenerators.app'") || !middleware.includes("APEX_HOST = 'fontgenerators.app'") || !middleware.includes('Response.redirect')) throw new Error('middleware missing www-to-apex redirect logic');
+if (redirects.includes('www.fontgenerators.app')) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level www-to-apex redirects; Pages middleware handles host canonicalization instead');
+for (const s of ['/discord-colored-text-generator/ /discord-colored-text-generator 301','/privacy/ /privacy 301','/terms-of-service/ /terms-of-service 301']) if (!redirects.includes(s)) throw new Error(`redirects missing clean URL fallback rule: ${s}`);
+for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/discord-colored-text-generator/', '/terms-of-service/']) {
+  if (!middleware.includes(s)) throw new Error(`canonical middleware missing ${s}`);
+}
+const { onRequest } = await import('../functions/_middleware.js');
+async function middlewareSmoke(url) {
+  return onRequest({ request: new Request(url), next: () => new Response('next ok', { status: 200 }) });
+}
+const wwwRedirect = await middlewareSmoke('https://www.fontgenerators.app/discord-colored-text-generator/?utm_source=test');
+if (wwwRedirect.status !== 301 || wwwRedirect.headers.get('location') !== 'https://fontgenerators.app/discord-colored-text-generator?utm_source=test') throw new Error('middleware must 301 www legacy tool URL to apex clean URL and preserve query');
+const slashRedirect = await middlewareSmoke('https://fontgenerators.app/terms/');
+if (slashRedirect.status !== 301 || slashRedirect.headers.get('location') !== 'https://fontgenerators.app/terms-of-service') throw new Error('middleware must preserve legacy clean-route redirects');
+const passThrough = await middlewareSmoke('https://fontgenerators.app/');
+if (passThrough.status !== 200 || await passThrough.text() !== 'next ok') throw new Error('middleware should pass canonical apex clean routes through');
 console.log(`smoke ok: pages, SEO/schema/legal routes present; homepage has ${styleIds.length} copyable style transforms`);
