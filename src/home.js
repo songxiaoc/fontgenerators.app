@@ -108,10 +108,9 @@ function render(){
   count.textContent = `${visible.length} STYLES SHOWN · ${styles.length} REAL TRANSFORMS`;
   results.innerHTML = visible.map((style, index) => {
     const output = style.transform(text);
-    const featured = index === 2 ? ' is-featured' : '';
     const favorite = favoriteIds.has(style.id);
     const newBadge = index === 0 ? '<span class="style-new">NEW</span>' : '';
-    return `<article class="style-row${featured}" data-style-id="${style.id}">
+    return `<article class="style-row" data-style-id="${style.id}">
       <div class="style-row-head">
         <div>
           <div class="style-title-line"><span class="style-encoding">ENCODING: ${encoding(style)}</span>${newBadge}</div>

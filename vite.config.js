@@ -8,8 +8,8 @@ export default defineConfig({
       input: {
         home: resolve(__dirname, 'index.html'),
         tool: resolve(__dirname, 'discord-colored-text-generator/index.html'),
-        privacy: resolve(__dirname, 'privacy/index.html'),
-        terms: resolve(__dirname, 'terms/index.html')
+        privacy: resolve(__dirname, 'privacy.html'),
+        termsOfService: resolve(__dirname, 'terms-of-service.html')
       }
     }
   }

@@ -33,7 +33,8 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; background: var(--lab-bg); }
-body { margin: 0; color: var(--ink); background: var(--lab-bg); font-family: var(--font-body); line-height: 1.55; }
+body { min-height: 100vh; margin: 0; display: flex; flex-direction: column; color: var(--ink); background: var(--lab-bg); font-family: var(--font-body); line-height: 1.55; }
+main { flex: 1 0 auto; }
 a { color: inherit; }
 button, input, textarea { font: inherit; }
 button { cursor: pointer; }
@@ -100,7 +101,7 @@ input:focus, textarea:focus, .style-output:focus, .code-box:focus { outline: 2px
 .style-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .style-row { position: relative; min-height: 132px; display: flex; flex-direction: column; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 18px; box-shadow: 0 1px 0 rgba(20,27,43,.035); transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
 .style-row:hover { border-color: rgba(0,110,47,.48); transform: translateY(-1px); box-shadow: var(--shadow-tactile); }
-.style-row.is-featured, .style-row.copied { border-color: rgba(0,110,47,.55); background: linear-gradient(0deg, rgba(0,110,47,.035), rgba(0,110,47,.035)), var(--surface); box-shadow: 0 0 0 1px rgba(0,110,47,.10), var(--shadow-tactile); }
+.style-row.copied { border-color: rgba(0,110,47,.55); background: linear-gradient(0deg, rgba(0,110,47,.035), rgba(0,110,47,.035)), var(--surface); box-shadow: 0 0 0 1px rgba(0,110,47,.10), var(--shadow-tactile); }
 .style-row-head { min-height: 32px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding-right: 82px; }
 .style-title-line { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
 .style-encoding { display: inline-flex; align-items: center; width: fit-content; padding: 4px 6px; border: 1px solid var(--line); background: var(--surface-low); border-radius: 4px; font-size: .62rem; color: var(--muted); }
@@ -179,7 +180,13 @@ summary { cursor: pointer; font-weight: 800; }
 
 .fg-gray{color:#9CA3AF}.fg-red{color:#F87171}.fg-yellow{color:#FACC15}.fg-green{color:#34D399}.fg-cyan{color:#22D3EE}.fg-blue{color:#60A5FA}.fg-magenta{color:#F472B6}.fg-white{color:#F8FAFC}.bg-gray{background:#4B5563}.bg-red{background:#7F1D1D}.bg-yellow{background:#78350F}.bg-green{background:#064E3B}.bg-cyan{background:#155E75}.bg-blue{background:#1E3A8A}.bg-magenta{background:#831843}.bg-white{background:#E5E7EB;color:#111827}.bold{font-weight:900}.underline{text-decoration:underline}.mini-terminal{background:#111827;color:#e5e7eb;border-radius:var(--radius-lg);padding:16px;font-family:var(--font-code)}.ansi-red{color:#F87171}.ansi-yellow{color:#FACC15}.ansi-green{color:#34D399}.ansi-blue{color:#60A5FA}.ansi-magenta{color:#F472B6}.ansi-cyan{color:#22D3EE}
 
-.site-footer { display: flex; align-items: flex-start; justify-content: space-between; gap: 28px; padding: 38px clamp(18px, 5vw, 56px); background: #eef2ff; border-top: 1px solid #dce2f7; color: var(--ink-soft); }
+.legal-page { width: 100%; padding: clamp(42px, 6vw, 76px) clamp(16px, 4vw, 32px); }
+.legal-card { width: min(100%, 860px); margin: 0 auto; background: rgba(255,255,255,.94); border: 1px solid var(--line); border-radius: var(--radius-xl); padding: clamp(24px, 4vw, 42px); box-shadow: var(--shadow-raised); }
+.legal-card h1 { margin: 0 0 14px; font-family: var(--font-display); font-size: clamp(2.1rem, 5vw, 3.35rem); line-height: 1.08; letter-spacing: -.04em; }
+.legal-card h2 { margin: 30px 0 8px; font-family: var(--font-display); font-size: clamp(1.18rem, 2.2vw, 1.45rem); line-height: 1.2; letter-spacing: -.02em; }
+.legal-card p { max-width: 74ch; margin: 0 0 14px; color: var(--ink-soft); font-size: 1.02rem; }
+.legal-card .note { margin-bottom: 28px; padding: 12px 14px; border-left: 4px solid var(--amber); border-radius: 0 var(--radius-md) var(--radius-md) 0; background: var(--amber-soft); color: var(--ink-soft); }
+.site-footer { flex-shrink: 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 28px; padding: 38px clamp(18px, 5vw, 56px); background: #eef2ff; border-top: 1px solid #dce2f7; color: var(--ink-soft); }
 .site-footer > div { max-width: 540px; }
 .site-footer p { color: var(--muted); }
 .site-footer nav { display: flex; gap: 20px; flex-wrap: wrap; font-weight: 800; }

@@ -32,7 +32,7 @@ const el = {
 };
 let spans = [];
 let lastText = '';
-let lastApplied = { foreground: 'green', background: null, bold: true, underline: false };
+let lastApplied = { foreground: null, background: null, bold: false, underline: false };
 const blankStyle = () => ({ foreground: null, background: null, bold: false, underline: false });
 const esc = s => s.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 
@@ -58,7 +58,7 @@ function renderActiveSequence() {
 function addButtons() {
   const formatButtons = document.querySelectorAll('[data-style]');
   formatButtons.forEach(button => {
-    button.addEventListener('click', () => apply({ [button.dataset.style]: true }));
+    button.addEventListener('click', () => toggleStyleControl(button.dataset.style));
     button.setAttribute('aria-pressed', 'false');
   });
 
@@ -71,7 +71,7 @@ function addButtons() {
     fg.setAttribute('aria-label', `Apply ${c.label} text color`);
     fg.setAttribute('aria-pressed', 'false');
     fg.innerHTML = `<span class="sr-only">${c.label}</span>`;
-    fg.addEventListener('click', () => apply({ foreground: c.id }));
+    fg.addEventListener('click', () => toggleColorControl('foreground', c.id));
     el.fg.appendChild(fg);
 
     const bg = document.createElement('button');
@@ -82,26 +82,82 @@ function addButtons() {
     bg.setAttribute('aria-label', `Apply ${c.label} background color`);
     bg.setAttribute('aria-pressed', 'false');
     bg.innerHTML = `<span class="sr-only">${c.label}</span>`;
-    bg.addEventListener('click', () => apply({ background: c.id }));
+    bg.addEventListener('click', () => toggleColorControl('background', c.id));
     el.bg.appendChild(bg);
   });
 }
-function apply(style) {
-  const [start, end] = selected();
-  const merged = { ...blankStyle(), ...style };
-  lastApplied = { ...lastApplied, ...style };
-  if (style.foreground) lastApplied.background = lastApplied.background ?? null;
-  if (style.background) lastApplied.foreground = lastApplied.foreground ?? null;
+function cloneStyle(st) {
+  return { ...blankStyle(), ...st };
+}
+function rangeEvery(start, end, predicate) {
+  if (start === end) return false;
+  for (let i = start; i < end; i += 1) {
+    if (!predicate(styleAt(i))) return false;
+  }
+  return true;
+}
+function stylesByCharacter() {
+  return Array.from({ length: el.msg.value.length }, (_, i) => cloneStyle(styleAt(i)));
+}
+function compressStyleRuns(perCharStyles) {
+  if (!perCharStyles.length) return [];
+  const blankKey = key(blankStyle());
+  const next = [];
+  let runStart = 0;
+  let previous = cloneStyle(perCharStyles[0]);
+  for (let i = 1; i <= perCharStyles.length; i += 1) {
+    const current = i < perCharStyles.length ? cloneStyle(perCharStyles[i]) : null;
+    if (i === perCharStyles.length || key(current) !== key(previous)) {
+      if (key(previous) !== blankKey) next.push({ start: runStart, end: i, ...previous });
+      runStart = i;
+      previous = current || blankStyle();
+    }
+  }
+  return next;
+}
+function setRangeStyle(start, end, patch) {
+  const perCharStyles = stylesByCharacter();
+  for (let i = start; i < end; i += 1) {
+    perCharStyles[i] = { ...perCharStyles[i], ...patch };
+  }
+  spans = compressStyleRuns(perCharStyles);
+  normalize();
+  render();
+}
+function setActivePatch(patch) {
+  lastApplied = { ...lastApplied, ...patch };
   updatePressedStates();
   renderActiveSequence();
+}
+function toggleStyleControl(name) {
+  const [start, end] = selected();
+  const label = name === 'bold' ? 'Bold' : 'Underline';
+  const nextValue = start === end
+    ? !Boolean(lastApplied[name])
+    : !rangeEvery(start, end, st => Boolean(st[name]));
+  setActivePatch({ [name]: nextValue });
   if (start === end) {
-    setStatus('Select text first, then apply a color or style.');
+    setStatus(`${label} ${nextValue ? 'enabled' : 'disabled'} for the next selection.`);
     el.msg.focus();
     return;
   }
-  spans.push({ start, end, ...merged });
-  normalize();
-  render();
+  setRangeStyle(start, end, { [name]: nextValue });
+  setStatus(`${nextValue ? 'Applied' : 'Removed'} ${label.toLowerCase()} on selected text.`);
+  el.msg.focus();
+}
+function toggleColorControl(kind, id) {
+  const [start, end] = selected();
+  const color = colorById(id);
+  const colorLabel = kind === 'foreground' ? 'text color' : 'background color';
+  const nextValue = (start === end ? lastApplied[kind] === id : rangeEvery(start, end, st => st[kind] === id)) ? null : id;
+  setActivePatch({ [kind]: nextValue });
+  if (start === end) {
+    setStatus(`${color.label} ${colorLabel} ${nextValue ? 'enabled' : 'cleared'} for the next selection.`);
+    el.msg.focus();
+    return;
+  }
+  setRangeStyle(start, end, { [kind]: nextValue });
+  setStatus(`${nextValue ? 'Applied' : 'Removed'} ${color.label.toLowerCase()} ${colorLabel} on selected text.`);
   el.msg.focus();
 }
 function normalize() {
@@ -205,8 +261,7 @@ document.querySelector('#clear-selected').addEventListener('click', () => {
     setStatus('Select text first, then clear selected formatting.');
     return;
   }
-  spans = spans.filter(s => s.end <= start || s.start >= end);
-  render();
+  setRangeStyle(start, end, blankStyle());
   setStatus('Cleared selected formatting.');
 });
 document.querySelector('#clear-all').addEventListener('click', () => {
@@ -234,7 +289,7 @@ spans = [
   { start: 22, end: 26, foreground: 'yellow', background: null, bold: false, underline: true },
   { start: 27, end: 39, foreground: 'cyan', background: null, bold: false, underline: false }
 ];
-lastApplied = { foreground: 'red', background: null, bold: true, underline: false };
+lastApplied = blankStyle();
 updatePressedStates();
 renderActiveSequence();
 render();
