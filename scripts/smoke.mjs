@@ -11,6 +11,7 @@ const terms=readFileSync('dist/terms-of-service.html','utf8');
 const homeJs=readFileSync('src/home.js','utf8');
 const toolJs=readFileSync('src/tool.js','utf8');
 const robots=readFileSync('dist/robots.txt','utf8');
+const sitemap=readFileSync('dist/sitemap.xml','utf8');
 const redirects=readFileSync('dist/_redirects','utf8');
 const middleware=readFileSync('functions/_middleware.js','utf8');
 const mustTool=['Discord Colored Text Generator','Copy for Discord','Unofficial tool; not made, endorsed, or sponsored by Discord','Discord ANSI uses a limited palette','FAQPage','WebApplication'];
@@ -40,6 +41,12 @@ for (const forbidden of ['free font downloads','download TTF','install fonts','w
   if (home.toLowerCase().includes(forbidden.toLowerCase())) throw new Error(`home contains forbidden claim: ${forbidden}`);
 }
 if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('Sitemap: https://fontgenerators.app/sitemap.xml')) throw new Error('robots missing noindex/ sitemap signals');
+const sitemapLocs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/discord-colored-text-generator'];
+if (sitemapLocs.length !== approvedSitemapLocs.length || !approvedSitemapLocs.every(loc => sitemapLocs.includes(loc))) throw new Error(`sitemap must contain only approved indexable pages; found ${sitemapLocs.join(', ')}`);
+for (const forbidden of ['/pricing', '/refund', '/cookies', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator', '/privacy', '/terms-of-service']) {
+  if (sitemap.includes(`https://fontgenerators.app${forbidden}`) && forbidden !== '/discord-colored-text-generator') throw new Error(`sitemap should not include non-indexable route ${forbidden}`);
+}
 if (redirects.includes('www.fontgenerators.app')) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level www-to-apex redirects; Pages middleware handles host canonicalization instead');
 for (const s of ['/discord-colored-text-generator/ /discord-colored-text-generator 301','/privacy/ /privacy 301','/terms-of-service/ /terms-of-service 301']) if (!redirects.includes(s)) throw new Error(`redirects missing clean URL fallback rule: ${s}`);
 for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/discord-colored-text-generator/', '/terms-of-service/']) {
@@ -55,4 +62,17 @@ const slashRedirect = await middlewareSmoke('https://fontgenerators.app/terms/')
 if (slashRedirect.status !== 301 || slashRedirect.headers.get('location') !== 'https://fontgenerators.app/terms-of-service') throw new Error('middleware must preserve legacy clean-route redirects');
 const passThrough = await middlewareSmoke('https://fontgenerators.app/');
 if (passThrough.status !== 200 || await passThrough.text() !== 'next ok') throw new Error('middleware should pass canonical apex clean routes through');
-console.log(`smoke ok: pages, SEO/schema/legal routes present; homepage has ${styleIds.length} copyable style transforms`);
+const approvedToolPassThrough = await middlewareSmoke('https://fontgenerators.app/discord-colored-text-generator');
+if (approvedToolPassThrough.status !== 200 || await approvedToolPassThrough.text() !== 'next ok') throw new Error('middleware should pass approved clean Discord route through');
+const heldPaths = ['/pricing', '/pricing/', '/refund', '/refund/', '/cookies', '/cookies/', '/discord-font-generator', '/discord-font-generator/', '/fancy-text-generator', '/fancy-text-generator/', '/discord-text-generator', '/not-a-real-mvp-route'];
+for (const path of heldPaths) {
+  const response = await middlewareSmoke(`https://fontgenerators.app${path}`);
+  const body = await response.text();
+  if (response.status !== 404) throw new Error(`held/non-MVP path ${path} should return 404, got ${response.status}`);
+  if (!response.headers.get('x-robots-tag')?.includes('noindex')) throw new Error(`held/non-MVP path ${path} should send x-robots-tag noindex`);
+  if (!body.includes('<meta name="robots" content="noindex, nofollow">')) throw new Error(`held/non-MVP path ${path} should include noindex meta`);
+  if (body.includes('Font Generator for Copy-Paste Fancy Text Styles')) throw new Error(`held/non-MVP path ${path} returned homepage duplicate HTML`);
+}
+const staticPassThrough = await middlewareSmoke('https://fontgenerators.app/assets/home-test.js');
+if (staticPassThrough.status !== 200 || await staticPassThrough.text() !== 'next ok') throw new Error('middleware should pass static asset requests through');
+console.log(`smoke ok: pages, SEO/schema/legal routes present; homepage has ${styleIds.length} copyable style transforms; held routes return 404 noindex`);
