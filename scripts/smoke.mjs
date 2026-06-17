@@ -1,9 +1,9 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
-const files=['dist/index.html','dist/discord-colored-text-generator/index.html','dist/privacy.html','dist/terms-of-service.html','dist/sitemap.xml','dist/robots.txt'];
+const files=['dist/index.html','dist/discord-colored-text-generator.html','dist/privacy.html','dist/terms-of-service.html','dist/sitemap.xml','dist/robots.txt'];
 for (const f of files) { if (!existsSync(f)) throw new Error(`missing ${f}`); }
 const assetDir='dist/assets';
 if (!existsSync(assetDir) || !readdirSync(assetDir).some(f=>f.endsWith('.css')) || !readdirSync(assetDir).some(f=>f.endsWith('.js'))) throw new Error('missing built css/js assets');
-const tool=readFileSync('dist/discord-colored-text-generator/index.html','utf8');
+const tool=readFileSync('dist/discord-colored-text-generator.html','utf8');
 const home=readFileSync('dist/index.html','utf8');
 const privacy=readFileSync('dist/privacy.html','utf8');
 const terms=readFileSync('dist/terms-of-service.html','utf8');
@@ -21,7 +21,10 @@ for (const [name, html] of [['privacy', privacy], ['terms', terms]]) {
 }
 for (const html of [home, tool, privacy, terms]) {
   if (html.includes('href="/terms/"')) throw new Error('stale /terms/ link present');
+  if (html.includes('href="/discord-colored-text-generator/"')) throw new Error('stale discord route slash link present');
 }
+if (tool.includes('https://fontgenerators.app/discord-colored-text-generator/')) throw new Error('stale discord canonical slash present');
+if (!tool.includes('Current ANSI codes')) throw new Error('discord page missing user-friendly ANSI codes label');
 if (homeJs.includes('is-featured') || homeJs.includes('style-row${featured}')) throw new Error('homepage should not default-highlight a featured style row');
 for (const s of ['toggleStyleControl', 'rangeEvery', 'setRangeStyle']) if (!toolJs.includes(s)) throw new Error(`tool missing toggle helper ${s}`);
 if (toolJs.includes("[button.dataset.style]: true")) throw new Error('bold/underline controls must be toggles, not one-way true setters');
