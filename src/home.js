@@ -5,6 +5,7 @@ const count = document.querySelector('#style-count');
 const status = document.querySelector('#copy-status');
 const categoryButtons = [...document.querySelectorAll('[data-category]')];
 let activeCategory = 'All';
+const favoriteIds = new Set();
 
 const range = (start, end) => Array.from({ length: end - start + 1 }, (_, i) => String.fromCodePoint(start + i));
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -73,7 +74,7 @@ const styles = [
   ['diamonds','Diamond Wrap','Symbols',['Gaming'], t=>`◆ ${t} ◆`],
   ['moon','Moon Wrap','Symbols',['Social'], t=>`☾ ${t} ☽`],
   ['spark-bars','Spark Bars','Symbols',['Discord'], t=>`| ✦ ${t} ✦ |`],
-  ['discord-code','Discord Code','Discord',['Discord'], t=>`[1m${t}[0m`],
+  ['discord-code','Discord Code','Discord',['Discord'], t=>`\`${t}\``],
   ['discord-channel','Discord Channel','Discord',['Discord'], t=>`# ${t.toLowerCase().replace(/\s+/g,'-')}`],
   ['discord-role','Discord Role','Discord',['Discord'], t=>`@${t.replace(/\s+/g,'')}`],
   ['discord-announcement','Discord Announcement','Discord',['Discord'], t=>`>>> ${t}`],
@@ -90,14 +91,39 @@ function matches(style, q){
   const haystack = [style.name, style.category, ...style.tags, style.id].join(' ').toLowerCase();
   return haystack.includes(q.trim().toLowerCase());
 }
+function encoding(style) { return style.id.toUpperCase().replaceAll('-', '_'); }
+function selectElementText(node) {
+  if (!node) return;
+  const range = document.createRange();
+  range.selectNodeContents(node);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  node.focus({ preventScroll: true });
+}
 function render(){
   const text = input.value || 'Your Text';
   const q = search.value || '';
   const visible = styles.filter(s => (activeCategory === 'All' || s.category === activeCategory || s.tags.includes(activeCategory)) && matches(s, q));
-  count.textContent = `${visible.length} styles shown · ${styles.length} real copyable transformations`;
-  results.innerHTML = visible.map(style => {
+  count.textContent = `${visible.length} STYLES SHOWN · ${styles.length} REAL TRANSFORMS`;
+  results.innerHTML = visible.map((style, index) => {
     const output = style.transform(text);
-    return `<article class="style-row" data-style-id="${style.id}"><div class="style-row-head"><div><span class="label-caps">${escapeHtml(style.name)}</span><div class="tagline">${escapeHtml(style.category)} · ${style.tags.map(escapeHtml).join(' · ')}</div></div><button type="button" class="icon-copy" data-copy="${style.id}" aria-label="Copy ${escapeHtml(style.name)} style">Copy</button></div><textarea readonly spellcheck="false" aria-label="${escapeHtml(style.name)} output">${escapeHtml(output)}</textarea></article>`;
+    const featured = index === 2 ? ' is-featured' : '';
+    const favorite = favoriteIds.has(style.id);
+    const newBadge = index === 0 ? '<span class="style-new">NEW</span>' : '';
+    return `<article class="style-row${featured}" data-style-id="${style.id}">
+      <div class="style-row-head">
+        <div>
+          <div class="style-title-line"><span class="style-encoding">ENCODING: ${encoding(style)}</span>${newBadge}</div>
+          <div class="tagline">${escapeHtml(style.category)} · ${style.tags.map(escapeHtml).join(' · ')}</div>
+        </div>
+      </div>
+      <div class="style-actions">
+        <button type="button" class="icon-action-btn${favorite ? ' is-on' : ''}" data-favorite="${style.id}" aria-pressed="${favorite}" aria-label="Favorite ${escapeHtml(style.name)} style"><span class="material-symbols-outlined">${favorite ? 'star' : 'star_border'}</span></button>
+        <button type="button" class="icon-copy" data-copy="${style.id}" aria-label="Copy ${escapeHtml(style.name)} style"><span class="material-symbols-outlined">content_copy</span></button>
+      </div>
+      <div class="style-output" data-output tabindex="0" aria-label="${escapeHtml(style.name)} generated style preview">${escapeHtml(output)}</div>
+    </article>`;
   }).join('') || '<p class="empty-state">No styles match that filter. Try All, Bold, Cursive, Fancy, Aesthetic, Symbols, Discord, or Social / Gaming.</p>';
 }
 async function copyStyle(id){
@@ -106,15 +132,28 @@ async function copyStyle(id){
   const value = style.transform(input.value || 'Your Text');
   const row = document.querySelector(`[data-style-id="${id}"]`);
   const button = row?.querySelector('[data-copy]');
+  const icon = button?.querySelector('.material-symbols-outlined');
   try {
     await navigator.clipboard.writeText(value);
-    if (button) button.textContent = 'Copied';
+    row?.classList.add('copied');
+    button?.classList.add('copied');
+    if (icon) icon.textContent = 'check';
     setStatus(`Copied ${style.name}.`);
-    setTimeout(() => { if (button) button.textContent = 'Copy'; }, 1600);
+    setTimeout(() => {
+      row?.classList.remove('copied');
+      button?.classList.remove('copied');
+      if (icon) icon.textContent = 'content_copy';
+    }, 1500);
   } catch (err) {
-    row?.querySelector('textarea')?.select();
-    setStatus('Copy failed. The generated text is selected so you can copy it manually.');
+    selectElementText(row?.querySelector('[data-output]'));
+    setStatus('Copy failed. The generated output is selected so you can copy it manually.');
   }
+}
+function toggleFavorite(id) {
+  if (favoriteIds.has(id)) favoriteIds.delete(id); else favoriteIds.add(id);
+  render();
+  const style = styles.find(s => s.id === id);
+  if (style) setStatus(`${favoriteIds.has(id) ? 'Favorited' : 'Removed favorite'} ${style.name}.`);
 }
 input.addEventListener('input', render);
 search.addEventListener('input', render);
@@ -124,7 +163,9 @@ categoryButtons.forEach(button => button.addEventListener('click', () => {
   render();
 }));
 results.addEventListener('click', e => {
-  const button = e.target.closest('[data-copy]');
-  if (button) copyStyle(button.dataset.copy);
+  const copyButton = e.target.closest('[data-copy]');
+  if (copyButton) return copyStyle(copyButton.dataset.copy);
+  const favoriteButton = e.target.closest('[data-favorite]');
+  if (favoriteButton) return toggleFavorite(favoriteButton.dataset.favorite);
 });
 render();
