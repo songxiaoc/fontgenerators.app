@@ -1,6 +1,7 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 const files=['dist/index.html','dist/discord-colored-text-generator.html','dist/privacy.html','dist/terms-of-service.html','dist/sitemap.xml','dist/robots.txt','dist/_redirects'];
 for (const f of files) { if (!existsSync(f)) throw new Error(`missing ${f}`); }
+if (!existsSync('functions/_middleware.js')) throw new Error('missing Pages middleware for host canonicalization');
 const assetDir='dist/assets';
 if (!existsSync(assetDir) || !readdirSync(assetDir).some(f=>f.endsWith('.css')) || !readdirSync(assetDir).some(f=>f.endsWith('.js'))) throw new Error('missing built css/js assets');
 const tool=readFileSync('dist/discord-colored-text-generator.html','utf8');
@@ -11,6 +12,7 @@ const homeJs=readFileSync('src/home.js','utf8');
 const toolJs=readFileSync('src/tool.js','utf8');
 const robots=readFileSync('dist/robots.txt','utf8');
 const redirects=readFileSync('dist/_redirects','utf8');
+const middleware=readFileSync('functions/_middleware.js','utf8');
 const mustTool=['Discord Colored Text Generator','Copy for Discord','Unofficial tool; not made, endorsed, or sponsored by Discord','Discord ANSI uses a limited palette','FAQPage','WebApplication'];
 for (const s of mustTool) if (!tool.includes(s)) throw new Error(`tool missing ${s}`);
 const mustHome=['Font Generator for Copy-Paste Fancy Text Styles','Type once, copy many text styles','These are Unicode copy-paste text styles, not downloadable font files','Open Discord Colored Text Generator','WebSite','WebApplication','FAQPage'];
@@ -38,5 +40,7 @@ for (const forbidden of ['free font downloads','download TTF','install fonts','w
   if (home.toLowerCase().includes(forbidden.toLowerCase())) throw new Error(`home contains forbidden claim: ${forbidden}`);
 }
 if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('Sitemap: https://fontgenerators.app/sitemap.xml')) throw new Error('robots missing noindex/ sitemap signals');
-if (!redirects.includes('https://www.fontgenerators.app/* https://fontgenerators.app/:splat 301')) throw new Error('redirects missing www-to-apex canonicalization rule');
+if (redirects.includes('www.fontgenerators.app')) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level www-to-apex redirects; use Cloudflare Redirect/Bulk Redirect rules instead');
+for (const s of ['/discord-colored-text-generator/ /discord-colored-text-generator 301','/privacy/ /privacy 301','/terms-of-service/ /terms-of-service 301']) if (!redirects.includes(s)) throw new Error(`redirects missing clean URL rule: ${s}`);
+if (!middleware.includes("WWW_HOST = 'www.fontgenerators.app'") || !middleware.includes("APEX_HOST = 'fontgenerators.app'") || !middleware.includes('Response.redirect')) throw new Error('middleware missing www-to-apex redirect logic');
 console.log(`smoke ok: pages, SEO/schema/legal routes present; homepage has ${styleIds.length} copyable style transforms`);
