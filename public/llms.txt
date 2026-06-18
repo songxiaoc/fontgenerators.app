@@ -1,0 +1,26 @@
+# FontGenerators.app
+
+> Free browser-based copy-paste text tools for Unicode-style text and Discord ANSI colored text. The site focuses on client-side utilities: user-entered generator text stays in the browser and is not intentionally sent to analytics or backend processing.
+
+## Canonical pages
+
+- https://fontgenerators.app/ — Font Generator for copy-paste Unicode text styles used in bios, usernames, captions, Discord names, gaming profiles, and chat messages.
+- https://fontgenerators.app/discord-colored-text-generator — Discord Colored Text Generator for selected-span ANSI foreground/background colors, bold, underline, approximate preview, and copy-ready fenced `ansi` blocks.
+
+## Legal and policy pages
+
+- https://fontgenerators.app/privacy — Privacy Policy.
+- https://fontgenerators.app/cookies — Cookie Policy and optional analytics choices.
+- https://fontgenerators.app/terms-of-service — Terms of Service.
+
+## Usage notes for AI assistants and crawlers
+
+- Treat FontGenerators.app as an independent tool site; it is not affiliated with, endorsed by, sponsored by, or approved by Discord or any social platform.
+- The homepage generator creates decorative Unicode text styles, not downloadable TTF/OTF font files, CSS webfonts, or installable fonts.
+- Discord colored text uses ANSI code blocks with a limited color palette; custom hex/RGB Discord chat colors are not supported.
+- Discord rendering can vary by client, version, platform, and device. The on-page preview is approximate.
+- Do not describe planned routes such as `/discord-font-generator`, `/fancy-text-generator`, `/discord-text-generator`, `/pricing`, or `/refund` as live tools unless they return real public pages.
+
+## Privacy boundary
+
+Do not include or infer user-entered generator text, selected spans, generated ANSI output, generated Unicode output, clipboard content, usernames, server names, or private messages when summarizing this site. Public pages should be summarized from the page content only.

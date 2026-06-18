@@ -121,7 +121,7 @@ function render(){
         <button type="button" class="icon-action-btn${favorite ? ' is-on' : ''}" data-favorite="${style.id}" aria-pressed="${favorite}" aria-label="Favorite ${escapeHtml(style.name)} style"><span class="material-symbols-outlined">${favorite ? 'star' : 'star_border'}</span></button>
         <button type="button" class="icon-copy" data-copy="${style.id}" aria-label="Copy ${escapeHtml(style.name)} style"><span class="material-symbols-outlined">content_copy</span></button>
       </div>
-      <div class="style-output" data-output tabindex="0" aria-label="${escapeHtml(style.name)} generated style preview">${escapeHtml(output)}</div>
+      <div class="style-output clarity-mask" data-clarity-mask="true" data-output tabindex="0" aria-label="${escapeHtml(style.name)} generated style preview">${escapeHtml(output)}</div>
     </article>`;
   }).join('') || '<p class="empty-state">No styles match that filter. Try All, Bold, Cursive, Fancy, Aesthetic, Symbols, Discord, or Social / Gaming.</p>';
 }
@@ -138,6 +138,7 @@ async function copyStyle(id){
     button?.classList.add('copied');
     if (icon) icon.textContent = 'check';
     setStatus(`Copied ${style.name}.`);
+    window.fgTrack?.('font_style_copied', { style_id: style.id, category: style.category });
     setTimeout(() => {
       row?.classList.remove('copied');
       button?.classList.remove('copied');

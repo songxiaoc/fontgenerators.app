@@ -250,6 +250,7 @@ document.querySelector('#copy').addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(buildAnsi());
     setStatus('Copied for Discord.');
+    window.fgTrack?.('discord_ansi_copied', { spans: spans.length });
   } catch (e) {
     setStatus('Copy failed. The generated block is selected so you can copy it manually.');
     selectOutput();

@@ -9,6 +9,7 @@ export default defineConfig({
         home: resolve(__dirname, 'index.html'),
         tool: resolve(__dirname, 'discord-colored-text-generator.html'),
         privacy: resolve(__dirname, 'privacy.html'),
+        cookies: resolve(__dirname, 'cookies.html'),
         termsOfService: resolve(__dirname, 'terms-of-service.html')
       }
     }

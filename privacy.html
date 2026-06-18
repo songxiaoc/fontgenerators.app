@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/styles.css" />
   <title>Privacy Policy — FontGenerators.app</title>
-  <meta name="description" content="Privacy summary for FontGenerators.app browser-based copy-paste text tools." />
+  <meta name="description" content="Privacy summary for FontGenerators.app browser-based copy-paste text tools and optional analytics." />
   <link rel="canonical" href="https://fontgenerators.app/privacy" />
   <meta name="robots" content="noindex" />
 </head>
@@ -26,22 +26,23 @@
     <article class="legal-card">
       <p class="eyebrow">Legal</p>
       <h1 id="privacy-title">Privacy Policy</h1>
-      <p class="note">Last updated: 2026-06-17. Legal operator, contact email, hosting provider, and analytics vendor details are pending owner confirmation before public launch.</p>
+      <p class="note">Last updated: 2026-06-18. Legal operator, contact email, hosting provider, and final analytics IDs are pending owner confirmation before final launch review.</p>
 
       <h2>Browser-side text generation</h2>
-      <p>This tool is designed to generate copy-paste text and Discord ANSI output in your browser. We do not intentionally store the message text you type into the generator on our servers in the MVP. Standard website requests and hosting logs may still exist. Do not enter sensitive, confidential, or private information.</p>
+      <p>This tool is designed to generate copy-paste Unicode text and Discord ANSI output in your browser. We do not intentionally store the message text you type into the generator on our servers in the MVP. Standard website requests and hosting logs may still exist. Do not enter sensitive, confidential, private, or regulated information.</p>
 
       <h2>Website requests and logs</h2>
       <p>When you visit the site, hosting or CDN systems may process technical request data such as IP address, user agent, URL, timestamp, referrer, and security/debug logs to deliver the site and keep it reliable.</p>
 
       <h2>Analytics and cookies</h2>
-      <p>No optional analytics, advertising, affiliate tracking, account system, AI provider, payment provider, upload storage, or database is enabled in this MVP implementation. If analytics is added later, events must be aggregate only and must not include raw user text, selected spans, generated ANSI output, clipboard content, usernames, server names, or message content.</p>
+      <p>FontGenerators.app may use Google Analytics 4, Microsoft Clarity, Plausible Analytics, and Ahrefs Web Analytics after you accept analytics in the cookie banner. These tools are for aggregate pageview, traffic-source, and product-usage measurement. Analytics events must not include raw user text, selected spans, generated Unicode output, generated ANSI output, clipboard content, usernames, server names, or message content.</p>
+      <p>Google Search Console and Ahrefs Webmaster verification meta tags may be added to prove site ownership. See the <a href="/cookies">Cookie Policy</a> for analytics choices.</p>
 
       <h2>Third-party platforms</h2>
       <p>Discord receives your message only if you separately paste copied output into Discord outside this site. FontGenerators.app is not affiliated with, endorsed by, sponsored by, or approved by Discord or any social platform.</p>
 
       <h2>Contact</h2>
-      <p>Before public launch, the owner should add a real contact email and legal operator details here.</p>
+      <p>Before final launch review, the owner should add a real contact email and legal operator details here.</p>
     </article>
   </main>
   <footer class="site-footer">
@@ -49,7 +50,8 @@
       <a class="brand mini" href="/" aria-label="FontGenerators.app home"><span>Fg_</span> FontGenerators.app</a>
       <p>FontGenerators.app is an independent copy-paste text toolkit. It is not affiliated with, endorsed by, sponsored by, or approved by Discord or any social platform.</p>
     </div>
-    <nav aria-label="Legal links"><a href="/privacy">Privacy Policy</a><a href="/terms-of-service">Terms of Use</a></nav>
+    <nav aria-label="Legal links"><a href="/privacy">Privacy Policy</a><a href="/cookies">Cookie Policy</a><a href="/terms-of-service">Terms of Use</a><button type="button" class="footer-link-button" data-cookie-settings>Cookie Settings</button></nav>
   </footer>
+  <script type="module" src="/src/analytics.js"></script>
 </body>
 </html>
