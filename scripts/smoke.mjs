@@ -74,8 +74,8 @@ if (!analyticsJs.match(/if \(typeof window\.plausible === 'function'\) window\.p
 if (!privacy.includes('Plausible Analytics is loaded as privacy-friendly analytics without requiring cookie consent')) throw new Error('privacy page must disclose Plausible no-consent behavior');
 if (!cookies.includes('Plausible Analytics may load without cookie consent')) throw new Error('cookie policy must disclose Plausible no-consent behavior');
 if (!terms.includes('Plausible may run without cookie consent')) throw new Error('terms page must mention Plausible no-consent behavior');
-if (!styles.includes('.utility-hero { padding: clamp(28px, 4.2vw, 56px)') || styles.includes('.utility-hero { padding: clamp(64px, 8vw, 112px)')) throw new Error('homepage hero should be shifted upward from the previous roomy top spacing');
-if (!styles.includes('right: auto;') || !styles.includes('width: min(300px, calc(100vw - 28px))') || !styles.includes('bottom: clamp(14px, 3vw, 24px)')) throw new Error('cookie banner should be compact and anchored bottom-left');
+if (!styles.includes('.utility-hero') || !styles.includes('padding: 56px 32px 28px') || styles.includes('padding: clamp(64px, 8vw, 112px)')) throw new Error('homepage hero should be shifted upward from the previous roomy top spacing');
+if (!styles.includes('.cookie-banner') || !styles.includes('left: 24px;') || !styles.includes('bottom: 24px;') || !styles.includes('width: min(300px, calc(100vw - 48px))')) throw new Error('cookie banner should be compact and anchored bottom-left');
 if (styles.includes('max-width: 980px') || styles.includes('right: clamp(14px, 4vw, 38px)')) throw new Error('cookie banner should not remain a wide bottom bar');
 for (const forbidden of ['raw input text', 'generated ANSI output', 'clipboard content']) {
   if (!cookies.includes(forbidden) && !privacy.includes(forbidden)) throw new Error(`privacy/cookies should disclose analytics forbidden payload: ${forbidden}`);

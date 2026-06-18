@@ -113,7 +113,7 @@ function render(){
     return `<article class="style-row" data-style-id="${style.id}">
       <div class="style-row-head">
         <div>
-          <div class="style-title-line"><span class="style-encoding">ENCODING: ${encoding(style)}</span>${newBadge}</div>
+          <div class="style-title-line"><span class="style-encoding">${escapeHtml(style.name.toUpperCase())}</span>${newBadge}</div>
           <div class="tagline">${escapeHtml(style.category)} · ${style.tags.map(escapeHtml).join(' · ')}</div>
         </div>
       </div>
