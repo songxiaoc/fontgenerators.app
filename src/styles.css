@@ -74,7 +74,7 @@ button { cursor: pointer; }
 }
 
 /* Homepage — rebuilt from the Stitch v2 self-contained reference */
-.utility-hero { padding: clamp(64px, 8vw, 112px) clamp(18px, 5vw, 56px) 44px; }
+.utility-hero { padding: clamp(28px, 4.2vw, 56px) clamp(18px, 5vw, 56px) 32px; }
 .hero-center { max-width: 900px; margin: 0 auto; text-align: center; }
 .eyebrow { margin: 0 0 12px; color: var(--primary); font-family: var(--font-code); font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .utility-hero h1 { max-width: 820px; margin: 0 auto 20px; font-family: var(--font-display); font-size: clamp(2.6rem, 6vw, 4rem); line-height: 1.08; letter-spacing: -.045em; font-weight: 800; }
@@ -199,13 +199,13 @@ summary { cursor: pointer; font-weight: 800; }
 .site-footer a { text-decoration: none; }
 .footer-link-button { appearance: none; border: 0; padding: 0; background: transparent; color: inherit; font: inherit; font-weight: 800; text-decoration: none; cursor: pointer; }
 .site-footer a:hover, .footer-link-button:hover { color: var(--primary); }
-.cookie-banner { position: fixed; z-index: 120; left: clamp(14px, 4vw, 38px); right: clamp(14px, 4vw, 38px); bottom: clamp(14px, 4vw, 30px); max-width: 980px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px; border: 1px solid #cfe9d6; border-radius: var(--radius-lg); background: rgba(255,255,255,.97); box-shadow: 0 18px 46px rgba(20,27,43,.16); }
-.cookie-banner__copy { max-width: 660px; }
-.cookie-banner__copy strong { display: block; margin-bottom: 3px; font-family: var(--font-display); }
-.cookie-banner__copy p { margin: 0; color: var(--ink-soft); font-size: .92rem; }
+.cookie-banner { position: fixed; z-index: 120; left: clamp(14px, 3vw, 24px); right: auto; bottom: clamp(14px, 3vw, 24px); width: min(300px, calc(100vw - 28px)); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 10px; border: 1px solid #cfe9d6; border-radius: 14px; background: rgba(255,255,255,.97); box-shadow: 0 12px 32px rgba(20,27,43,.14); }
+.cookie-banner__copy { max-width: 100%; }
+.cookie-banner__copy strong { display: block; margin-bottom: 2px; font-family: var(--font-display); font-size: .94rem; }
+.cookie-banner__copy p { margin: 0; color: var(--ink-soft); font-size: .82rem; line-height: 1.38; }
 .cookie-banner__copy a { color: var(--primary); font-weight: 800; }
-.cookie-banner__actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.cookie-banner .button { min-width: 132px; padding: 9px 14px; }
+.cookie-banner__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: 100%; }
+.cookie-banner .button { min-width: 0; flex: 1 1 106px; padding: 7px 9px; font-size: .82rem; }
 
 @media (max-width: 960px) {
   .generator-controls, .style-grid, .bento, .split, .tool-grid, .preview-grid, .ansi-table { grid-template-columns: 1fr; }
@@ -263,7 +263,7 @@ summary { cursor: pointer; font-weight: 800; }
   .preview-box { min-height: 62px; display: flex; align-items: center; border: 3px solid #111827; border-radius: 4px; font-size: 1rem; white-space: pre-wrap; overflow-wrap: anywhere; }
   .code-box { min-height: 132px; color: var(--code-text); background: var(--code-bg); border-color: #0f172a; border-radius: 7px; font-size: .9rem; white-space: pre-wrap; overflow-wrap: anywhere; }
   .site-footer { padding-left: 14px; padding-right: 14px; }
-  .cookie-banner { align-items: stretch; flex-direction: column; }
-  .cookie-banner__actions { display: grid; grid-template-columns: 1fr; width: 100%; }
-  .cookie-banner .button { width: 100%; min-width: 0; }
+  .cookie-banner { align-items: flex-start; }
+  .cookie-banner__actions { display: flex; }
+  .cookie-banner .button { width: auto; }
 }

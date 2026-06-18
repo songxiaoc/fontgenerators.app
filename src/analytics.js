@@ -140,8 +140,7 @@ function renderBanner({ force = false } = {}) {
   banner.setAttribute('aria-label', 'Cookie notice');
   banner.innerHTML = `
     <div class="cookie-banner__copy">
-      <strong>Cookie notice</strong>
-      <p>We use cookies and optional analytics, when enabled, to improve your experience. We do not send generator text, ANSI output, or clipboard content to analytics. <a href="/cookies">Learn more</a>.</p>
+      <p>We use cookies to improve your experience. <a href="/cookies">Learn more</a>.</p>
     </div>
     <div class="cookie-banner__actions">
       <button type="button" class="button secondary" data-cookie-decline>Decline</button>

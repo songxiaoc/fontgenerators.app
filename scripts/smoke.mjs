@@ -30,6 +30,7 @@ const sourceTerms = readFileSync('terms-of-service.html', 'utf8');
 const homeJs = readFileSync('src/home.js', 'utf8');
 const toolJs = readFileSync('src/tool.js', 'utf8');
 const analyticsJs = readFileSync('src/analytics.js', 'utf8');
+const styles = readFileSync('src/styles.css', 'utf8');
 const robots = readFileSync('dist/robots.txt', 'utf8');
 const sitemap = readFileSync('dist/sitemap.xml', 'utf8');
 const redirects = readFileSync('dist/_redirects', 'utf8');
@@ -63,6 +64,9 @@ if (!sourceHome.includes('data-clarity-mask="true"') || !homeJs.includes('data-c
 if (!sourceTool.includes('ansi-code-table') || !sourceTool.includes('<code>30</code>') || !sourceTool.includes('<code>47</code>')) throw new Error('discord page missing visible ANSI code table');
 if (!sourceTool.includes('data-clarity-mask="true"')) throw new Error('discord editor/output surfaces must be masked for Clarity');
 if (!analyticsJs.includes('FONTGENERATORS_ANALYTICS_CONFIG') || !analyticsJs.includes('VITE_GA_MEASUREMENT_ID') || !analyticsJs.includes('VITE_CLARITY_PROJECT_ID') || !analyticsJs.includes('VITE_PLAUSIBLE_DOMAIN') || !analyticsJs.includes('VITE_AHREFS_ANALYTICS_KEY')) throw new Error('analytics module missing provider configuration hooks');
+if (!styles.includes('.utility-hero { padding: clamp(28px, 4.2vw, 56px)') || styles.includes('.utility-hero { padding: clamp(64px, 8vw, 112px)')) throw new Error('homepage hero should be shifted upward from the previous roomy top spacing');
+if (!styles.includes('right: auto;') || !styles.includes('width: min(300px, calc(100vw - 28px))') || !styles.includes('bottom: clamp(14px, 3vw, 24px)')) throw new Error('cookie banner should be compact and anchored bottom-left');
+if (styles.includes('max-width: 980px') || styles.includes('right: clamp(14px, 4vw, 38px)')) throw new Error('cookie banner should not remain a wide bottom bar');
 for (const forbidden of ['raw input text', 'generated ANSI output', 'clipboard content']) {
   if (!cookies.includes(forbidden) && !privacy.includes(forbidden)) throw new Error(`privacy/cookies should disclose analytics forbidden payload: ${forbidden}`);
 }
