@@ -1,4 +1,5 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { Script, createContext } from 'node:vm';
 
 const files = [
   'dist/index.html',
@@ -41,7 +42,7 @@ const mustTool = ['Discord Colored Text Generator', 'Copy for Discord', 'Unoffic
 for (const s of mustTool) if (!tool.includes(s)) throw new Error(`tool missing ${s}`);
 const mustHome = ['Font Generator for Copy-Paste Fancy Text Styles', 'Type once, copy many text styles', 'These are Unicode copy-paste text styles, not downloadable font files', 'Open Discord Colored Text Generator', 'WebSite', 'WebApplication', 'FAQPage'];
 for (const s of mustHome) if (!home.includes(s)) throw new Error(`home missing ${s}`);
-for (const s of ['data-category="Bold"', 'data-category="Cursive"', 'data-category="Fancy"', 'data-category="Aesthetic"', 'data-category="Symbols"', 'data-category="Discord"', 'data-category="Social/Gaming"']) if (!home.includes(s)) throw new Error(`home missing filter ${s}`);
+for (const s of ['data-category="Favorites"', 'data-category="Bold"', 'data-category="Cursive"', 'data-category="Fancy"', 'data-category="Italic"', 'data-category="Stylish"', 'data-category="Cool"', 'data-category="Strikethrough"', 'data-category="Underline"', 'data-category="Cursed"', 'data-category="Big"', 'data-category="Discord"', 'data-category="WhatsApp"', 'data-category="Twitter"']) if (!home.includes(s)) throw new Error(`home missing filter ${s}`);
 
 for (const [name, html] of [['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
   if (!html.includes('class="legal-page paper-grid"') || !html.includes('class="legal-card"')) throw new Error(`${name} missing centered legal layout`);
@@ -58,9 +59,16 @@ for (const [name, html] of [['home', sourceHome], ['tool', sourceTool], ['privac
   if (!html.includes('/src/analytics.js')) throw new Error(`${name} missing analytics module`);
   if (!html.includes('data-cookie-settings')) throw new Error(`${name} missing cookie settings control`);
 }
-if (!sourceHome.includes('answer-block')) throw new Error('home missing compact AEO answer block');
+if (sourceHome.includes('Free Browser-Based Font Generator') || sourceHome.includes('answer-block')) throw new Error('home should not include the removed hero eyebrow or AEO answer block');
+if (sourceHome.includes('class="chips"') || homeJs.includes('style-new') || homeJs.includes('FONTB')) throw new Error('home should not include removed hero chips or temporary FontB badges');
+if (!sourceHome.includes('Unicode styles in real time,<br />then copy')) throw new Error('home lede should use the requested two-line break');
 if (!sourceHome.includes('How do I copy and paste fonts from this generator?') || !sourceHome.includes('Is fancy text accessible?')) throw new Error('home missing visible AEO FAQ additions');
 if (!sourceHome.includes('data-clarity-mask="true"') || !homeJs.includes('data-clarity-mask="true"')) throw new Error('homepage generator surfaces must be masked for Clarity');
+if (!homeJs.includes('fontgenerators.favoriteStyles.v1') || !homeJs.includes('localStorage') || !homeJs.includes("activeCategory === 'Favorites'")) throw new Error('homepage favorites should persist locally and expose a Favorites filter');
+if (!homeJs.includes('function fallbackCopyText') || !homeJs.includes("document.execCommand('copy')") || !homeJs.includes('async function copyText') || !homeJs.includes("addEventListener('pointerdown'")) throw new Error('homepage copy should fall back when Clipboard API is blocked');
+if (!sourceHome.includes('class="card-icon material-symbols-outlined"') || styles.includes('.bento article:before')) throw new Error('homepage info cards should render real icons, not empty pseudo-element blocks');
+if (!styles.includes('.icon-action-btn.is-on .material-symbols-outlined') || !styles.includes('"FILL" 1')) throw new Error('favorited star should use filled Material Symbols styling');
+if (!styles.includes('#copy-status[data-toast-visible="true"]') || !styles.includes('visibility: hidden;') || !homeJs.includes("status.dataset.toastVisible = 'true'") || !homeJs.includes("setProperty('opacity', '1', 'important')") || !homeJs.includes("setProperty('visibility', 'visible', 'important')")) throw new Error('copy/favorite status should use a floating toast state');
 if (!sourceTool.includes('ansi-code-table') || !sourceTool.includes('<code>30</code>') || !sourceTool.includes('<code>47</code>')) throw new Error('discord page missing visible ANSI code table');
 if (!sourceTool.includes('data-clarity-mask="true"')) throw new Error('discord editor/output surfaces must be masked for Clarity');
 if (!analyticsJs.includes('FONTGENERATORS_ANALYTICS_CONFIG') || !analyticsJs.includes('VITE_GA_MEASUREMENT_ID') || !analyticsJs.includes('VITE_CLARITY_PROJECT_ID') || !analyticsJs.includes('VITE_PLAUSIBLE_DOMAIN') || !analyticsJs.includes('VITE_AHREFS_ANALYTICS_KEY')) throw new Error('analytics module missing provider configuration hooks');
@@ -74,7 +82,8 @@ if (!analyticsJs.match(/if \(typeof window\.plausible === 'function'\) window\.p
 if (!privacy.includes('Plausible Analytics is loaded as privacy-friendly analytics without requiring cookie consent')) throw new Error('privacy page must disclose Plausible no-consent behavior');
 if (!cookies.includes('Plausible Analytics may load without cookie consent')) throw new Error('cookie policy must disclose Plausible no-consent behavior');
 if (!terms.includes('Plausible may run without cookie consent')) throw new Error('terms page must mention Plausible no-consent behavior');
-if (!styles.includes('.utility-hero') || !styles.includes('padding: 56px 32px 28px') || styles.includes('padding: clamp(64px, 8vw, 112px)')) throw new Error('homepage hero should be shifted upward from the previous roomy top spacing');
+if (!styles.includes('.utility-hero') || !styles.includes('padding: 48px 32px 26px') || styles.includes('padding: clamp(64px, 8vw, 112px)')) throw new Error('homepage hero should be shifted upward from the previous roomy top spacing');
+if (!styles.includes('.generator-card') || !styles.includes('background: transparent;') || !styles.includes('border: 0;') || !styles.includes('box-shadow: none;')) throw new Error('homepage style rows should not be wrapped by an outer visual card');
 if (!styles.includes('.cookie-banner') || !styles.includes('left: 24px;') || !styles.includes('bottom: 24px;') || !styles.includes('width: min(300px, calc(100vw - 48px))')) throw new Error('cookie banner should be compact and anchored bottom-left');
 if (styles.includes('max-width: 980px') || styles.includes('right: clamp(14px, 4vw, 38px)')) throw new Error('cookie banner should not remain a wide bottom bar');
 for (const forbidden of ['raw input text', 'generated ANSI output', 'clipboard content']) {
@@ -89,9 +98,52 @@ if (!tool.includes('Current ANSI codes')) throw new Error('discord page missing 
 if (homeJs.includes('is-featured') || homeJs.includes('style-row${featured}')) throw new Error('homepage should not default-highlight a featured style row');
 for (const s of ['toggleStyleControl', 'rangeEvery', 'setRangeStyle']) if (!toolJs.includes(s)) throw new Error(`tool missing toggle helper ${s}`);
 if (toolJs.includes('[button.dataset.style]: true')) throw new Error('bold/underline controls must be toggles, not one-way true setters');
-const styleIds = [...homeJs.matchAll(/\n\s*\['([^']+)'\s*,/g)].map(m => m[1]);
-if (styleIds.length < 40) throw new Error(`home has only ${styleIds.length} style transforms`);
+const styleIds = [...homeJs.matchAll(/^[^|\n]+\|([^|\n]+)\|/gm)].map(m => m[1]);
+if (styleIds.length < 140) throw new Error(`home has only ${styleIds.length} style transforms`);
 if (new Set(styleIds).size !== styleIds.length) throw new Error('duplicate homepage style ids');
+const makeStubNode = () => ({
+  value: '',
+  textContent: '',
+  innerHTML: '',
+  dataset: {},
+  classList: { add() {}, remove() {}, toggle() {} },
+  addEventListener() {},
+  querySelector() { return null; },
+  focus() {}
+});
+const homeStubNodes = new Map([
+  ['#font-input', makeStubNode()],
+  ['#style-search', makeStubNode()],
+  ['#style-results', makeStubNode()],
+  ['#style-count', makeStubNode()],
+  ['#copy-status', makeStubNode()]
+]);
+homeStubNodes.get('#font-input').value = 'Alex Plays';
+const homeSandbox = {
+  console,
+  setTimeout,
+  navigator: { clipboard: { writeText: async () => {} } },
+  window: {
+    fgTrack: null,
+    getSelection: () => ({ removeAllRanges() {}, addRange() {} })
+  },
+  document: {
+    querySelector: selector => homeStubNodes.get(selector) || makeStubNode(),
+    querySelectorAll: () => [],
+    createRange: () => ({ selectNodeContents() {} })
+  }
+};
+new Script(`${homeJs}\nglobalThis.__fgSmoke = { fontbStyles, transformStyle };`, { filename: 'src/home.js' }).runInContext(createContext(homeSandbox));
+const alphabetProbe = 'abcdefg hijklmn opqrst uvwxyz ABCDEFG HIJKLMN OPQRST UVWXYZ';
+const userReportedUnicodeStyles = ['flower-crown', 'oh', 'fancy', 'fancy-bubbles', 'dapper-lanes', 'santa-hat', 'dapper-dashing', 'silicon-dash'];
+const unassignedMathGlyphs = new Set([0x1d455,0x1d49d,0x1d4a0,0x1d4a1,0x1d4a3,0x1d4a4,0x1d4a7,0x1d4a8,0x1d4ad,0x1d4ba,0x1d4bc,0x1d4c4]);
+for (const id of userReportedUnicodeStyles) {
+  const style = homeSandbox.__fgSmoke.fontbStyles.find(item => item.id === id);
+  if (!style) throw new Error(`missing user-reported Unicode style ${id}`);
+  const output = homeSandbox.__fgSmoke.transformStyle(style, alphabetProbe);
+  const bad = [...output].filter(ch => ch === '\ufffd' || unassignedMathGlyphs.has(ch.codePointAt(0)));
+  if (bad.length) throw new Error(`${id} outputs unsupported math glyph code points: ${bad.map(ch => `U+${ch.codePointAt(0).toString(16).toUpperCase()}`).join(', ')}`);
+}
 for (const forbidden of ['free font downloads', 'download TTF', 'install fonts', 'works everywhere', 'upgrade to pro', 'subscription plan']) {
   if (home.toLowerCase().includes(forbidden.toLowerCase())) throw new Error(`home contains forbidden claim: ${forbidden}`);
 }
