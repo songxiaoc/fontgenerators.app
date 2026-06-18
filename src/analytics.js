@@ -1,7 +1,11 @@
 const CONSENT_KEY = 'fontgenerators_cookie_consent_v1';
 const ACCEPTED = 'accepted';
 const DECLINED = 'declined';
-const DEFAULT_PLAUSIBLE_SRC = 'https://plausible.io/js/script.js';
+const DEFAULT_GA_ID = 'G-JX2VGXPG5J';
+const DEFAULT_CLARITY_ID = 'x8r8lczazd';
+const DEFAULT_PLAUSIBLE_DOMAIN = '';
+const DEFAULT_PLAUSIBLE_SRC = 'https://plausible.shipsolo.io/js/pa-31uX2txOmuueW8_OZSa78.js';
+const DEFAULT_AHREFS_ANALYTICS_KEY = 'kWGc53rLUFEQEds4myn9rg';
 const DEFAULT_AHREFS_SRC = 'https://analytics.ahrefs.com/analytics.js';
 
 const clean = (value) => String(value || '').trim();
@@ -17,11 +21,11 @@ const viteConfig = {
 
 const runtimeConfig = window.FONTGENERATORS_ANALYTICS_CONFIG || {};
 const config = {
-  gaId: clean(runtimeConfig.gaId || viteConfig.gaId),
-  clarityId: clean(runtimeConfig.clarityId || viteConfig.clarityId),
-  plausibleDomain: clean(runtimeConfig.plausibleDomain || viteConfig.plausibleDomain),
+  gaId: clean(runtimeConfig.gaId || viteConfig.gaId || DEFAULT_GA_ID),
+  clarityId: clean(runtimeConfig.clarityId || viteConfig.clarityId || DEFAULT_CLARITY_ID),
+  plausibleDomain: clean(runtimeConfig.plausibleDomain || viteConfig.plausibleDomain || DEFAULT_PLAUSIBLE_DOMAIN),
   plausibleScriptSrc: clean(runtimeConfig.plausibleScriptSrc || viteConfig.plausibleScriptSrc || DEFAULT_PLAUSIBLE_SRC),
-  ahrefsAnalyticsKey: clean(runtimeConfig.ahrefsAnalyticsKey || viteConfig.ahrefsAnalyticsKey),
+  ahrefsAnalyticsKey: clean(runtimeConfig.ahrefsAnalyticsKey || viteConfig.ahrefsAnalyticsKey || DEFAULT_AHREFS_ANALYTICS_KEY),
   ahrefsScriptSrc: clean(runtimeConfig.ahrefsScriptSrc || viteConfig.ahrefsScriptSrc || DEFAULT_AHREFS_SRC),
 };
 
@@ -75,12 +79,12 @@ function loadClarity() {
 }
 
 function loadPlausible() {
-  if (!config.plausibleDomain) return;
+  if (!config.plausibleScriptSrc) return;
   window.plausible = window.plausible || function plausible(){ (window.plausible.q = window.plausible.q || []).push(arguments); };
-  loadScript('fg-plausible-script', config.plausibleScriptSrc, {
-    defer: 'defer',
-    'data-domain': config.plausibleDomain
-  });
+  window.plausible.init = window.plausible.init || function init(options){ window.plausible.o = options || {}; };
+  const attrs = config.plausibleDomain ? { defer: 'defer', 'data-domain': config.plausibleDomain } : { defer: 'defer' };
+  loadScript('fg-plausible-script', config.plausibleScriptSrc, attrs);
+  window.plausible.init(config.plausibleDomain ? { domain: config.plausibleDomain } : undefined);
 }
 
 function loadAhrefsAnalytics() {
@@ -90,10 +94,9 @@ function loadAhrefsAnalytics() {
   });
 }
 
-function loadAnalytics() {
+function loadConsentAnalytics() {
   loadGoogleAnalytics();
   loadClarity();
-  loadPlausible();
   loadAhrefsAnalytics();
 }
 
@@ -118,11 +121,11 @@ function safeEventProps(props = {}) {
 }
 
 window.fgTrack = function fgTrack(eventName, props = {}) {
-  if (readConsent() !== ACCEPTED) return;
   const name = safeEventName(eventName);
   const safeProps = safeEventProps(props);
-  if (typeof window.gtag === 'function') window.gtag('event', name, safeProps);
   if (typeof window.plausible === 'function') window.plausible(name, { props: safeProps });
+  if (readConsent() !== ACCEPTED) return;
+  if (typeof window.gtag === 'function') window.gtag('event', name, safeProps);
   if (typeof window.clarity === 'function') window.clarity('event', name);
 };
 
@@ -159,7 +162,7 @@ function bindCookieControls() {
     if (event.target.closest('[data-cookie-accept]')) {
       writeConsent(ACCEPTED);
       removeBanner();
-      loadAnalytics();
+      loadConsentAnalytics();
       return;
     }
     if (event.target.closest('[data-cookie-decline]')) {
@@ -171,8 +174,9 @@ function bindCookieControls() {
 
 function init() {
   bindCookieControls();
+  loadPlausible();
   const consent = readConsent();
-  if (consent === ACCEPTED) loadAnalytics();
+  if (consent === ACCEPTED) loadConsentAnalytics();
   if (!consent) renderBanner();
 }
 

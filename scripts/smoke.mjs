@@ -64,6 +64,16 @@ if (!sourceHome.includes('data-clarity-mask="true"') || !homeJs.includes('data-c
 if (!sourceTool.includes('ansi-code-table') || !sourceTool.includes('<code>30</code>') || !sourceTool.includes('<code>47</code>')) throw new Error('discord page missing visible ANSI code table');
 if (!sourceTool.includes('data-clarity-mask="true"')) throw new Error('discord editor/output surfaces must be masked for Clarity');
 if (!analyticsJs.includes('FONTGENERATORS_ANALYTICS_CONFIG') || !analyticsJs.includes('VITE_GA_MEASUREMENT_ID') || !analyticsJs.includes('VITE_CLARITY_PROJECT_ID') || !analyticsJs.includes('VITE_PLAUSIBLE_DOMAIN') || !analyticsJs.includes('VITE_AHREFS_ANALYTICS_KEY')) throw new Error('analytics module missing provider configuration hooks');
+for (const s of ['G-JX2VGXPG5J', 'x8r8lczazd', 'https://plausible.shipsolo.io/js/pa-31uX2txOmuueW8_OZSa78.js', 'kWGc53rLUFEQEds4myn9rg']) {
+  if (!analyticsJs.includes(s)) throw new Error(`analytics module missing configured production ID/script: ${s}`);
+}
+const consentFn = analyticsJs.match(/function loadConsentAnalytics\(\) \{([\s\S]*?)\n\}/)?.[1] || '';
+if (!consentFn || consentFn.includes('loadPlausible(')) throw new Error('Plausible must not be behind cookie consent');
+if (!analyticsJs.match(/function init\(\) \{[\s\S]*loadPlausible\(\);[\s\S]*const consent = readConsent\(\)/)) throw new Error('Plausible must load before checking cookie consent');
+if (!analyticsJs.match(/if \(typeof window\.plausible === 'function'\) window\.plausible\(name, \{ props: safeProps \}\);[\s\S]*if \(readConsent\(\) !== ACCEPTED\) return;/)) throw new Error('Plausible events should fire before cookie-gated analytics return');
+if (!privacy.includes('Plausible Analytics is loaded as privacy-friendly analytics without requiring cookie consent')) throw new Error('privacy page must disclose Plausible no-consent behavior');
+if (!cookies.includes('Plausible Analytics may load without cookie consent')) throw new Error('cookie policy must disclose Plausible no-consent behavior');
+if (!terms.includes('Plausible may run without cookie consent')) throw new Error('terms page must mention Plausible no-consent behavior');
 if (!styles.includes('.utility-hero { padding: clamp(28px, 4.2vw, 56px)') || styles.includes('.utility-hero { padding: clamp(64px, 8vw, 112px)')) throw new Error('homepage hero should be shifted upward from the previous roomy top spacing');
 if (!styles.includes('right: auto;') || !styles.includes('width: min(300px, calc(100vw - 28px))') || !styles.includes('bottom: clamp(14px, 3vw, 24px)')) throw new Error('cookie banner should be compact and anchored bottom-left');
 if (styles.includes('max-width: 980px') || styles.includes('right: clamp(14px, 4vw, 38px)')) throw new Error('cookie banner should not remain a wide bottom bar');
