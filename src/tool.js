@@ -1,3 +1,5 @@
+import { copyText, createToast, selectElementText } from './ui.js';
+
 const colors = [
   { id: 'gray', label: 'Gray', fg: '30', bg: '40', hex: '#80848E', bgHex: '#4B5563' },
   { id: 'red', label: 'Red', fg: '31', bg: '41', hex: '#ED4245', bgHex: '#7F1D1D' },
@@ -8,10 +10,12 @@ const colors = [
   { id: 'cyan', label: 'Cyan', fg: '36', bg: '46', hex: '#1ABC9C', bgHex: '#155E75' },
   { id: 'white', label: 'White', fg: '37', bg: '47', hex: '#FFFFFF', bgHex: '#E5E7EB' }
 ];
+const rainbowColors = ['red', 'yellow', 'green', 'cyan', 'blue', 'magenta'];
 
 const faq = [
   { q: 'How do I make colored text in Discord?', a: 'Use an ansi code block in a supported Discord client. Type your message in this generator, select the text you want to style, choose supported ANSI colors or styles, then copy the full fenced ansi block and paste it into Discord.' },
   { q: 'What is a Discord color text generator?', a: 'A Discord color text generator creates ANSI-formatted code blocks for Discord. Instead of typing escape codes manually, you choose colors in a visual editor and copy a ready-to-paste block.' },
+  { q: 'How do I make rainbow colored text in Discord?', a: 'Use the Rainbow quick effect in this tool. Select the text you want to color, or leave nothing selected to apply it to the whole message, then copy the generated ansi code block for Discord.' },
   { q: 'Does Discord colored text work on mobile?', a: 'Mobile support may vary. Discord ANSI colored text generally works best in supported Discord desktop and web clients. Some mobile clients may show plain text or render styles differently.' },
   { q: 'Can I use custom hex colors in Discord text?', a: 'No. Discord ANSI text uses a limited palette, not arbitrary hex, RGB, or brand colors. This tool should only offer colors that map to supported ANSI codes.' },
   { q: 'Why is my Discord colored text not working?', a: 'Check that you pasted the full ansi code block, including the opening triple backticks, the ansi label, the generated escape sequences, and the closing triple backticks. Rendering can also vary by Discord client and version.' },
@@ -30,6 +34,7 @@ const el = {
   status: document.querySelector('#copy-status'),
   active: document.querySelector('#active-sequence')
 };
+const showStatus = createToast(el.status);
 let spans = [];
 let lastText = '';
 let lastApplied = { foreground: null, background: null, bold: false, underline: false };
@@ -37,7 +42,7 @@ const blankStyle = () => ({ foreground: null, background: null, bold: false, und
 const esc = s => s.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 
 function colorById(id) { return colors.find(c => c.id === id); }
-function setStatus(message) { el.status.textContent = message; }
+function setStatus(message) { showStatus(message); }
 function selected() {
   const a = el.msg.selectionStart;
   const b = el.msg.selectionEnd;
@@ -47,18 +52,29 @@ function updatePressedStates() {
   document.querySelectorAll('[data-fg]').forEach(btn => btn.setAttribute('aria-pressed', String(lastApplied.foreground === btn.dataset.fg)));
   document.querySelectorAll('[data-bg]').forEach(btn => btn.setAttribute('aria-pressed', String(lastApplied.background === btn.dataset.bg)));
   document.querySelectorAll('[data-style]').forEach(btn => btn.setAttribute('aria-pressed', String(Boolean(lastApplied[btn.dataset.style]))));
+  document.querySelectorAll('[data-preset]').forEach(btn => btn.setAttribute('aria-pressed', 'false'));
 }
 function renderActiveSequence() {
   if (!el.active) return;
-  const codes = ansiCodes(lastApplied);
-  el.active.innerHTML = codes.length
-    ? `<code>[${codes.join(';')}m</code><span>selected text</span><code>[0m</code>`
-    : '<code>[0m</code><span>plain selected text</span>';
+  const pieces = [];
+  if (lastApplied.bold) pieces.push('Bold');
+  if (lastApplied.underline) pieces.push('Underline');
+  if (lastApplied.foreground) pieces.push(`${colorById(lastApplied.foreground).label} text`);
+  if (lastApplied.background) pieces.push(`${colorById(lastApplied.background).label} highlight`);
+  el.active.innerHTML = pieces.length
+    ? `<span class="active-style-label">Active style</span><span class="active-style-pills">${pieces.map(piece => `<span>${esc(piece)}</span>`).join('')}</span>`
+    : '<span class="active-style-label">Plain text</span><span class="active-style-note">No color or extra formatting selected.</span>';
 }
 function addButtons() {
   const formatButtons = document.querySelectorAll('[data-style]');
   formatButtons.forEach(button => {
     button.addEventListener('click', () => toggleStyleControl(button.dataset.style));
+    button.setAttribute('aria-pressed', 'false');
+  });
+  document.querySelectorAll('[data-preset]').forEach(button => {
+    button.addEventListener('click', () => {
+      if (button.dataset.preset === 'rainbow') applyRainbow();
+    });
     button.setAttribute('aria-pressed', 'false');
   });
 
@@ -79,7 +95,7 @@ function addButtons() {
     bg.className = `color-chip${c.id === 'white' ? ' is-white' : ''}`;
     bg.style.background = c.bgHex;
     bg.dataset.bg = c.id;
-    bg.setAttribute('aria-label', `Apply ${c.label} background color`);
+    bg.setAttribute('aria-label', `Apply ${c.label} highlight color`);
     bg.setAttribute('aria-pressed', 'false');
     bg.innerHTML = `<span class="sr-only">${c.label}</span>`;
     bg.addEventListener('click', () => toggleColorControl('background', c.id));
@@ -96,8 +112,8 @@ function rangeEvery(start, end, predicate) {
   }
   return true;
 }
-function stylesByCharacter() {
-  return Array.from({ length: el.msg.value.length }, (_, i) => cloneStyle(styleAt(i)));
+function stylesByCharacter(length = el.msg.value.length) {
+  return Array.from({ length }, (_, i) => cloneStyle(styleAt(i)));
 }
 function compressStyleRuns(perCharStyles) {
   if (!perCharStyles.length) return [];
@@ -115,6 +131,50 @@ function compressStyleRuns(perCharStyles) {
   }
   return next;
 }
+function findTextEditRange(oldText, newText) {
+  let start = 0;
+  const oldLen = oldText.length;
+  const newLen = newText.length;
+  while (start < oldLen && start < newLen && oldText[start] === newText[start]) start += 1;
+
+  let oldEnd = oldLen;
+  let newEnd = newLen;
+  while (oldEnd > start && newEnd > start && oldText[oldEnd - 1] === newText[newEnd - 1]) {
+    oldEnd -= 1;
+    newEnd -= 1;
+  }
+  return { start, oldEnd, newEnd };
+}
+function styleForInsertedText(oldStyles, start, oldEnd) {
+  if (oldEnd > start && oldStyles[start]) return cloneStyle(oldStyles[start]);
+  if (start > 0 && oldStyles[start - 1]) return cloneStyle(oldStyles[start - 1]);
+  if (oldStyles[start]) return cloneStyle(oldStyles[start]);
+  return cloneStyle(lastApplied);
+}
+function syncSpansAfterTextEdit(oldText, newText) {
+  if (oldText === newText) return;
+  const oldStyles = stylesByCharacter(oldText.length);
+  const { start, oldEnd, newEnd } = findTextEditRange(oldText, newText);
+  const nextStyles = [];
+  const insertedStyle = styleForInsertedText(oldStyles, start, oldEnd);
+
+  for (let i = 0; i < start; i += 1) {
+    nextStyles[i] = cloneStyle(oldStyles[i]);
+  }
+  for (let i = start; i < newEnd; i += 1) {
+    const oldIndex = start + (i - start);
+    nextStyles[i] = oldIndex < oldEnd && oldStyles[oldIndex]
+      ? cloneStyle(oldStyles[oldIndex])
+      : cloneStyle(insertedStyle);
+  }
+  const offset = newEnd - oldEnd;
+  for (let i = newEnd; i < newText.length; i += 1) {
+    nextStyles[i] = cloneStyle(oldStyles[i - offset]);
+  }
+
+  spans = compressStyleRuns(nextStyles);
+  normalize();
+}
 function setRangeStyle(start, end, patch) {
   const perCharStyles = stylesByCharacter();
   for (let i = start; i < end; i += 1) {
@@ -124,10 +184,45 @@ function setRangeStyle(start, end, patch) {
   normalize();
   render();
 }
+function setRangePattern(start, end, colorIds) {
+  const text = el.msg.value;
+  const perCharStyles = stylesByCharacter();
+  let offset = start;
+  let colorIndex = 0;
+  for (const glyph of Array.from(text.slice(start, end))) {
+    const nextOffset = offset + glyph.length;
+    const foreground = /\s/.test(glyph) ? null : colorIds[colorIndex % colorIds.length];
+    for (let i = offset; i < nextOffset; i += 1) {
+      perCharStyles[i] = { ...perCharStyles[i], foreground };
+    }
+    if (foreground) colorIndex += 1;
+    offset = nextOffset;
+  }
+  spans = compressStyleRuns(perCharStyles);
+  normalize();
+  render();
+}
 function setActivePatch(patch) {
   lastApplied = { ...lastApplied, ...patch };
   updatePressedStates();
   renderActiveSequence();
+}
+function applyRainbow() {
+  if (!el.msg.value.trim()) {
+    setStatus('Type a message before applying rainbow colors.');
+    el.msg.focus();
+    return;
+  }
+  let [start, end] = selected();
+  const wholeMessage = start === end;
+  if (wholeMessage) {
+    start = 0;
+    end = el.msg.value.length;
+  }
+  setRangePattern(start, end, rainbowColors);
+  setActivePatch({ foreground: null });
+  setStatus(`Applied rainbow colors to ${wholeMessage ? 'the full message' : 'selected text'}.`);
+  el.msg.focus();
 }
 function toggleStyleControl(name) {
   const [start, end] = selected();
@@ -148,7 +243,7 @@ function toggleStyleControl(name) {
 function toggleColorControl(kind, id) {
   const [start, end] = selected();
   const color = colorById(id);
-  const colorLabel = kind === 'foreground' ? 'text color' : 'background color';
+  const colorLabel = kind === 'foreground' ? 'text color' : 'highlight color';
   const nextValue = (start === end ? lastApplied[kind] === id : rangeEvery(start, end, st => st[kind] === id)) ? null : id;
   setActivePatch({ [kind]: nextValue });
   if (start === end) {
@@ -234,12 +329,7 @@ function render() {
   lastText = el.msg.value;
 }
 function selectOutput() {
-  const range = document.createRange();
-  range.selectNodeContents(el.output);
-  const selection = window.getSelection();
-  selection.removeAllRanges();
-  selection.addRange(range);
-  el.output.focus();
+  selectElementText(el.output);
 }
 document.querySelector('#copy').addEventListener('click', async () => {
   if (!el.msg.value.trim()) {
@@ -248,7 +338,7 @@ document.querySelector('#copy').addEventListener('click', async () => {
   }
   setStatus('Preparing block...');
   try {
-    await navigator.clipboard.writeText(buildAnsi());
+    await copyText(buildAnsi());
     setStatus('Copied for Discord.');
     window.fgTrack?.('discord_ansi_copied', { spans: spans.length });
   } catch (e) {
@@ -274,7 +364,7 @@ document.querySelector('#clear-all').addEventListener('click', () => {
   setStatus('Reset codes are included to help prevent colors from bleeding into the rest of your message.');
 });
 el.msg.addEventListener('input', () => {
-  if (el.msg.value !== lastText) spans = [];
+  syncSpansAfterTextEdit(lastText, el.msg.value);
   render();
 });
 el.msg.addEventListener('select', () => setStatus('Select a word or line, then apply a color or style.'));

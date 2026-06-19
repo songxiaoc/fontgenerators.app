@@ -12,5 +12,8 @@
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "latest",
     "vite": "latest"
+  },
+  "dependencies": {
+    "figlet": "^1.11.0"
   }
 }

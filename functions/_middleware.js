@@ -2,6 +2,10 @@ const APEX_HOST = 'fontgenerators.app';
 const WWW_HOST = 'www.fontgenerators.app';
 
 const CLEAN_PATHS = new Map([
+  ['/ascii-art-generator/', '/ascii-art-generator'],
+  ['/font-mixer/', '/font-mixer'],
+  ['/username-generator/', '/username-generator'],
+  ['/auto-font-styler/', '/auto-font-styler'],
   ['/discord-colored-text-generator/', '/discord-colored-text-generator'],
   ['/privacy/', '/privacy'],
   ['/cookies/', '/cookies'],
@@ -12,6 +16,10 @@ const CLEAN_PATHS = new Map([
 
 const APPROVED_PAGE_PATHS = new Set([
   '/',
+  '/ascii-art-generator',
+  '/font-mixer',
+  '/username-generator',
+  '/auto-font-styler',
   '/discord-colored-text-generator',
   '/privacy',
   '/cookies',
