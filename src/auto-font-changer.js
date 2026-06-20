@@ -86,8 +86,8 @@ function applyPreset() {
 async function copyStyled() {
   try {
     await copyText(latestOutput);
-    setStatus(`Copied ${presets[el.preset.value].label} styled text.`);
-    window.fgTrack?.('auto_font_styler_copied', { preset: el.preset.value });
+    setStatus(`Copied ${presets[el.preset.value].label} changed text.`);
+    window.fgTrack?.('auto_font_changer_copied', { preset: el.preset.value });
   } catch (err) {
     selectElementText(el.output);
     setStatus('Clipboard blocked by this browser. The styled text is selected; press Ctrl+C to copy it.');
@@ -98,7 +98,7 @@ async function copyStyled() {
 el.restyle.addEventListener('click', () => {
   offset += 1;
   applyPreset();
-  setStatus('Applied a new automatic style mix.');
+  setStatus('Applied a new automatic font change.');
 });
 el.copy.addEventListener('pointerdown', event => {
   event.preventDefault();

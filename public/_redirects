@@ -1,7 +1,9 @@
 /ascii-art-generator/ /ascii-art-generator 301
 /font-mixer/ /font-mixer 301
 /username-generator/ /username-generator 301
-/auto-font-styler/ /auto-font-styler 301
+/auto-font-changer/ /auto-font-changer 301
+/auto-font-styler /auto-font-changer 301
+/auto-font-styler/ /auto-font-changer 301
 /discord-colored-text-generator/ /discord-colored-text-generator 301
 /privacy/ /privacy 301
 /cookies/ /cookies 301

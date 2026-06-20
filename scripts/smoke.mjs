@@ -5,7 +5,7 @@ const files = [
   'dist/ascii-art-generator.html',
   'dist/font-mixer.html',
   'dist/username-generator.html',
-  'dist/auto-font-styler.html',
+  'dist/auto-font-changer.html',
   'dist/discord-colored-text-generator.html',
   'dist/privacy.html',
   'dist/cookies.html',
@@ -28,7 +28,7 @@ const home = readFileSync('dist/index.html', 'utf8');
 const ascii = readFileSync('dist/ascii-art-generator.html', 'utf8');
 const mixer = readFileSync('dist/font-mixer.html', 'utf8');
 const username = readFileSync('dist/username-generator.html', 'utf8');
-const styler = readFileSync('dist/auto-font-styler.html', 'utf8');
+const changer = readFileSync('dist/auto-font-changer.html', 'utf8');
 const privacy = readFileSync('dist/privacy.html', 'utf8');
 const cookies = readFileSync('dist/cookies.html', 'utf8');
 const terms = readFileSync('dist/terms-of-service.html', 'utf8');
@@ -36,7 +36,7 @@ const sourceHome = readFileSync('index.html', 'utf8');
 const sourceAscii = readFileSync('ascii-art-generator.html', 'utf8');
 const sourceMixer = readFileSync('font-mixer.html', 'utf8');
 const sourceUsername = readFileSync('username-generator.html', 'utf8');
-const sourceStyler = readFileSync('auto-font-styler.html', 'utf8');
+const sourceChanger = readFileSync('auto-font-changer.html', 'utf8');
 const sourceTool = readFileSync('discord-colored-text-generator.html', 'utf8');
 const sourcePrivacy = readFileSync('privacy.html', 'utf8');
 const sourceCookies = readFileSync('cookies.html', 'utf8');
@@ -47,7 +47,7 @@ const uiJs = readFileSync('src/ui.js', 'utf8');
 const asciiJs = readFileSync('src/ascii-art.js', 'utf8');
 const mixerJs = readFileSync('src/font-mixer.js', 'utf8');
 const usernameJs = readFileSync('src/username-generator.js', 'utf8');
-const stylerJs = readFileSync('src/auto-font-styler.js', 'utf8');
+const changerJs = readFileSync('src/auto-font-changer.js', 'utf8');
 const toolJs = readFileSync('src/tool.js', 'utf8');
 const analyticsJs = readFileSync('src/analytics.js', 'utf8');
 const styles = readFileSync('src/styles.css', 'utf8');
@@ -67,7 +67,7 @@ const toolPages = [
   ['ascii', ascii, sourceAscii, asciiJs, ['ASCII Art Generator', 'Browse styles', 'Popular ASCII art results', 'Banner3-D', 'Bubble', 'Digital', 'Download Image', '.txt', 'Markdown', 'WeChat', 'Image to ASCII', 'ascii-art.js']],
   ['mixer', mixer, sourceMixer, mixerJs, ['Font Mixer', 'Mix preset', 'Shuffle', 'font-mixer.js']],
   ['username', username, sourceUsername, usernameJs, ['Username Generator', 'Platform', 'Style vibe', 'username-generator.js']],
-  ['styler', styler, sourceStyler, stylerJs, ['Auto Font Styler', 'Scenario', 'Style intensity', 'auto-font-styler.js']]
+  ['changer', changer, sourceChanger, changerJs, ['Auto Font Changer', 'Scenario', 'Change intensity', 'auto-font-changer.js']]
 ];
 for (const [name, builtHtml, sourceHtml, sourceJs, expected] of toolPages) {
   for (const s of expected) if (!builtHtml.includes(s) && !sourceHtml.includes(s) && !sourceJs.includes(s)) throw new Error(`${name} tool missing ${s}`);
@@ -104,7 +104,7 @@ for (const [name, html] of [['privacy', privacy], ['cookies', cookies], ['terms'
 }
 if (!cookies.includes('<meta name="robots" content="noindex"')) throw new Error('cookies page should remain noindex');
 
-for (const html of [home, ascii, mixer, username, styler, tool, privacy, cookies, terms]) {
+for (const html of [home, ascii, mixer, username, changer, tool, privacy, cookies, terms]) {
   if (html.includes('href="/terms/"')) throw new Error('stale /terms/ link present');
   if (html.includes('href="/discord-colored-text-generator/"')) throw new Error('stale discord route slash link present');
   if (!html.includes('rel="icon" href="/favicon.png"')) throw new Error('page missing png favicon link');
@@ -114,7 +114,7 @@ for (const html of [home, ascii, mixer, username, styler, tool, privacy, cookies
   if (!html.includes('/> FontGenerators</a>')) throw new Error('visible brand label missing');
   if (html.includes('<span>Fg_</span>')) throw new Error('page should not use old text-only brand mark');
 }
-for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixer', sourceMixer], ['username', sourceUsername], ['styler', sourceStyler], ['tool', sourceTool], ['privacy', sourcePrivacy], ['cookies', sourceCookies], ['terms', sourceTerms]]) {
+for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixer', sourceMixer], ['username', sourceUsername], ['changer', sourceChanger], ['tool', sourceTool], ['privacy', sourcePrivacy], ['cookies', sourceCookies], ['terms', sourceTerms]]) {
   if (!html.includes('/src/analytics.js')) throw new Error(`${name} missing analytics module`);
   if (!html.includes('data-cookie-settings')) throw new Error(`${name} missing cookie settings control`);
 }
@@ -161,7 +161,7 @@ if (styles.includes('max-width: 980px') || styles.includes('right: clamp(14px, 4
 for (const forbidden of ['raw input text', 'generated ANSI output', 'clipboard content']) {
   if (!cookies.includes(forbidden) && !privacy.includes(forbidden)) throw new Error(`privacy/cookies should disclose analytics forbidden payload: ${forbidden}`);
 }
-for (const s of ['https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-styler', 'https://fontgenerators.app/discord-colored-text-generator', 'not downloadable TTF/OTF font files', 'Do not describe planned routes']) {
+for (const s of ['https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/discord-colored-text-generator', 'not downloadable TTF/OTF font files', 'Do not describe planned routes']) {
   if (!llms.includes(s)) throw new Error(`llms.txt missing AI/crawler guidance: ${s}`);
 }
 
@@ -208,14 +208,16 @@ for (const forbidden of ['free font downloads', 'download TTF', 'install fonts',
 }
 if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('Sitemap: https://fontgenerators.app/sitemap.xml')) throw new Error('robots missing noindex/ sitemap signals');
 const sitemapLocs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-styler', 'https://fontgenerators.app/discord-colored-text-generator'];
+const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/discord-colored-text-generator'];
 if (sitemapLocs.length !== approvedSitemapLocs.length || !approvedSitemapLocs.every(loc => sitemapLocs.includes(loc))) throw new Error(`sitemap must contain only approved indexable pages; found ${sitemapLocs.join(', ')}`);
-for (const forbidden of ['/pricing', '/refund', '/cookies', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator', '/privacy', '/terms-of-service']) {
+const sitemapLastmods = [...sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map(m => m[1]);
+if (sitemapLastmods.length !== approvedSitemapLocs.length || !sitemapLastmods.every(value => value === '2026-06-20')) throw new Error(`sitemap lastmod must be present for every indexable URL; found ${sitemapLastmods.join(', ')}`);
+for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator', '/privacy', '/terms-of-service']) {
   if (sitemap.includes(`https://fontgenerators.app${forbidden}`) && forbidden !== '/discord-colored-text-generator') throw new Error(`sitemap should not include non-indexable route ${forbidden}`);
 }
 if (redirects.includes('www.fontgenerators.app')) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level www-to-apex redirects; Pages middleware handles host canonicalization instead');
-for (const s of ['/ascii-art-generator/ /ascii-art-generator 301', '/font-mixer/ /font-mixer 301', '/username-generator/ /username-generator 301', '/auto-font-styler/ /auto-font-styler 301', '/discord-colored-text-generator/ /discord-colored-text-generator 301', '/privacy/ /privacy 301', '/cookies/ /cookies 301', '/terms-of-service/ /terms-of-service 301']) if (!redirects.includes(s)) throw new Error(`redirects missing clean URL fallback rule: ${s}`);
-for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
+for (const s of ['/ascii-art-generator/ /ascii-art-generator 301', '/font-mixer/ /font-mixer 301', '/username-generator/ /username-generator 301', '/auto-font-changer/ /auto-font-changer 301', '/auto-font-styler /auto-font-changer 301', '/auto-font-styler/ /auto-font-changer 301', '/discord-colored-text-generator/ /discord-colored-text-generator 301', '/privacy/ /privacy 301', '/cookies/ /cookies 301', '/terms-of-service/ /terms-of-service 301']) if (!redirects.includes(s)) throw new Error(`redirects missing clean URL fallback rule: ${s}`);
+for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
   if (!middleware.includes(s)) throw new Error(`canonical/analytics middleware missing ${s}`);
 }
 
@@ -237,12 +239,16 @@ const passThrough = await middlewareSmoke('https://fontgenerators.app/');
 if (passThrough.status !== 200 || await passThrough.text() !== 'next ok') throw new Error('middleware should pass canonical apex clean routes through');
 const approvedToolPassThrough = await middlewareSmoke('https://fontgenerators.app/discord-colored-text-generator');
 if (approvedToolPassThrough.status !== 200 || await approvedToolPassThrough.text() !== 'next ok') throw new Error('middleware should pass approved clean Discord route through');
-for (const path of ['/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-styler']) {
+for (const path of ['/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer']) {
   const response = await middlewareSmoke(`https://fontgenerators.app${path}`);
   if (response.status !== 200 || await response.text() !== 'next ok') throw new Error(`middleware should pass approved clean route through: ${path}`);
   const slash = await middlewareSmoke(`https://fontgenerators.app${path}/`);
   if (slash.status !== 301 || slash.headers.get('location') !== `https://fontgenerators.app${path}`) throw new Error(`middleware should redirect slash route to clean route: ${path}`);
 }
+const legacyAutoStylerRedirect = await middlewareSmoke('https://fontgenerators.app/auto-font-styler?from=old');
+if (legacyAutoStylerRedirect.status !== 301 || legacyAutoStylerRedirect.headers.get('location') !== 'https://fontgenerators.app/auto-font-changer?from=old') throw new Error('middleware should redirect legacy auto-font-styler route to auto-font-changer and preserve query');
+const legacyAutoStylerSlashRedirect = await middlewareSmoke('https://fontgenerators.app/auto-font-styler/');
+if (legacyAutoStylerSlashRedirect.status !== 301 || legacyAutoStylerSlashRedirect.headers.get('location') !== 'https://fontgenerators.app/auto-font-changer') throw new Error('middleware should redirect legacy auto-font-styler slash route to auto-font-changer');
 const approvedCookiesPassThrough = await middlewareSmoke('https://fontgenerators.app/cookies');
 if (approvedCookiesPassThrough.status !== 200 || await approvedCookiesPassThrough.text() !== 'next ok') throw new Error('middleware should pass approved clean cookie route through');
 const injectedResponse = await middlewareSmoke('https://fontgenerators.app/', {
@@ -273,4 +279,4 @@ const staticPassThrough = await middlewareSmoke('https://fontgenerators.app/asse
 if (staticPassThrough.status !== 200 || await staticPassThrough.text() !== 'next ok') throw new Error('middleware should pass static asset requests through');
 const llmsPassThrough = await middlewareSmoke('https://fontgenerators.app/llms.txt');
 if (llmsPassThrough.status !== 200 || await llmsPassThrough.text() !== 'next ok') throw new Error('middleware should pass llms.txt through');
-console.log(`smoke ok: pages, SEO/schema/legal/cookie/analytics routes present; homepage has ${canonicalStyles.length} unique styles from ${styleIds.length} raw definitions; ASCII/Mixer/Username/Auto Styler routes are live; held routes return 404 noindex`);
+console.log(`smoke ok: pages, SEO/schema/legal/cookie/analytics routes present; homepage has ${canonicalStyles.length} unique styles from ${styleIds.length} raw definitions; ASCII/Mixer/Username/Auto Changer routes are live; held routes return 404 noindex`);

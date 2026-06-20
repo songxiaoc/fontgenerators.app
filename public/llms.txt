@@ -8,7 +8,7 @@
 - https://fontgenerators.app/ascii-art-generator - ASCII Art Generator for FIGlet text styles, width controls, copy actions, and TXT/PNG downloads.
 - https://fontgenerators.app/font-mixer - Font Mixer for applying different copy-paste Unicode styles to different words in one line.
 - https://fontgenerators.app/username-generator - Username Generator for styled social, Discord, and gaming handle ideas.
-- https://fontgenerators.app/auto-font-styler - Auto Font Styler for one-click styled bios, captions, marketing snippets, Discord messages, and gaming text.
+- https://fontgenerators.app/auto-font-changer - Auto Font Changer for one-click changed bios, captions, marketing snippets, Discord messages, and gaming text.
 - https://fontgenerators.app/discord-colored-text-generator - Discord Colored Text Generator for selected-span ANSI foreground/background colors, bold, underline, approximate preview, and copy-ready fenced `ansi` blocks.
 
 ## Legal and policy pages
