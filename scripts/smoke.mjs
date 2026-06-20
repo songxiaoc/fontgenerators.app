@@ -134,7 +134,7 @@ if (!styles.includes('.icon-action-btn.is-on .material-symbols-outlined') || !st
 if (!styles.includes('.rainbow-control') || !styles.includes('linear-gradient(90deg, #f87171, #facc15, #34d399, #22d3ee, #60a5fa, #f472b6)')) throw new Error('discord rainbow preset styling missing');
 if (!styles.includes('.palette-group .color-chip') || !styles.includes('width: 26px;') || !styles.includes('height: 26px;')) throw new Error('mobile Discord color chips should stay compact');
 if (!styles.includes('.preview-grid') || !styles.includes('grid-template-columns: 1fr;')) throw new Error('discord preview/output should stack into two rows');
-if (!styles.includes('.palette-group') || !styles.includes('.palette-label') || !styles.includes('.active-style-label') || !styles.includes('.active-style-pills')) throw new Error('discord color palette/status clarity CSS missing');
+if (!styles.includes('.palette-group') || !styles.includes('.palette-label')) throw new Error('discord color palette clarity CSS missing');
 if (!styles.includes('#copy-status[data-toast-visible="true"]') || !styles.includes('.toast-line[data-toast-visible="true"]') || !styles.includes('visibility: hidden;') || !uiJs.includes("status.dataset.toastVisible = 'true'") || !uiJs.includes("setProperty('opacity', '1', 'important')") || !uiJs.includes("setProperty('visibility', 'visible', 'important')")) throw new Error('copy/favorite status should use a floating toast state');
 if (!sourceTool.includes('ansi-code-table') || !sourceTool.includes('<code>30</code>') || !sourceTool.includes('<code>47</code>')) throw new Error('discord page missing visible ANSI code table');
 if (!sourceTool.includes('data-clarity-mask="true"')) throw new Error('discord editor/output surfaces must be masked for Clarity');
@@ -168,8 +168,9 @@ for (const s of ['https://fontgenerators.app/ascii-art-generator', 'https://font
 if (tool.includes('https://fontgenerators.app/discord-colored-text-generator/')) throw new Error('stale discord canonical slash present');
 if (!tool.includes('<h1 id="tool-label">Discord Colored Text Generator</h1>')) throw new Error('discord page H1 must use search-facing primary phrase');
 if (tool.includes('Discord ANSI Generator - Light Lab')) throw new Error('discord page should not expose internal Light Lab H1 wording');
-if (!sourceTool.includes('Text color') || !sourceTool.includes('Highlight') || !sourceTool.includes('Selection formatting')) throw new Error('discord page missing user-friendly color/status labels');
-if (sourceTool.includes('>Active style<') || sourceTool.includes('Palette (Fg / Bg)') || sourceTool.includes('Current ANSI codes')) throw new Error('discord page should not expose low-value badge/status labels or raw ANSI labels in the main controls');
+if (!sourceTool.includes('Text color') || !sourceTool.includes('Highlight')) throw new Error('discord page missing user-friendly color labels');
+if (sourceTool.includes('Selection formatting') || sourceTool.includes('active-sequence') || sourceTool.includes('>Active style<') || sourceTool.includes('>Plain text<') || sourceTool.includes('Palette (Fg / Bg)') || sourceTool.includes('Current ANSI codes')) throw new Error('discord page should not expose low-value badge/status labels or raw ANSI labels in the main controls');
+if (toolJs.includes('renderActiveSequence') || toolJs.includes('active-sequence')) throw new Error('discord script should not maintain the removed active style summary');
 if (homeJs.includes('is-featured') || homeJs.includes('style-row${featured}')) throw new Error('homepage should not default-highlight a featured style row');
 for (const s of ['toggleStyleControl', 'rangeEvery', 'setRangeStyle']) if (!toolJs.includes(s)) throw new Error(`tool missing toggle helper ${s}`);
 for (const s of ['rainbowColors', 'applyRainbow', 'setRangePattern', "from './ui.js'", 'copyText(buildAnsi())']) if (!toolJs.includes(s)) throw new Error(`tool missing rainbow/fallback helper ${s}`);

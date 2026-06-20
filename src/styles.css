@@ -1263,41 +1263,6 @@ summary {
   border-radius: var(--radius-sm);
   vertical-align: -3px;
 }
-.compact-helper { display: none; }
-.active-sequence {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 8px 12px;
-  color: var(--muted);
-  background: rgba(240,253,250,.5);
-  border: 1px solid #ccfbf1;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-code);
-  font-size: 14px;
-}
-.active-sequence code,
-.active-style-pills span {
-  padding: 2px 8px;
-  color: #0f766e;
-  background: var(--surface);
-  border: 1px solid #99f6e4;
-  border-radius: var(--radius-sm);
-}
-.active-style-label {
-  color: var(--ink);
-  font-weight: 700;
-}
-.active-style-note {
-  color: var(--muted);
-}
-.active-style-pills {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
 .preview-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1998,7 +1963,6 @@ summary {
     border-radius: 2px !important;
   }
   .palette-divider { display: none; }
-  .active-sequence { display: none; }
   .preview-grid {
     gap: 12px;
     margin-top: 12px;

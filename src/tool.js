@@ -31,8 +31,7 @@ const el = {
   bg: document.querySelector('#bg-controls'),
   preview: document.querySelector('#preview'),
   output: document.querySelector('#output'),
-  status: document.querySelector('#copy-status'),
-  active: document.querySelector('#active-sequence')
+  status: document.querySelector('#copy-status')
 };
 const showStatus = createToast(el.status);
 let spans = [];
@@ -53,17 +52,6 @@ function updatePressedStates() {
   document.querySelectorAll('[data-bg]').forEach(btn => btn.setAttribute('aria-pressed', String(lastApplied.background === btn.dataset.bg)));
   document.querySelectorAll('[data-style]').forEach(btn => btn.setAttribute('aria-pressed', String(Boolean(lastApplied[btn.dataset.style]))));
   document.querySelectorAll('[data-preset]').forEach(btn => btn.setAttribute('aria-pressed', 'false'));
-}
-function renderActiveSequence() {
-  if (!el.active) return;
-  const pieces = [];
-  if (lastApplied.bold) pieces.push('Bold');
-  if (lastApplied.underline) pieces.push('Underline');
-  if (lastApplied.foreground) pieces.push(`${colorById(lastApplied.foreground).label} text`);
-  if (lastApplied.background) pieces.push(`${colorById(lastApplied.background).label} highlight`);
-  el.active.innerHTML = pieces.length
-    ? `<span class="active-style-label">Active style</span><span class="active-style-pills">${pieces.map(piece => `<span>${esc(piece)}</span>`).join('')}</span>`
-    : '<span class="active-style-label">Plain text</span><span class="active-style-note">No color or extra formatting selected.</span>';
 }
 function addButtons() {
   const formatButtons = document.querySelectorAll('[data-style]');
@@ -205,7 +193,6 @@ function setRangePattern(start, end, colorIds) {
 function setActivePatch(patch) {
   lastApplied = { ...lastApplied, ...patch };
   updatePressedStates();
-  renderActiveSequence();
 }
 function applyRainbow() {
   if (!el.msg.value.trim()) {
@@ -359,7 +346,6 @@ document.querySelector('#clear-all').addEventListener('click', () => {
   spans = [];
   lastApplied = blankStyle();
   updatePressedStates();
-  renderActiveSequence();
   render();
   setStatus('Reset codes are included to help prevent colors from bleeding into the rest of your message.');
 });
@@ -382,5 +368,4 @@ spans = [
 ];
 lastApplied = blankStyle();
 updatePressedStates();
-renderActiveSequence();
 render();
