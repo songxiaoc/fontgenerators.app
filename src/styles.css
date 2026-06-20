@@ -1417,6 +1417,10 @@ summary {
   color: var(--muted);
   font-size: 14px;
 }
+.site-footer .footer-contact {
+  margin-top: 10px;
+  font-weight: 700;
+}
 .site-footer nav {
   display: flex;
   flex-wrap: wrap;
