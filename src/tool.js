@@ -362,9 +362,9 @@ function lists() {
 addButtons();
 lists();
 spans = [
-  { start: 0, end: 11, foreground: 'red', background: null, bold: true, underline: false },
-  { start: 22, end: 26, foreground: 'yellow', background: null, bold: false, underline: true },
-  { start: 27, end: 39, foreground: 'cyan', background: null, bold: false, underline: false }
+  { start: 0, end: 9, foreground: 'red', background: null, bold: true, underline: false },
+  { start: 10, end: 16, foreground: 'yellow', background: null, bold: false, underline: true },
+  { start: 24, end: 33, foreground: 'cyan', background: null, bold: false, underline: false }
 ];
 lastApplied = blankStyle();
 updatePressedStates();

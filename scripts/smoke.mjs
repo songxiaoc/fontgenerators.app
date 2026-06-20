@@ -120,6 +120,7 @@ for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixe
 }
 if (sourceHome.includes('Free Browser-Based Font Generator') || sourceHome.includes('answer-block')) throw new Error('home should not include the removed hero eyebrow or AEO answer block');
 if (sourceHome.includes('class="chips"') || homeJs.includes('style-new') || homeJs.includes('FONTB')) throw new Error('home should not include removed hero chips or temporary FontB badges');
+if (!sourceHome.includes('value="Make your profile text stand out"') || sourceHome.includes('value="Alex Plays"')) throw new Error('homepage default text should use the current product-facing sample copy');
 if (!sourceHome.includes('Unicode styles in real time, <br />then copy')) throw new Error('home lede should use the requested two-line break with mobile-safe spacing');
 if (!sourceHome.includes('How do I copy and paste fonts from this generator?') || !sourceHome.includes('Is fancy text accessible?')) throw new Error('home missing visible AEO FAQ additions');
 if (!sourceHome.includes('data-clarity-mask="true"') || !homeJs.includes('data-clarity-mask="true"')) throw new Error('homepage generator surfaces must be masked for Clarity');
@@ -170,6 +171,9 @@ if (!tool.includes('<h1 id="tool-label">Discord Colored Text Generator</h1>')) t
 if (tool.includes('Discord ANSI Generator - Light Lab')) throw new Error('discord page should not expose internal Light Lab H1 wording');
 if (!sourceTool.includes('Text color') || !sourceTool.includes('Highlight')) throw new Error('discord page missing user-friendly color labels');
 if (sourceTool.includes('Selection formatting') || sourceTool.includes('active-sequence') || sourceTool.includes('>Active style<') || sourceTool.includes('>Plain text<') || sourceTool.includes('Palette (Fg / Bg)') || sourceTool.includes('Current ANSI codes')) throw new Error('discord page should not expose low-value badge/status labels or raw ANSI labels in the main controls');
+if (!sourceTool.includes('Make this server update stand out tonight.') || sourceTool.includes('Movie night starts') || sourceTool.includes('Bring snacks')) throw new Error('discord editor should use the current concise sample copy');
+if (!styles.includes('grid-template-columns: minmax(340px, max-content) minmax(420px, 1fr);') || !styles.includes('flex-wrap: nowrap;')) throw new Error('discord desktop palette should keep color chips on one row');
+if (!styles.match(/\.preview-box \{[\s\S]*?white-space: pre-wrap;/)) throw new Error('discord preview should preserve repeated spaces and line breaks');
 if (toolJs.includes('renderActiveSequence') || toolJs.includes('active-sequence')) throw new Error('discord script should not maintain the removed active style summary');
 if (homeJs.includes('is-featured') || homeJs.includes('style-row${featured}')) throw new Error('homepage should not default-highlight a featured style row');
 for (const s of ['toggleStyleControl', 'rangeEvery', 'setRangeStyle']) if (!toolJs.includes(s)) throw new Error(`tool missing toggle helper ${s}`);

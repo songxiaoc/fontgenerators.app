@@ -1118,7 +1118,7 @@ summary {
 }
 .controls {
   display: grid;
-  grid-template-columns: minmax(340px, .9fr) minmax(320px, 1fr) minmax(280px, 1fr);
+  grid-template-columns: minmax(340px, max-content) minmax(420px, 1fr);
   gap: 24px;
   padding-bottom: 16px;
   margin-bottom: 16px;
@@ -1178,7 +1178,8 @@ summary {
   border-color: #fde68a;
 }
 .palette-group .control-row {
-  gap: 7px;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
 .palette-divider {
   display: none;
@@ -1286,6 +1287,7 @@ summary {
   color: #e6edf3;
   background: var(--discord-bg);
   border-color: #334155;
+  white-space: pre-wrap;
 }
 .code-box {
   color: var(--code-text);
