@@ -352,8 +352,12 @@ if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('
 const sitemapLocs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
 const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/discord-colored-text-generator', 'https://fontgenerators.app/privacy', 'https://fontgenerators.app/terms-of-service'];
 if (sitemapLocs.length !== approvedSitemapLocs.length || !approvedSitemapLocs.every(loc => sitemapLocs.includes(loc))) throw new Error(`sitemap must contain only approved indexable pages; found ${sitemapLocs.join(', ')}`);
-const sitemapLastmods = [...sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map(m => m[1]);
-if (sitemapLastmods.length !== approvedSitemapLocs.length || !sitemapLastmods.every(value => value === '2026-06-29')) throw new Error(`sitemap lastmod must be present for every indexable URL; found ${sitemapLastmods.join(', ')}`);
+const sitemapLastmods = new Map([...sitemap.matchAll(/<url><loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod><\/url>/g)].map(match => [match[1], match[2]]));
+const approvedSitemapLastmods = new Map(approvedSitemapLocs.map(loc => [loc, loc === 'https://fontgenerators.app/font-mixer' ? '2026-07-04' : '2026-06-29']));
+for (const [loc, expectedLastmod] of approvedSitemapLastmods) {
+  const actualLastmod = sitemapLastmods.get(loc);
+  if (actualLastmod !== expectedLastmod) throw new Error(`sitemap lastmod for ${loc} must be ${expectedLastmod}; found ${actualLastmod || 'missing'}`);
+}
 for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator']) {
   if (sitemap.includes(`https://fontgenerators.app${forbidden}`) && forbidden !== '/discord-colored-text-generator') throw new Error(`sitemap should not include non-indexable route ${forbidden}`);
 }

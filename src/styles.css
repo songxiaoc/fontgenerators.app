@@ -1095,6 +1095,93 @@ summary {
   background: var(--primary);
   border-color: var(--primary);
 }
+.mixer-mode-row {
+  margin-bottom: 2px;
+}
+.word-token-list,
+.style-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+.word-token,
+.style-chip-grid button {
+  min-height: 38px;
+  max-width: 100%;
+  padding: 7px 10px;
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+.word-token {
+  display: inline-grid;
+  grid-template-columns: minmax(0, auto);
+  gap: 2px;
+  text-align: left;
+}
+.word-token__text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.word-token__style {
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.word-token.has-style {
+  background: var(--primary-soft);
+  border-color: rgba(0, 110, 47, .26);
+}
+.word-token[aria-pressed="true"],
+.style-chip-grid button:hover,
+.style-chip-grid button:focus-visible {
+  color: #fff;
+  background: var(--primary);
+  border-color: var(--primary);
+  outline: 0;
+}
+.word-token[aria-pressed="true"] .word-token__style {
+  color: rgba(255, 255, 255, .74);
+}
+.unicode-sample {
+  font-family: "Segoe UI Symbol", "Noto Sans Math", "Apple Symbols", var(--font-code), system-ui, sans-serif;
+}
+.mixer-example-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.mixer-example-grid article {
+  min-width: 0;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.mixer-example-grid h3 {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.mixer-example-grid p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 18px;
+  line-height: 1.45;
+}
 
 .tool-hero {
   width: min(100%, 1120px);
@@ -1621,6 +1708,7 @@ summary {
   .tool-form-grid,
   .tool-result-grid,
   .tool-grid,
+  .mixer-example-grid,
   .preview-grid,
   .ansi-table {
     grid-template-columns: 1fr;
@@ -1864,6 +1952,17 @@ summary {
   .tool-panel__header h2 {
     font-size: 22px;
     line-height: 28px;
+  }
+  .word-token,
+  .style-chip-grid button {
+    min-height: 34px;
+    padding: 6px 8px;
+    border-radius: 2px;
+    font-size: 12px;
+  }
+  .word-token__style {
+    font-size: 8px;
+    line-height: 11px;
   }
   .ascii-tool-page {
     padding-top: 18px;
