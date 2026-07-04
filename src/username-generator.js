@@ -78,7 +78,7 @@ function render() {
   el.results.innerHTML = candidates.map((candidate, index) => {
     const style = pool[index % pool.length] || styles[index % styles.length];
     const output = style.transform(candidate);
-    return `<article class="tool-result-card" data-username-card><h3>${escapeHtml(style.name)}</h3><div class="tool-card-actions"><button type="button" class="icon-copy" data-copy-username="${escapeHtml(output)}" aria-label="Copy ${escapeHtml(candidate)}"><span class="material-symbols-outlined">content_copy</span></button></div><output class="clarity-mask" data-clarity-mask="true" tabindex="0">${escapeHtml(output)}</output></article>`;
+    return `<article class="tool-result-card" data-username-card><h3>${escapeHtml(style.name)}</h3><div class="tool-card-actions"><button type="button" class="icon-copy" data-copy-username="${escapeHtml(output)}" aria-label="Copy ${escapeHtml(candidate)}"><span class="material-symbols-outlined" aria-hidden="true" data-icon="content_copy"></span></button></div><output class="clarity-mask" data-clarity-mask="true" tabindex="0">${escapeHtml(output)}</output></article>`;
   }).join('');
 }
 
@@ -87,11 +87,11 @@ async function copyUsername(button) {
   try {
     await copyText(value);
     button.classList.add('copied');
-    button.querySelector('.material-symbols-outlined').textContent = 'check';
+    button.querySelector('.material-symbols-outlined').dataset.icon = 'check';
     setStatus('Copied username.');
     window.setTimeout(() => {
       button.classList.remove('copied');
-      button.querySelector('.material-symbols-outlined').textContent = 'content_copy';
+      button.querySelector('.material-symbols-outlined').dataset.icon = 'content_copy';
     }, 1400);
   } catch (err) {
     selectElementText(button.closest('[data-username-card]')?.querySelector('output'));

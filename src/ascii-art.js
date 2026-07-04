@@ -205,9 +205,9 @@ async function renderPopularCards(token, text, width, layout, cardFonts) {
     <h3>${escapeHtml(fontName)}</h3>
     <pre class="ascii-card-output clarity-mask" data-clarity-mask="true" tabindex="0">${escapeHtml(output)}</pre>
     <div class="tool-actions ascii-card-actions">
-      <button type="button" class="button secondary" data-copy-ascii-card="${escapeHtml(fontName)}"><span class="material-symbols-outlined">content_copy</span>Copy</button>
-      <button type="button" class="button secondary" data-download-ascii-card-png="${escapeHtml(fontName)}"><span class="material-symbols-outlined">download</span>Download Image</button>
-      <button type="button" class="button secondary" data-download-ascii-card-txt="${escapeHtml(fontName)}"><span class="material-symbols-outlined">description</span>.txt</button>
+      <button type="button" class="button secondary" data-copy-ascii-card="${escapeHtml(fontName)}"><span class="material-symbols-outlined" aria-hidden="true" data-icon="content_copy"></span>Copy</button>
+      <button type="button" class="button secondary" data-download-ascii-card-png="${escapeHtml(fontName)}"><span class="material-symbols-outlined" aria-hidden="true" data-icon="download"></span>Download Image</button>
+      <button type="button" class="button secondary" data-download-ascii-card-txt="${escapeHtml(fontName)}"><span class="material-symbols-outlined" aria-hidden="true" data-icon="description"></span>.txt</button>
     </div>
   </article>`).join('');
 }
@@ -231,13 +231,13 @@ el.results.addEventListener('pointerdown', async event => {
     await copyText(output);
     card?.classList.add('copied');
     copyButton.classList.add('copied');
-    if (icon) icon.textContent = 'check';
+    if (icon) icon.dataset.icon = 'check';
     setStatus(`Copied ${fontName} ASCII art.`);
     window.fgTrack?.('ascii_art_card_copied', { font: fontName });
     window.setTimeout(() => {
       card?.classList.remove('copied');
       copyButton.classList.remove('copied');
-      if (icon) icon.textContent = 'content_copy';
+      if (icon) icon.dataset.icon = 'content_copy';
     }, 1500);
   } catch (err) {
     selectElementText(card?.querySelector('.ascii-card-output'));

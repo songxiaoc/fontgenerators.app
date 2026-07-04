@@ -10,6 +10,15 @@ const categoryButtons = [...document.querySelectorAll('[data-category]')];
 let activeCategory = 'All';
 const setStatus = createToast(status);
 const favoriteStorageKey = 'fontgenerators.favoriteStyles.v1';
+const svgIcon = {
+  check: '<svg viewBox="0 0 24 24" focusable="false"><path d="m20 6-11 11-5-5"></path></svg>',
+  copy: '<svg viewBox="0 0 24 24" focusable="false"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 4H6a2 2 0 0 0-2 2v10"></path></svg>',
+  star: '<svg viewBox="0 0 24 24" focusable="false" class="is-filled"><path d="m12 3.6 2.55 5.17 5.7.83-4.12 4.01.97 5.67L12 16.6l-5.1 2.68.97-5.67L3.75 9.6l5.7-.83L12 3.6Z"></path></svg>',
+  starBorder: '<svg viewBox="0 0 24 24" focusable="false"><path d="m12 3.6 2.55 5.17 5.7.83-4.12 4.01.97 5.67L12 16.6l-5.1 2.68.97-5.67L3.75 9.6l5.7-.83L12 3.6Z"></path></svg>'
+};
+function iconMarkup(name) {
+  return `<span class="inline-icon" aria-hidden="true">${svgIcon[name]}</span>`;
+}
 function readFavoriteIds() {
   try {
     const stored = globalThis.localStorage?.getItem(favoriteStorageKey);
@@ -55,8 +64,8 @@ function render(){
         </div>
       </div>
       <div class="style-actions">
-        <button type="button" class="icon-action-btn${favorite ? ' is-on' : ''}" data-favorite="${style.id}" aria-pressed="${favorite}" aria-label="${favorite ? 'Remove' : 'Save'} ${escapeHtml(style.name)} favorite"><span class="material-symbols-outlined">${favorite ? 'star' : 'star_border'}</span></button>
-        <button type="button" class="icon-copy" data-copy="${style.id}" aria-label="Copy ${escapeHtml(style.name)} style"><span class="material-symbols-outlined">content_copy</span></button>
+        <button type="button" class="icon-action-btn${favorite ? ' is-on' : ''}" data-favorite="${style.id}" aria-pressed="${favorite}" aria-label="${favorite ? 'Remove' : 'Save'} ${escapeHtml(style.name)} favorite">${iconMarkup(favorite ? 'star' : 'starBorder')}</button>
+        <button type="button" class="icon-copy" data-copy="${style.id}" aria-label="Copy ${escapeHtml(style.name)} style">${iconMarkup('copy')}</button>
       </div>
       <div class="style-output clarity-mask" data-clarity-mask="true" data-output tabindex="0" aria-label="${escapeHtml(style.name)} generated style preview">${escapeHtml(output)}</div>
     </article>`;
@@ -68,18 +77,18 @@ async function copyStyle(id){
   const value = style.transform(input.value || 'Your Text');
   const row = document.querySelector(`[data-style-id="${id}"]`);
   const button = row?.querySelector('[data-copy]');
-  const icon = button?.querySelector('.material-symbols-outlined');
+  const icon = button?.querySelector('.inline-icon');
   try {
     await copyText(value);
     row?.classList.add('copied');
     button?.classList.add('copied');
-    if (icon) icon.textContent = 'check';
+    if (icon) icon.innerHTML = svgIcon.check;
     setStatus(`Copied ${style.name}.`);
     window.fgTrack?.('font_style_copied', { style_id: style.id, category: style.category });
     setTimeout(() => {
       row?.classList.remove('copied');
       button?.classList.remove('copied');
-      if (icon) icon.textContent = 'content_copy';
+      if (icon) icon.innerHTML = svgIcon.copy;
     }, 1500);
   } catch (err) {
     selectElementText(row?.querySelector('[data-output]'));

@@ -15,7 +15,11 @@ const files = [
   'dist/llms.txt',
   'dist/logo.png',
   'dist/favicon.png',
+  'dist/fonts/dm-sans-latin.woff2',
+  'dist/fonts/dm-sans-latin-ext.woff2',
   'dist/_redirects',
+  'public/fonts/dm-sans-latin.woff2',
+  'public/fonts/dm-sans-latin-ext.woff2',
   'functions/_middleware.js'
 ];
 for (const f of files) { if (!existsSync(f)) throw new Error(`missing ${f}`); }
@@ -57,6 +61,121 @@ const redirects = readFileSync('dist/_redirects', 'utf8');
 const llms = readFileSync('dist/llms.txt', 'utf8');
 const middleware = readFileSync('functions/_middleware.js', 'utf8');
 
+const seoPages = [
+  ['home', home, 'font generator', 'copy paste fonts'],
+  ['ascii', ascii, 'ascii art', 'ascii art generator'],
+  ['mixer', mixer, 'font mixer', 'font mixer tool'],
+  ['username', username, 'username generator', 'fancy username generator'],
+  ['changer', changer, 'font changer', 'auto font changer'],
+  ['tool', tool, 'colored text', 'discord colored text'],
+  ['privacy', privacy, 'privacy policy', 'browser privacy policy'],
+  ['cookies', cookies, 'cookie policy', 'analytics cookie policy'],
+  ['terms', terms, 'service terms', 'terms of service']
+];
+
+function stripHtml(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z#0-9]+;/gi, ' ');
+}
+
+function wordTokens(html) {
+  return stripHtml(html).toLowerCase().replace(/[^a-z0-9\s-]/g, ' ').split(/\s+/).filter(Boolean);
+}
+
+function countPhrase(tokens, phrase) {
+  const parts = phrase.split(/\s+/);
+  let count = 0;
+  for (let i = 0; i <= tokens.length - parts.length; i++) {
+    let matches = true;
+    for (let j = 0; j < parts.length; j++) {
+      if (tokens[i + j] !== parts[j]) {
+        matches = false;
+        break;
+      }
+    }
+    if (matches) count++;
+  }
+  return count;
+}
+
+function assertSeoMetrics(name, html, twoWordKeyword, threeWordKeyword) {
+  const title = html.match(/<title>(.*?)<\/title>/i)?.[1] || '';
+  const description = html.match(/<meta name="description" content="([^"]*)"/i)?.[1] || '';
+  const tokens = wordTokens(html);
+  const twoWordDensity = (countPhrase(tokens, twoWordKeyword) / tokens.length) * 100;
+  const threeWordDensity = (countPhrase(tokens, threeWordKeyword) / tokens.length) * 100;
+
+  if (!title || title.length > 60) throw new Error(`${name} title must be present and <=60 characters; found ${title.length}`);
+  if (/(?:\||-|–|—)\s*FontGenerators(?:\.app)?\s*$/i.test(title) || /FontGenerators\.app/i.test(title)) throw new Error(`${name} title should not append the brand name`);
+  if (description.length < 140 || description.length > 160) throw new Error(`${name} description must be 140-160 characters; found ${description.length}`);
+  if (tokens.length < 1000) throw new Error(`${name} should have at least 1000 visible words; found ${tokens.length}`);
+  if (twoWordDensity < 3) throw new Error(`${name} "${twoWordKeyword}" density must be >=3%; found ${twoWordDensity.toFixed(2)}%`);
+  if (threeWordDensity < 1) throw new Error(`${name} "${threeWordKeyword}" density must be >=1%; found ${threeWordDensity.toFixed(2)}%`);
+}
+
+function assertImageAlts(name, html) {
+  for (const match of html.matchAll(/<img\b[^>]*>/gi)) {
+    const tag = match[0];
+    const alt = tag.match(/\salt\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+    if (!alt) throw new Error(`${name} image missing alt text: ${tag.slice(0, 100)}`);
+    const value = alt[1] ?? alt[2] ?? alt[3] ?? '';
+    if (!value.trim()) throw new Error(`${name} image has empty alt text: ${tag.slice(0, 100)}`);
+  }
+}
+
+for (const [name, html, twoWordKeyword, threeWordKeyword] of seoPages) {
+  assertSeoMetrics(name, html, twoWordKeyword, threeWordKeyword);
+  assertImageAlts(name, html);
+}
+
+for (const [name, content] of [
+  ['home source', sourceHome],
+  ['ascii source', sourceAscii],
+  ['mixer source', sourceMixer],
+  ['username source', sourceUsername],
+  ['changer source', sourceChanger],
+  ['tool source', sourceTool],
+  ['home js', homeJs],
+  ['ascii js', asciiJs],
+  ['username js', usernameJs],
+  ['built home', home],
+  ['built ascii', ascii],
+  ['built mixer', mixer],
+  ['built username', username],
+  ['built changer', changer],
+  ['built tool', tool]
+]) {
+  if (/<span\b(?=[^>]*material-symbols-outlined)[^>]*>\s*[a-z][a-z0-9_]*\s*<\/span>/i.test(content)) {
+    throw new Error(`${name} should render Material Symbols from data-icon, not visible ligature text`);
+  }
+}
+
+for (const [name, html] of [
+  ['home', sourceHome],
+  ['ascii', sourceAscii],
+  ['mixer', sourceMixer],
+  ['username', sourceUsername],
+  ['changer', sourceChanger],
+  ['tool', sourceTool],
+  ['privacy', sourcePrivacy],
+  ['cookies', sourceCookies],
+  ['terms', sourceTerms]
+]) {
+  if (!html.includes('rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin')) throw new Error(`${name} should preload the self-hosted DM Sans latin subset`);
+  if (html.includes('family=DM+Sans')) throw new Error(`${name} should not load DM Sans from Google Fonts`);
+  if (html.includes('family=JetBrains+Mono') && !html.includes('Space+Grotesk:wght@500;700&display=optional')) throw new Error(`${name} remaining Google text fonts should use display=optional`);
+  if (html.includes('family=JetBrains+Mono') && html.includes('Space+Grotesk:wght@500;700&display=swap')) throw new Error(`${name} remaining Google text fonts should not use display=swap`);
+  if (html.includes('family=Noto+Sans+Math') && !html.includes('family=Noto+Sans+Math&display=optional')) throw new Error(`${name} math fallback font should use display=optional`);
+  if (html.includes('family=Noto+Sans+Math&display=swap')) throw new Error(`${name} math fallback font should not use display=swap`);
+  if (html.includes('Material+Symbols+Outlined') && !html.includes('Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&display=swap')) throw new Error(`${name} Material Symbols should keep display=swap so icons do not stay as ligature text`);
+}
+if (!styles.includes('src: url("/fonts/dm-sans-latin.woff2") format("woff2")') || !styles.includes('src: url("/fonts/dm-sans-latin-ext.woff2") format("woff2")') || !styles.includes('font-weight: 400 800;')) {
+  throw new Error('global CSS should self-host DM Sans variable font subsets');
+}
+
 const mustTool = ['Discord Colored Text Generator', 'Copy for Discord', 'Rainbow', 'Unofficial tool; not made, endorsed, or sponsored by Discord', 'Discord ANSI uses a limited palette', 'FAQPage', 'WebApplication', 'HowTo'];
 for (const s of mustTool) if (!tool.includes(s)) throw new Error(`tool missing ${s}`);
 const mustHome = ['Font Generator for Copy-Paste Fancy Text Styles', 'Type once, copy many text styles', 'These are Unicode copy-paste text styles, not downloadable font files', 'Open Discord Colored Text Generator', 'WebSite', 'WebApplication', 'FAQPage'];
@@ -90,7 +209,7 @@ for (const s of ['latestOutput', 'copyOutput', 'el.output', 'el.copy', 'el.downl
   if (asciiJs.includes(s)) throw new Error(`ASCII script should be card-only and not reference removed top controls: ${s}`);
 }
 if (!sourceAscii.includes('class="ascii-results-section"') || sourceAscii.includes('<section class="tool-panel" aria-labelledby="ascii-results-title"')) throw new Error('ASCII popular results should not be wrapped by an outer visual panel');
-if (!asciiJs.includes("card?.classList.add('copied')") || !asciiJs.includes("icon.textContent = 'check'")) throw new Error('ASCII card copy should use homepage-like copied state');
+if (!asciiJs.includes("card?.classList.add('copied')") || !asciiJs.includes("icon.dataset.icon = 'check'")) throw new Error('ASCII card copy should use homepage-like copied state');
 for (const s of ['copyText', 'createToast', 'downloadText', 'selectElementText']) if (!uiJs.includes(`export ${s === 'copyText' || s === 'downloadText' ? 'async ' : ''}function ${s}`) && !uiJs.includes(`export function ${s}`)) throw new Error(`shared UI helper missing ${s}`);
 for (const s of ['.tool-page', '.tool-panel', '.tool-form-grid', '.tool-output', '.tool-result-card:hover', '.tool-result-card.copied', '.ascii-results-section', '.ascii-results-grid', '.ascii-card-output', '.ascii-compact-grid', '.ascii-option-grid', '.toast-line[data-toast-visible="true"]']) if (!styles.includes(s)) throw new Error(`shared CSS missing ${s}`);
 for (const s of ['overflow-x: auto;', 'scrollbar-gutter: stable;', '.ascii-card-actions .button', 'min-width: 0;']) {
@@ -107,12 +226,21 @@ if (!cookies.includes('<meta name="robots" content="noindex"')) throw new Error(
 for (const html of [home, ascii, mixer, username, changer, tool, privacy, cookies, terms]) {
   if (html.includes('href="/terms/"')) throw new Error('stale /terms/ link present');
   if (html.includes('href="/discord-colored-text-generator/"')) throw new Error('stale discord route slash link present');
+  if (html.includes('mailto:') || html.includes('/cdn-cgi/l/email-protection')) throw new Error('page should not expose Cloudflare-obfuscated email links');
+  if (html.includes('contact@fontgenerators.app')) throw new Error('page should not expose a contiguous email address');
+  if (html.includes('alt=""')) throw new Error('page should not contain empty image alt attributes');
   if (!html.includes('rel="icon" href="/favicon.png"')) throw new Error('page missing png favicon link');
   if (!html.includes('class="brand-mark" src="/logo.png"')) throw new Error('page missing logo brand mark');
+  if (!html.includes('alt="FontGenerators.app logo"')) throw new Error('page missing logo alt text');
   if (!html.includes('class="nav-toggle"') || !html.includes('id="primary-navigation"')) throw new Error('page missing mobile navigation toggle');
   if (html.includes('/> FontGenerators.app</a>')) throw new Error('visible brand label should omit .app');
   if (!html.includes('/> FontGenerators</a>')) throw new Error('visible brand label missing');
   if (html.includes('<span>Fg_</span>')) throw new Error('page should not use old text-only brand mark');
+}
+for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['tool', tool], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
+  for (const s of ['property="og:type"', 'property="og:url"', 'property="og:image"', 'property="og:image:alt"', 'name="twitter:card"', 'name="twitter:title"', 'name="twitter:description"', 'name="twitter:image"']) {
+    if (!html.includes(s)) throw new Error(`${name} missing complete social metadata: ${s}`);
+  }
 }
 for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixer', sourceMixer], ['username', sourceUsername], ['changer', sourceChanger], ['tool', sourceTool], ['privacy', sourcePrivacy], ['cookies', sourceCookies], ['terms', sourceTerms]]) {
   if (!html.includes('/src/analytics.js')) throw new Error(`${name} missing analytics module`);
@@ -120,18 +248,20 @@ for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixe
 }
 if (sourceHome.includes('Free Browser-Based Font Generator') || sourceHome.includes('answer-block')) throw new Error('home should not include the removed hero eyebrow or AEO answer block');
 if (sourceHome.includes('class="chips"') || homeJs.includes('style-new') || homeJs.includes('FONTB')) throw new Error('home should not include removed hero chips or temporary FontB badges');
-if (!sourceHome.includes('value="Make your profile text stand out"') || sourceHome.includes('value="Alex Plays"')) throw new Error('homepage default text should use the current product-facing sample copy');
+if (!sourceHome.includes('value="Make your profile text stand out"') || sourceHome.includes('value="Alex Plays"') || sourceHome.includes('value="font generator"')) throw new Error('homepage default text should use the current product-facing sample copy');
 if (!sourceHome.includes('Unicode styles in real time, <br />then copy')) throw new Error('home lede should use the requested two-line break with mobile-safe spacing');
 if (!sourceHome.includes('How do I copy and paste fonts from this generator?') || !sourceHome.includes('Is fancy text accessible?')) throw new Error('home missing visible AEO FAQ additions');
 if (!sourceHome.includes('data-clarity-mask="true"') || !homeJs.includes('data-clarity-mask="true"')) throw new Error('homepage generator surfaces must be masked for Clarity');
 if (!homeJs.includes('fontgenerators.favoriteStyles.v1') || !homeJs.includes('localStorage') || !homeJs.includes("activeCategory === 'Favorites'")) throw new Error('homepage favorites should persist locally and expose a Favorites filter');
 if (!uiJs.includes('function fallbackCopyText') || !uiJs.includes("document.execCommand('copy')") || !uiJs.includes('async function copyText') || !homeJs.includes("addEventListener('pointerdown'")) throw new Error('homepage copy should fall back when Clipboard API is blocked');
-if (!sourceHome.includes('class="card-icon material-symbols-outlined"') || styles.includes('.bento article:before')) throw new Error('homepage info cards should render real icons, not empty pseudo-element blocks');
+if (!sourceHome.includes('class="filter-icon"') || !sourceHome.includes('class="card-icon"') || !sourceHome.includes('<svg viewBox="0 0 24 24"')) throw new Error('homepage icons should render inline svg controls');
+if (sourceHome.includes('Material+Symbols+Outlined') || sourceHome.includes('card-icon material-symbols-outlined') || sourceHome.includes('data-icon="format_size"') || styles.includes('.bento article:before')) throw new Error('homepage icons should not depend on Material Symbols ligature text');
 if (!styles.includes('.brand-mark') || !styles.includes('.brand.mini .brand-mark')) throw new Error('brand logo CSS missing');
 if (!styles.includes('backdrop-filter: blur(28px) saturate(180%) contrast(112%)') || !styles.includes('-webkit-backdrop-filter: blur(28px) saturate(180%) contrast(112%)')) throw new Error('topbar glass effect CSS missing');
 if (!styles.includes('.topbar::before') || !styles.includes('feTurbulence') || !styles.includes('mix-blend-mode: multiply')) throw new Error('topbar frosted texture layer missing');
 if (!styles.includes('.nav-toggle') || !styles.includes('.topbar[data-nav-open="true"] nav') || !analyticsJs.includes('bindMobileNavigation') || !analyticsJs.includes('header.dataset.navOpen')) throw new Error('mobile topbar navigation should use a hamburger toggle menu');
-if (!styles.includes('.icon-action-btn.is-on .material-symbols-outlined') || !styles.includes('"FILL" 1')) throw new Error('favorited star should use filled Material Symbols styling');
+if (!homeJs.includes('svgIcon') || homeJs.includes('material-symbols-outlined') || homeJs.includes('data-icon="content_copy"')) throw new Error('homepage copy/favorite controls should use inline svg icons, not visible ligature text');
+if (!styles.includes('.inline-icon svg') || !styles.includes('.inline-icon svg.is-filled') || styles.includes('[data-category="Favorites"]::before')) throw new Error('homepage favorite/copy icons should use svg styling without text pseudo-elements');
 if (!styles.includes('.rainbow-control') || !styles.includes('linear-gradient(90deg, #f87171, #facc15, #34d399, #22d3ee, #60a5fa, #f472b6)')) throw new Error('discord rainbow preset styling missing');
 if (!styles.includes('.palette-group .color-chip') || !styles.includes('width: 26px;') || !styles.includes('height: 26px;')) throw new Error('mobile Discord color chips should stay compact');
 if (!styles.includes('.preview-grid') || !styles.includes('grid-template-columns: 1fr;')) throw new Error('discord preview/output should stack into two rows');
@@ -192,6 +322,11 @@ if (new Set(canonicalIds).size !== canonicalIds.length) throw new Error('duplica
 const alphabetProbe = 'abcdefg hijklmn opqrst uvwxyz ABCDEFG HIJKLMN OPQRST UVWXYZ 0123456789';
 const canonicalOutputs = canonicalStyles.map(style => style.transform(alphabetProbe));
 if (new Set(canonicalOutputs).size !== canonicalOutputs.length) throw new Error('canonical homepage styles should not produce duplicate outputs for the alphabet probe');
+const homeDefaultValue = sourceHome.match(/<input\b(?=[^>]*id="font-input")[^>]*\svalue="([^"]*)"/i)?.[1] || 'Your Text';
+const renderedHomeText = `${stripHtml(home)} ${canonicalStyles.map(style => `${style.name} ${style.category} ${style.aliasNames.length ? `${style.aliasNames.length} aliases` : ''} ${style.transform(homeDefaultValue)}`).join(' ')}`;
+const renderedHomeTokens = wordTokens(renderedHomeText);
+const renderedHomeFontGeneratorDensity = (countPhrase(renderedHomeTokens, 'font generator') / renderedHomeTokens.length) * 100;
+if (renderedHomeFontGeneratorDensity < 3) throw new Error(`rendered home "font generator" density must be >=3%; found ${renderedHomeFontGeneratorDensity.toFixed(2)}%`);
 const unassignedMathGlyphs = new Set([0x1d455,0x1d49d,0x1d4a0,0x1d4a1,0x1d4a3,0x1d4a4,0x1d4a7,0x1d4a8,0x1d4ad,0x1d4ba,0x1d4bc,0x1d4c4]);
 function assertStyleOutputSupportsProbe(style, output, label) {
   if (!output || !output.trim()) throw new Error(`${label} ${style.id} produced empty output for A-Z/a-z/0-9 probe`);
@@ -213,11 +348,11 @@ for (const forbidden of ['free font downloads', 'download TTF', 'install fonts',
 }
 if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('Sitemap: https://fontgenerators.app/sitemap.xml')) throw new Error('robots missing noindex/ sitemap signals');
 const sitemapLocs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/discord-colored-text-generator'];
+const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/discord-colored-text-generator', 'https://fontgenerators.app/privacy', 'https://fontgenerators.app/terms-of-service'];
 if (sitemapLocs.length !== approvedSitemapLocs.length || !approvedSitemapLocs.every(loc => sitemapLocs.includes(loc))) throw new Error(`sitemap must contain only approved indexable pages; found ${sitemapLocs.join(', ')}`);
 const sitemapLastmods = [...sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map(m => m[1]);
-if (sitemapLastmods.length !== approvedSitemapLocs.length || !sitemapLastmods.every(value => value === '2026-06-20')) throw new Error(`sitemap lastmod must be present for every indexable URL; found ${sitemapLastmods.join(', ')}`);
-for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator', '/privacy', '/terms-of-service']) {
+if (sitemapLastmods.length !== approvedSitemapLocs.length || !sitemapLastmods.every(value => value === '2026-06-29')) throw new Error(`sitemap lastmod must be present for every indexable URL; found ${sitemapLastmods.join(', ')}`);
+for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator']) {
   if (sitemap.includes(`https://fontgenerators.app${forbidden}`) && forbidden !== '/discord-colored-text-generator') throw new Error(`sitemap should not include non-indexable route ${forbidden}`);
 }
 if (redirects.includes('www.fontgenerators.app')) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level www-to-apex redirects; Pages middleware handles host canonicalization instead');
