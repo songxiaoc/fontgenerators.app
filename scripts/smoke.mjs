@@ -166,15 +166,17 @@ for (const [name, html] of [
 ]) {
   if (!html.includes('rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin')) throw new Error(`${name} should preload the self-hosted DM Sans latin subset`);
   if (html.includes('family=DM+Sans')) throw new Error(`${name} should not load DM Sans from Google Fonts`);
-  if (html.includes('family=JetBrains+Mono') && !html.includes('Space+Grotesk:wght@500;700&display=optional')) throw new Error(`${name} remaining Google text fonts should use display=optional`);
-  if (html.includes('family=JetBrains+Mono') && html.includes('Space+Grotesk:wght@500;700&display=swap')) throw new Error(`${name} remaining Google text fonts should not use display=swap`);
+  if (html.includes('Space+Grotesk')) throw new Error(`${name} should not load Space Grotesk from Google Fonts`);
+  if (html.includes('family=JetBrains+Mono') && !html.includes('family=JetBrains+Mono:wght@500;700&display=optional')) throw new Error(`${name} remaining Google text fonts should use display=optional`);
+  if (html.includes('family=JetBrains+Mono') && html.includes('family=JetBrains+Mono:wght@500;700&display=swap')) throw new Error(`${name} remaining Google text fonts should not use display=swap`);
   if (html.includes('family=Noto+Sans+Math') && !html.includes('family=Noto+Sans+Math&display=optional')) throw new Error(`${name} math fallback font should use display=optional`);
   if (html.includes('family=Noto+Sans+Math&display=swap')) throw new Error(`${name} math fallback font should not use display=swap`);
   if (html.includes('Material+Symbols+Outlined') && !html.includes('Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&display=swap')) throw new Error(`${name} Material Symbols should keep display=swap so icons do not stay as ligature text`);
 }
-if (!styles.includes('src: url("/fonts/dm-sans-latin.woff2") format("woff2")') || !styles.includes('src: url("/fonts/dm-sans-latin-ext.woff2") format("woff2")') || !styles.includes('font-weight: 400 800;')) {
+if (!styles.includes('src: url("/fonts/dm-sans-latin.woff2") format("woff2")') || !styles.includes('src: url("/fonts/dm-sans-latin-ext.woff2") format("woff2")') || !styles.includes('font-weight: 400 800;') || !styles.includes('font-display: swap;')) {
   throw new Error('global CSS should self-host DM Sans variable font subsets');
 }
+if (!styles.includes('--font-display: "DM Sans", system-ui, sans-serif;') || styles.includes('Space Grotesk')) throw new Error('display headings should use the self-hosted DM Sans family on first load');
 
 const mustTool = ['Discord Colored Text Generator', 'Copy for Discord', 'Rainbow', 'Unofficial tool; not made, endorsed, or sponsored by Discord', 'Discord ANSI uses a limited palette', 'FAQPage', 'WebApplication', 'HowTo'];
 for (const s of mustTool) if (!tool.includes(s)) throw new Error(`tool missing ${s}`);
