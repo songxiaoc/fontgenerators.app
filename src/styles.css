@@ -1098,12 +1098,31 @@ summary {
 .mixer-mode-row {
   margin-bottom: 2px;
 }
+.mixer-output-field {
+  align-self: stretch;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+.mixer-output-field .tool-output {
+  height: 100%;
+}
+.mixer-control-strip {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 14px;
+  padding-top: 2px;
+}
 .word-token-list,
 .style-chip-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   min-width: 0;
+}
+.mixer-control-strip .word-token-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  align-items: stretch;
 }
 .word-token,
 .style-chip-grid button {
@@ -1121,6 +1140,7 @@ summary {
   grid-template-columns: minmax(0, auto);
   gap: 2px;
   text-align: left;
+  width: 100%;
 }
 .word-token__text {
   min-width: 0;

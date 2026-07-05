@@ -153,7 +153,14 @@
           <button type="button" id="manual-mode" aria-pressed="true">Manual Mix</button>
           <button type="button" id="shuffle-mode" aria-pressed="false">Shuffle Mix</button>
         </div>
+      </div>
 
+      <div class="mixer-output-field">
+        <label class="label-caps" for="mixer-output">Mixed result</label>
+        <pre id="mixer-output" class="tool-output clarity-mask" data-clarity-mask="true" tabindex="0" aria-live="polite"></pre>
+      </div>
+
+      <div class="mixer-control-strip">
         <div class="tool-field">
           <span id="mixer-token-label" class="label-caps">Select words</span>
           <div id="mixer-token-list" class="word-token-list clarity-mask" data-clarity-mask="true" role="group" aria-labelledby="mixer-token-label"></div>
@@ -180,11 +187,6 @@
           <button type="button" id="clear-mix" class="button secondary"><span class="material-symbols-outlined" aria-hidden="true" data-icon="restart_alt"></span>Clear Styles</button>
         </div>
         <p class="tool-note">Mixed Unicode text may look different across apps and devices. Keep important words readable.</p>
-      </div>
-
-      <div>
-        <label class="label-caps" for="mixer-output">Mixed result</label>
-        <pre id="mixer-output" class="tool-output clarity-mask" data-clarity-mask="true" tabindex="0" aria-live="polite"></pre>
       </div>
     </div>
     <p class="status-line toast-line" id="copy-status" aria-live="polite">Ready.</p>
