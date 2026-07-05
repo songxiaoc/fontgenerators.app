@@ -116,12 +116,20 @@ function render() {
 }
 
 function applyStyle(styleId) {
-  const style = getStyle(styleId);
-  if (!style) return;
   if (!selectedWords.size) {
     setStatus('Select one or more words first.');
     return;
   }
+  if (styleId === 'original') {
+    for (const index of selectedWords) assignments.delete(index);
+    activeMode = 'manual';
+    render();
+    setStatus('Original text restored for selected words.');
+    window.fgTrack?.('font_mixer_manual_style_applied', { style: 'original', words: selectedWords.size });
+    return;
+  }
+  const style = getStyle(styleId);
+  if (!style) return;
   for (const index of selectedWords) assignments.set(index, style.id);
   activeMode = 'manual';
   render();
