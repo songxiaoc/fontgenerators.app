@@ -18,6 +18,7 @@ export default defineConfig({
         bratFont: resolve(__dirname, 'brat-font.html'),
         bratGreen: resolve(__dirname, 'brat-green.html'),
         tool: resolve(__dirname, 'discord-colored-text-generator.html'),
+        about: resolve(__dirname, 'about.html'),
         privacy: resolve(__dirname, 'privacy.html'),
         cookies: resolve(__dirname, 'cookies.html'),
         termsOfService: resolve(__dirname, 'terms-of-service.html')

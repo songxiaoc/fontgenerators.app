@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/src/styles.css" />
   <title>Brat Generator — Free Brat Font &amp; Text Image Maker</title>
   <meta name="description" content="Create brat-style text images with this free brat font generator. Customize colors, blur, alignment and size, then download PNG, JPEG or WebP—no signup." />
+  <meta name="author" content="FontGenerators.app" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://fontgenerators.app/brat-generator" />
   <meta property="og:title" content="Brat Generator — Free Brat Font &amp; Text Image Maker" />
@@ -35,20 +36,54 @@
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "Organization",
+        "@id": "https://fontgenerators.app/#organization",
+        "name": "FontGenerators.app",
+        "alternateName": "FontGenerators",
+        "url": "https://fontgenerators.app/",
+        "description": "An independent publisher of browser-based text and image utilities.",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://fontgenerators.app/logo.png"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://fontgenerators.app/#website",
+        "name": "FontGenerators.app",
+        "alternateName": "FontGenerators",
+        "url": "https://fontgenerators.app/",
+        "publisher": {
+          "@id": "https://fontgenerators.app/#organization"
+        }
+      },
+      {
         "@type": "WebPage",
         "@id": "https://fontgenerators.app/brat-generator#webpage",
         "url": "https://fontgenerators.app/brat-generator",
         "name": "Brat Generator — Free Brat Font & Text Image Maker",
         "description": "Create brat-style text images with this free brat font generator. Customize colors, blur, alignment and size, then download PNG, JPEG or WebP—no signup.",
         "inLanguage": "en",
+        "datePublished": "2026-07-27",
+        "dateModified": "2026-07-27",
+        "lastReviewed": "2026-07-27",
         "isPartOf": {
-          "@type": "WebSite",
-          "name": "FontGenerators.app",
-          "url": "https://fontgenerators.app/"
+          "@id": "https://fontgenerators.app/#website"
+        },
+        "author": {
+          "@id": "https://fontgenerators.app/#organization"
+        },
+        "publisher": {
+          "@id": "https://fontgenerators.app/#organization"
         },
         "mainEntity": {
           "@id": "https://fontgenerators.app/brat-generator#app"
-        }
+        },
+        "citation": [
+          "https://abcdinamo.com/newsletter/the-dinamo-update-our-font-for-charli-xcxs-brat",
+          "https://learn.microsoft.com/en-us/typography/font-list/arial-narrow",
+          "https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum"
+        ]
       },
       {
         "@type": "WebApplication",
@@ -60,6 +95,12 @@
         "browserRequirements": "Requires a modern browser with HTML canvas support.",
         "operatingSystem": "Any",
         "isAccessibleForFree": true,
+        "creator": {
+          "@id": "https://fontgenerators.app/#organization"
+        },
+        "provider": {
+          "@id": "https://fontgenerators.app/#organization"
+        },
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -369,7 +410,19 @@
 
       <h2>Output formats and transparent images</h2>
       <p>Choose a square canvas for posts and artwork, 9:16 for stories and phone screens, or 16:9 for thumbnails, slides, and banners. Square output can be adjusted from 512 to 2048 pixels; vertical and wide modes use 1080 × 1920 and 1920 × 1080. Short phrases usually remain most legible, but the renderer wraps longer text and automatically reduces its size to fit.</p>
-      <p>PNG is the dependable choice for sharp text and transparent output. WebP can also preserve transparency while often producing a smaller file. JPEG is widely compatible for solid-color graphics but cannot store transparent pixels, so the editor keeps PNG selected when transparency is active. Copy image writes a PNG to the clipboard in supported secure browsers; if the browser blocks image clipboard access, downloading the PNG is the reliable fallback.</p>
+      <div class="brat-table-wrap" role="region" aria-label="Comparison of Brat Generator export formats" tabindex="0">
+        <table class="brat-comparison-table">
+          <caption>Brat Generator export and clipboard format comparison</caption>
+          <thead><tr><th scope="col">Method</th><th scope="col">Transparency</th><th scope="col">Best use</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">PNG download</th><td>Yes</td><td>Crisp text, overlays, and dependable image quality.</td></tr>
+            <tr><th scope="row">JPEG download</th><td>No</td><td>Solid backgrounds or destinations that specifically require JPEG.</td></tr>
+            <tr><th scope="row">WebP download</th><td>Yes</td><td>Compact web images when the destination supports WebP.</td></tr>
+            <tr><th scope="row">Copy image</th><td>Yes, as PNG</td><td>Fast pasting in browsers that allow image clipboard access.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>PNG is the dependable choice for sharp text and transparent output. WebP can also preserve transparency while often producing a smaller file. JPEG is widely compatible for solid-color graphics but cannot store transparent pixels, so choosing JPEG with a transparent background switches the export back to PNG. Copy image writes a PNG to the clipboard in supported secure browsers; if the browser blocks image clipboard access, downloading the PNG is the reliable fallback.</p>
 
       <h2>Uses, privacy, and limits</h2>
       <p>Use the output for an original social post, meme, playlist graphic, invitation, reaction image, announcement, slide, or personal cover. A download is only a layout export: it does not grant rights to somebody else’s lyrics, trademarks, names, photographs, or artwork. Enter text you wrote or have permission to use, avoid copying official artwork, and review the rights required by the place where you intend to publish it.</p>
@@ -416,6 +469,19 @@
       </div>
     </section>
 
+    <section class="content-band brat-sources" aria-labelledby="brat-generator-sources-title">
+      <div>
+        <p class="eyebrow">Sources &amp; review</p>
+        <h2 id="brat-generator-sources-title">Sources behind this generator</h2>
+        <p>Published and maintained by <a rel="author" href="/about">FontGenerators.app</a>. Published <time datetime="2026-07-27">July 27, 2026</time>; last reviewed <time datetime="2026-07-27">July 27, 2026</time>. Sources support the design and accessibility facts below; the renderer behavior is verified against this page’s live browser controls.</p>
+      </div>
+      <ol class="brat-source-list">
+        <li><a href="https://abcdinamo.com/newsletter/the-dinamo-update-our-font-for-charli-xcxs-brat" rel="noreferrer">Dinamo — The Dinamo Update: Our Font for Charli XCX’s Brat</a><span>First-party account of the Arial treatment, low-resolution process, ROM campaign use, and #8ACE00.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/typography/font-list/arial-narrow" rel="noreferrer">Microsoft Typography — Arial Narrow</a><span>Product availability and font redistribution licensing guidance.</span></li>
+        <li><a href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum" rel="noreferrer">W3C WAI — Understanding Success Criterion 1.4.3</a><span>Contrast-ratio method used by the linked Brat green accessibility comparison.</span></li>
+      </ol>
+    </section>
+
     <section class="content-band brat-related" aria-labelledby="brat-related-title">
       <div class="brat-section-heading">
         <div>
@@ -442,10 +508,10 @@
   <footer class="site-footer">
     <div>
       <a class="brand mini" href="/" aria-label="FontGenerators.app home"><img class="brand-mark" src="/logo.png" alt="FontGenerators.app logo" width="24" height="24" /> FontGenerators</a>
-      <p>FontGenerators.app is an independent copy-paste text toolkit. It is not affiliated with, endorsed by, sponsored by, or approved by Discord or any social platform.</p>
+      <p>FontGenerators.app is an independent browser-based text and image toolkit. This Brat Generator is not affiliated with, endorsed by, or sponsored by Charli XCX, her team, or her record labels.</p>
       <p class="footer-contact">Contact: <span class="email-address" aria-label="contact at fontgenerators dot app">contact<span class="email-at" aria-hidden="true"></span>fontgenerators.app</span></p>
     </div>
-    <nav aria-label="Legal links"><a href="/privacy">Privacy Policy</a><a href="/cookies">Cookie Policy</a><a href="/terms-of-service">Terms of Use</a><button type="button" class="footer-link-button" data-cookie-settings>Cookie Settings</button></nav>
+    <nav aria-label="Site and legal links"><a href="/about">About</a><a href="/about#contact">Contact</a><a href="/privacy">Privacy Policy</a><a href="/cookies">Cookie Policy</a><a href="/terms-of-service">Terms of Use</a><button type="button" class="footer-link-button" data-cookie-settings>Cookie Settings</button></nav>
   </footer>
   <script type="module" src="/src/analytics.js"></script>
   <script type="module" src="/src/brat-generator.js"></script>

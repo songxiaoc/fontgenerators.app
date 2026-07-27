@@ -10,6 +10,7 @@ const files = [
   'dist/brat-font.html',
   'dist/brat-green.html',
   'dist/discord-colored-text-generator.html',
+  'dist/about.html',
   'dist/privacy.html',
   'dist/cookies.html',
   'dist/terms-of-service.html',
@@ -45,6 +46,7 @@ const bratGreen = readFileSync('dist/brat-green.html', 'utf8');
 const privacy = readFileSync('dist/privacy.html', 'utf8');
 const cookies = readFileSync('dist/cookies.html', 'utf8');
 const terms = readFileSync('dist/terms-of-service.html', 'utf8');
+const about = readFileSync('dist/about.html', 'utf8');
 const sourceHome = readFileSync('index.html', 'utf8');
 const sourceAscii = readFileSync('ascii-art-generator.html', 'utf8');
 const sourceMixer = readFileSync('font-mixer.html', 'utf8');
@@ -54,6 +56,7 @@ const sourceBrat = readFileSync('brat-generator.html', 'utf8');
 const sourceBratFont = readFileSync('brat-font.html', 'utf8');
 const sourceBratGreen = readFileSync('brat-green.html', 'utf8');
 const sourceTool = readFileSync('discord-colored-text-generator.html', 'utf8');
+const sourceAbout = readFileSync('about.html', 'utf8');
 const sourcePrivacy = readFileSync('privacy.html', 'utf8');
 const sourceCookies = readFileSync('cookies.html', 'utf8');
 const sourceTerms = readFileSync('terms-of-service.html', 'utf8');
@@ -152,6 +155,7 @@ for (const [name, html, twoWordKeyword, threeWordKeyword] of seoPages) {
 assertImageAlts('brat', brat);
 assertImageAlts('brat font', bratFont);
 assertImageAlts('brat green', bratGreen);
+assertImageAlts('about', about);
 
 for (const [name, content] of [
   ['home source', sourceHome],
@@ -163,6 +167,7 @@ for (const [name, content] of [
   ['brat font source', sourceBratFont],
   ['brat green source', sourceBratGreen],
   ['tool source', sourceTool],
+  ['about source', sourceAbout],
   ['home js', homeJs],
   ['ascii js', asciiJs],
   ['username js', usernameJs],
@@ -176,6 +181,7 @@ for (const [name, content] of [
   ['built brat', brat],
   ['built brat font', bratFont],
   ['built brat green', bratGreen],
+  ['built about', about],
   ['built tool', tool]
 ]) {
   if (/<span\b(?=[^>]*material-symbols-outlined)[^>]*>\s*[a-z][a-z0-9_]*\s*<\/span>/i.test(content)) {
@@ -193,6 +199,7 @@ for (const [name, html] of [
   ['brat font', sourceBratFont],
   ['brat green', sourceBratGreen],
   ['tool', sourceTool],
+  ['about', sourceAbout],
   ['privacy', sourcePrivacy],
   ['cookies', sourceCookies],
   ['terms', sourceTerms]
@@ -252,7 +259,9 @@ function getJsonLdNodes(name, html) {
     }
     if (!value || typeof value !== 'object') return;
     nodes.push(value);
-    if (Array.isArray(value['@graph'])) value['@graph'].forEach(visit);
+    Object.values(value).forEach(nested => {
+      if (nested && typeof nested === 'object') visit(nested);
+    });
   }
   for (const match of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
     try {
@@ -269,6 +278,97 @@ function hasSchemaType(nodes, expectedType) {
     const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
     return types.includes(expectedType);
   });
+}
+
+function getSchemaNodesByType(nodes, expectedType) {
+  return nodes.filter(node => {
+    const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
+    return types.includes(expectedType);
+  });
+}
+
+function getSingleSchemaNode(name, nodes, expectedType) {
+  const matches = getSchemaNodesByType(nodes, expectedType);
+  if (matches.length !== 1) throw new Error(`${name} must expose exactly one ${expectedType} node; found ${matches.length}`);
+  return matches[0];
+}
+
+function assertExactStringSet(name, actual, expected) {
+  if (!Array.isArray(actual) || actual.some(value => typeof value !== 'string')) {
+    throw new Error(`${name} must be an array of strings`);
+  }
+  const actualSet = new Set(actual);
+  const expectedSet = new Set(expected);
+  if (actualSet.size !== actual.length) throw new Error(`${name} must not contain duplicate values`);
+  const missing = expected.filter(value => !actualSet.has(value));
+  const unexpected = actual.filter(value => !expectedSet.has(value));
+  if (missing.length || unexpected.length || actual.length !== expected.length) {
+    throw new Error(`${name} mismatch; missing: ${missing.join(', ') || 'none'}; unexpected: ${unexpected.join(', ') || 'none'}`);
+  }
+}
+
+function getElementHtml(name, html, tagName) {
+  const match = html.match(new RegExp(`<${tagName}\\b[^>]*>[\\s\\S]*?<\\/${tagName}>`, 'i'));
+  if (!match) throw new Error(`${name} missing <${tagName}>`);
+  return match[0];
+}
+
+function getSectionByClass(name, html, className) {
+  for (const match of html.matchAll(/<section\b[^>]*>[\s\S]*?<\/section>/gi)) {
+    const openingTag = match[0].match(/^<section\b[^>]*>/i)?.[0] || '';
+    const classes = getTagAttribute(openingTag, 'class').split(/\s+/).filter(Boolean);
+    if (classes.includes(className)) return match[0];
+  }
+  throw new Error(`${name} missing visible section .${className}`);
+}
+
+function getAnchors(html) {
+  return [...html.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/gi)].map(match => ({
+    href: getTagAttribute(match[0].match(/^<a\b[^>]*>/i)?.[0] || '', 'href'),
+    label: decodeBasicEntities(stripHtml(match[0]).trim().replace(/\s+/g, ' '))
+  }));
+}
+
+function getLabeledTime(name, html, labelPattern) {
+  const main = getElementHtml(name, html, 'main');
+  const match = main.match(new RegExp(`${labelPattern}\\s*:?\\s*[\\s\\S]{0,48}?<time\\b[^>]*\\bdatetime=(?:"([^"]+)"|'([^']+)')`, 'i'));
+  return match?.[1] ?? match?.[2] ?? '';
+}
+
+function assertIsoDate(name, value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || Number.isNaN(Date.parse(`${value}T00:00:00Z`))) {
+    throw new Error(`${name} must be a valid YYYY-MM-DD date; found ${value || 'missing'}`);
+  }
+}
+
+function getMarkdownSection(markdown, heading) {
+  const lines = markdown.split(/\r?\n/);
+  const headingLine = `## ${heading}`;
+  const start = lines.findIndex(line => line.trim() === headingLine);
+  if (start < 0) throw new Error(`llms.txt missing ${headingLine} section`);
+  let end = lines.length;
+  for (let index = start + 1; index < lines.length; index++) {
+    if (/^##\s+/.test(lines[index])) {
+      end = index;
+      break;
+    }
+  }
+  return lines.slice(start + 1, end).join('\n');
+}
+
+function getMarkdownLinks(markdown) {
+  return [...markdown.matchAll(/\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g)].map(match => ({
+    label: match[1].trim(),
+    url: match[2]
+  }));
+}
+
+function assertMarkdownLinkSection(sectionName, section, expectedLinks) {
+  const actualLinks = getMarkdownLinks(section);
+  const actualPairs = actualLinks.map(link => `${link.label}\t${link.url}`);
+  const expectedPairs = expectedLinks.map(link => `${link.label}\t${link.url}`);
+  assertExactStringSet(`llms.txt ${sectionName} links`, actualPairs, expectedPairs);
+  return actualLinks;
 }
 
 function searchableText(value) {
@@ -294,6 +394,22 @@ function assertVisibleFaqMatchesSchema(name, html, nodes) {
   }
 }
 
+const aboutNodes = getJsonLdNodes('about', about);
+const aboutTitle = decodeBasicEntities(about.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '');
+const aboutH1 = decodeBasicEntities(stripHtml(about.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || '').trim().replace(/\s+/g, ' '));
+const aboutCanonical = 'https://fontgenerators.app/about';
+if (aboutTitle !== 'About FontGenerators.app and Its Browser Tools') throw new Error(`about title mismatch: ${aboutTitle || 'missing'}`);
+if (aboutH1 !== 'About FontGenerators.app') throw new Error(`about H1 mismatch: ${aboutH1 || 'missing'}`);
+if (getCanonical(about) !== aboutCanonical) throw new Error('about canonical must use the clean production URL');
+if (!getMetaContent(about, 'name', 'robots').includes('index, follow')) throw new Error('about page must remain indexable');
+for (const type of ['Organization', 'WebSite', 'AboutPage']) if (!hasSchemaType(aboutNodes, type)) throw new Error(`about page missing ${type} structured data`);
+const aboutPageSchema = getSingleSchemaNode('about', aboutNodes, 'AboutPage');
+if (aboutPageSchema['@id'] !== `${aboutCanonical}#webpage` || aboutPageSchema.url !== aboutCanonical) throw new Error('about AboutPage @id and url must match its canonical');
+if (aboutPageSchema.name !== aboutTitle) throw new Error('about AboutPage name must match its title');
+if (aboutPageSchema.about?.['@id'] !== 'https://fontgenerators.app/#organization' || aboutPageSchema.author?.['@id'] !== 'https://fontgenerators.app/#organization' || aboutPageSchema.publisher?.['@id'] !== 'https://fontgenerators.app/#organization' || aboutPageSchema.isPartOf?.['@id'] !== 'https://fontgenerators.app/#website') throw new Error('about AboutPage must reference the shared Organization and WebSite entities');
+if (!sourceAbout.includes('id="contact"') || !sourceAbout.includes('How factual claims are reviewed') || !sourceAbout.includes('contact<span class="email-at"')) throw new Error('about page must expose editorial policy and a visible contact section');
+if (wordTokens(about).length < 350) throw new Error(`about page should provide substantive publisher and editorial information; found ${wordTokens(about).length} visible words`);
+
 const bratPageContracts = [
   {
     name: 'brat generator',
@@ -304,7 +420,10 @@ const bratPageContracts = [
     h1: 'Brat Generator',
     canonical: 'https://fontgenerators.app/brat-generator',
     ogImage: 'https://fontgenerators.app/og/brat-generator.png',
-    schemaTypes: ['WebPage', 'WebApplication', 'HowTo', 'FAQPage'],
+    schemaTypes: ['Organization', 'WebSite', 'WebPage', 'WebApplication', 'HowTo', 'FAQPage'],
+    pageId: 'https://fontgenerators.app/brat-generator#webpage',
+    mainEntityType: 'WebApplication',
+    mainEntityId: 'https://fontgenerators.app/brat-generator#app',
     links: ['/brat-font', '/brat-green']
   },
   {
@@ -317,6 +436,10 @@ const bratPageContracts = [
     canonical: 'https://fontgenerators.app/brat-font',
     ogImage: 'https://fontgenerators.app/og/brat-font.png',
     schemaTypes: ['WebPage', 'Article', 'BreadcrumbList', 'FAQPage'],
+    pageId: 'https://fontgenerators.app/brat-font#webpage',
+    mainEntityType: 'Article',
+    mainEntityId: 'https://fontgenerators.app/brat-font#article',
+    breadcrumbId: 'https://fontgenerators.app/brat-font#breadcrumb',
     links: ['/brat-generator', '/brat-green']
   },
   {
@@ -329,10 +452,15 @@ const bratPageContracts = [
     canonical: 'https://fontgenerators.app/brat-green',
     ogImage: 'https://fontgenerators.app/og/brat-green.png',
     schemaTypes: ['WebPage', 'WebApplication', 'BreadcrumbList', 'FAQPage'],
+    pageId: 'https://fontgenerators.app/brat-green#webpage',
+    mainEntityType: 'WebApplication',
+    mainEntityId: 'https://fontgenerators.app/brat-green#app',
+    breadcrumbId: 'https://fontgenerators.app/brat-green#breadcrumb',
     links: ['/brat-generator', '/brat-font']
   }
 ];
 
+const bratStructuredDates = new Map();
 for (const contract of bratPageContracts) {
   const title = decodeBasicEntities(contract.html.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '');
   const description = getMetaContent(contract.html, 'name', 'description');
@@ -355,6 +483,19 @@ for (const contract of bratPageContracts) {
   if (getMetaContent(contract.html, 'property', 'og:image:width') !== '1200' || getMetaContent(contract.html, 'property', 'og:image:height') !== '630') throw new Error(`${contract.name} OG image metadata must declare 1200x630`);
   if (getMetaContent(contract.html, 'name', 'twitter:image') !== contract.ogImage) throw new Error(`${contract.name} Twitter image must match its dedicated OG image`);
   for (const type of contract.schemaTypes) if (!hasSchemaType(nodes, type)) throw new Error(`${contract.name} page missing ${type} structured data`);
+  const page = getSingleSchemaNode(contract.name, nodes, 'WebPage');
+  const mainEntity = getSingleSchemaNode(contract.name, nodes, contract.mainEntityType);
+  if (page['@id'] !== contract.pageId || page.url !== contract.canonical || page.name !== contract.title) throw new Error(`${contract.name} WebPage @id, url, and name must match its canonical page identity`);
+  if (page.mainEntity?.['@id'] !== contract.mainEntityId || mainEntity['@id'] !== contract.mainEntityId) throw new Error(`${contract.name} mainEntity must resolve to ${contract.mainEntityId}`);
+  if (contract.mainEntityType === 'WebApplication' && mainEntity.url !== contract.canonical) throw new Error(`${contract.name} WebApplication url must match its canonical`);
+  if (contract.mainEntityType === 'Article' && mainEntity.mainEntityOfPage?.['@id'] !== contract.pageId) throw new Error(`${contract.name} Article must point back to its WebPage`);
+  if (contract.breadcrumbId) {
+    const breadcrumb = getSingleSchemaNode(contract.name, nodes, 'BreadcrumbList');
+    if (page.breadcrumb?.['@id'] !== contract.breadcrumbId || breadcrumb['@id'] !== contract.breadcrumbId) throw new Error(`${contract.name} breadcrumb @id must match the WebPage reference`);
+  }
+  for (const field of ['datePublished', 'dateModified']) assertIsoDate(`${contract.name} WebPage ${field}`, page[field]);
+  if (page.datePublished > page.dateModified) throw new Error(`${contract.name} datePublished must not be after dateModified`);
+  bratStructuredDates.set(contract.canonical, page.dateModified);
   assertVisibleFaqMatchesSchema(contract.name, contract.html, nodes);
   for (const path of contract.links) if (!contract.source.includes(`href="${path}"`)) throw new Error(`${contract.name} must link to ${path}`);
   if (/\b(?:official generator|exact replica)\b/i.test(metadata)) throw new Error(`${contract.name} search/social metadata contains a prohibited official/exact claim`);
@@ -367,7 +508,63 @@ const bratIdentityFields = bratPageContracts.map(contract => {
 }).flat();
 if (new Set(bratIdentityFields).size !== bratIdentityFields.length) throw new Error('Brat topic-cluster pages must have unique title, H1, and canonical values');
 
-const bratApplicationSchema = getJsonLdNodes('brat generator', brat).find(node => hasSchemaType([node], 'WebApplication'));
+const bratSchemaNodes = getJsonLdNodes('brat generator', brat);
+const bratOrganizationSchema = bratSchemaNodes.find(node => hasSchemaType([node], 'Organization'));
+const bratWebsiteSchema = bratSchemaNodes.find(node => hasSchemaType([node], 'WebSite'));
+const bratWebPageSchema = bratSchemaNodes.find(node => hasSchemaType([node], 'WebPage'));
+const bratApplicationSchema = bratSchemaNodes.find(node => hasSchemaType([node], 'WebApplication'));
+if (bratOrganizationSchema?.['@id'] !== 'https://fontgenerators.app/#organization' || bratOrganizationSchema?.name !== 'FontGenerators.app' || bratOrganizationSchema?.alternateName !== 'FontGenerators') throw new Error('brat page must expose the stable FontGenerators.app Organization identity');
+if (bratWebsiteSchema?.['@id'] !== 'https://fontgenerators.app/#website' || bratWebsiteSchema?.publisher?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error('brat page must expose the stable WebSite identity and publisher relation');
+const visibleBratPublished = getLabeledTime('brat generator', brat, '\\bPublished\\b');
+const visibleBratReviewed = getLabeledTime('brat generator', brat, '\\blast reviewed\\b');
+assertIsoDate('brat generator visible published date', visibleBratPublished);
+assertIsoDate('brat generator visible reviewed date', visibleBratReviewed);
+if (bratWebPageSchema?.datePublished !== visibleBratPublished || bratWebPageSchema?.dateModified !== visibleBratReviewed || bratWebPageSchema?.lastReviewed !== visibleBratReviewed) throw new Error('brat WebPage dates must match the visible Published and last reviewed dates');
+for (const field of ['author', 'publisher']) if (bratWebPageSchema?.[field]?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error(`brat WebPage ${field} must reference the stable Organization`);
+if (bratWebPageSchema?.isPartOf?.['@id'] !== 'https://fontgenerators.app/#website') throw new Error('brat WebPage must reference the stable WebSite');
+const bratCitations = [
+  'https://abcdinamo.com/newsletter/the-dinamo-update-our-font-for-charli-xcxs-brat',
+  'https://learn.microsoft.com/en-us/typography/font-list/arial-narrow',
+  'https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum'
+];
+assertExactStringSet('brat WebPage citations', bratWebPageSchema?.citation, bratCitations);
+const bratSourcesSection = getSectionByClass('brat generator', brat, 'brat-sources');
+const visibleBratSourceUrls = getAnchors(bratSourcesSection).map(anchor => anchor.href).filter(href => /^https:\/\//.test(href));
+assertExactStringSet('brat visible source links', visibleBratSourceUrls, bratCitations);
+if (!sourceBrat.includes('<meta name="author" content="FontGenerators.app"') || !getAnchors(bratSourcesSection).some(anchor => anchor.href === '/about' && anchor.label === 'FontGenerators.app')) throw new Error('brat page must expose visible organization authorship in its sources section');
+if (!sourceBrat.includes('<table class="brat-comparison-table">') || !sourceBrat.includes('<caption>Brat Generator export and clipboard format comparison</caption>') || !sourceBrat.includes('<th scope="col">Method</th>') || !sourceBrat.includes('<th scope="row">PNG download</th>') || !sourceBrat.includes('<th scope="row">JPEG download</th>') || !sourceBrat.includes('<th scope="row">WebP download</th>')) throw new Error('brat page must expose an accessible, practical export-format comparison table');
+const schemaPages = [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat generator', brat], ['brat font', bratFont], ['brat green', bratGreen], ['tool', tool], ['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]];
+for (const [name, html] of schemaPages) {
+  for (const entityType of ['Organization', 'WebSite']) {
+    for (const entity of getSchemaNodesByType(getJsonLdNodes(name, html), entityType)) {
+      if (Object.hasOwn(entity, 'sameAs')) throw new Error(`${name} ${entityType} must not claim unverified sameAs profiles`);
+    }
+  }
+}
+for (const [name, html] of [['home', home], ['about', about], ['brat generator', brat]]) {
+  const nodes = getJsonLdNodes(name, html);
+  const organization = getSingleSchemaNode(name, nodes, 'Organization');
+  const website = getSingleSchemaNode(name, nodes, 'WebSite');
+  if (organization['@id'] !== 'https://fontgenerators.app/#organization' || organization.name !== 'FontGenerators.app' || organization.alternateName !== 'FontGenerators' || organization.url !== 'https://fontgenerators.app/') throw new Error(`${name} must define the stable Organization identity`);
+  if (website['@id'] !== 'https://fontgenerators.app/#website' || website.name !== 'FontGenerators.app' || website.alternateName !== 'FontGenerators' || website.url !== 'https://fontgenerators.app/' || website.publisher?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error(`${name} must define the stable WebSite identity`);
+}
+for (const [name, html] of [['brat generator', brat], ['brat font', bratFont], ['brat green', bratGreen]]) {
+  const page = getJsonLdNodes(name, html).find(node => hasSchemaType([node], 'WebPage'));
+  if (page?.author?.['@id'] !== 'https://fontgenerators.app/#organization' || page?.publisher?.['@id'] !== 'https://fontgenerators.app/#organization' || page?.isPartOf?.['@id'] !== 'https://fontgenerators.app/#website') throw new Error(`${name} must reference the shared site and publisher entities`);
+}
+const visibleAboutReviewed = getLabeledTime('about', about, '\\blast reviewed\\b');
+assertIsoDate('about visible reviewed date', visibleAboutReviewed);
+if (aboutPageSchema.dateModified !== visibleAboutReviewed) throw new Error('about dateModified must match its visible last reviewed date');
+for (const field of ['datePublished', 'dateModified']) assertIsoDate(`about AboutPage ${field}`, aboutPageSchema[field]);
+if (aboutPageSchema.datePublished > aboutPageSchema.dateModified) throw new Error('about datePublished must not be after dateModified');
+bratStructuredDates.set(aboutCanonical, aboutPageSchema.dateModified);
+const bratFontNodes = getJsonLdNodes('brat font', bratFont);
+const bratFontPageSchema = getSingleSchemaNode('brat font', bratFontNodes, 'WebPage');
+const bratFontArticleSchema = getSingleSchemaNode('brat font', bratFontNodes, 'Article');
+const visibleBratFontReviewed = getLabeledTime('brat font', bratFont, '\\blast reviewed\\b');
+assertIsoDate('brat font visible reviewed date', visibleBratFontReviewed);
+if (bratFontPageSchema.dateModified !== visibleBratFontReviewed || bratFontArticleSchema.dateModified !== visibleBratFontReviewed) throw new Error('brat font WebPage and Article dateModified must match the visible last reviewed date');
+
 const bratFeatureList = JSON.stringify(bratApplicationSchema?.featureList || '');
 for (const s of ['color', 'blur', 'pixelated', 'lowercase', 'alignment', 'size', 'PNG', 'JPEG', 'WebP', 'copy image']) {
   if (!bratFeatureList.toLowerCase().includes(s.toLowerCase())) throw new Error(`brat WebApplication featureList missing a current real feature: ${s}`);
@@ -439,18 +636,20 @@ for (const s of ['overflow-x: auto;', 'scrollbar-gutter: stable;', '.ascii-card-
   if (!styles.includes(s)) throw new Error(`ASCII overflow guard CSS missing ${s}`);
 }
 
-for (const [name, html] of [['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
+for (const [name, html] of [['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
   if (!html.includes('class="legal-page paper-grid"') || !html.includes('class="legal-card"')) throw new Error(`${name} missing centered legal layout`);
   if (!html.includes('href="/terms-of-service"')) throw new Error(`${name} missing terms-of-service links`);
   if (!html.includes('href="/cookies"')) throw new Error(`${name} missing cookie policy link`);
 }
 if (!cookies.includes('<meta name="robots" content="noindex"')) throw new Error('cookies page should remain noindex');
 
-for (const html of [home, ascii, mixer, username, changer, brat, bratFont, bratGreen, tool, privacy, cookies, terms]) {
+for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['brat font', bratFont], ['brat green', bratGreen], ['tool', tool], ['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
   if (html.includes('href="/terms/"')) throw new Error('stale /terms/ link present');
   if (html.includes('href="/discord-colored-text-generator/"')) throw new Error('stale discord route slash link present');
   if (html.includes('href="/brat-generator/"')) throw new Error('stale brat route slash link present');
   if (!html.includes('href="/brat-generator"')) throw new Error('page missing clean Brat Generator primary navigation link');
+  const footerAnchors = getAnchors(getElementHtml(name, html, 'footer'));
+  if (!footerAnchors.some(anchor => anchor.href === '/about' && anchor.label === 'About') || !footerAnchors.some(anchor => anchor.href === '/about#contact' && anchor.label === 'Contact')) throw new Error(`${name} footer must expose visible About and Contact links`);
   if (html.includes('mailto:') || html.includes('/cdn-cgi/l/email-protection')) throw new Error('page should not expose Cloudflare-obfuscated email links');
   if (html.includes('contact@fontgenerators.app')) throw new Error('page should not expose a contiguous email address');
   if (html.includes('alt=""')) throw new Error('page should not contain empty image alt attributes');
@@ -462,12 +661,12 @@ for (const html of [home, ascii, mixer, username, changer, brat, bratFont, bratG
   if (!html.includes('/> FontGenerators</a>')) throw new Error('visible brand label missing');
   if (html.includes('<span>Fg_</span>')) throw new Error('page should not use old text-only brand mark');
 }
-for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['brat font', bratFont], ['brat green', bratGreen], ['tool', tool], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
+for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['brat font', bratFont], ['brat green', bratGreen], ['tool', tool], ['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
   for (const s of ['property="og:type"', 'property="og:url"', 'property="og:image"', 'property="og:image:alt"', 'name="twitter:card"', 'name="twitter:title"', 'name="twitter:description"', 'name="twitter:image"']) {
     if (!html.includes(s)) throw new Error(`${name} missing complete social metadata: ${s}`);
   }
 }
-for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixer', sourceMixer], ['username', sourceUsername], ['changer', sourceChanger], ['brat', sourceBrat], ['brat font', sourceBratFont], ['brat green', sourceBratGreen], ['tool', sourceTool], ['privacy', sourcePrivacy], ['cookies', sourceCookies], ['terms', sourceTerms]]) {
+for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixer', sourceMixer], ['username', sourceUsername], ['changer', sourceChanger], ['brat', sourceBrat], ['brat font', sourceBratFont], ['brat green', sourceBratGreen], ['tool', sourceTool], ['about', sourceAbout], ['privacy', sourcePrivacy], ['cookies', sourceCookies], ['terms', sourceTerms]]) {
   if (!html.includes('/src/analytics.js')) throw new Error(`${name} missing analytics module`);
   if (!html.includes('data-cookie-settings')) throw new Error(`${name} missing cookie settings control`);
 }
@@ -521,8 +720,41 @@ if (styles.includes('max-width: 980px') || styles.includes('right: clamp(14px, 4
 for (const forbidden of ['raw input text', 'generated ANSI output', 'clipboard content']) {
   if (!cookies.includes(forbidden) && !privacy.includes(forbidden)) throw new Error(`privacy/cookies should disclose analytics forbidden payload: ${forbidden}`);
 }
-for (const s of ['https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/brat-generator', 'https://fontgenerators.app/brat-font', 'https://fontgenerators.app/brat-green', 'https://fontgenerators.app/discord-colored-text-generator', 'generated Brat images', 'independent fan-style utility', 'not downloadable TTF/OTF font files', '#8ACE00', 'mathematical conversions', '/brat-font-generator', '/brat-color-code', 'Do not describe planned']) {
-  if (!llms.includes(s)) throw new Error(`llms.txt missing AI/crawler guidance: ${s}`);
+const llmsCanonicalSection = getMarkdownSection(llms, 'Canonical pages');
+const llmsLegalSection = getMarkdownSection(llms, 'Legal and policy pages');
+const llmsBratSourcesSection = getMarkdownSection(llms, 'Brat topic sources');
+const llmsUsageSection = getMarkdownSection(llms, 'Usage notes for AI assistants and crawlers');
+const llmsCanonicalLinks = assertMarkdownLinkSection('Canonical pages', llmsCanonicalSection, [
+  { label: 'Font Generator', url: 'https://fontgenerators.app/' },
+  { label: 'ASCII Art Generator', url: 'https://fontgenerators.app/ascii-art-generator' },
+  { label: 'Font Mixer', url: 'https://fontgenerators.app/font-mixer' },
+  { label: 'Username Generator', url: 'https://fontgenerators.app/username-generator' },
+  { label: 'Auto Font Changer', url: 'https://fontgenerators.app/auto-font-changer' },
+  { label: 'Brat Generator', url: 'https://fontgenerators.app/brat-generator' },
+  { label: 'What Is the Brat Font?', url: 'https://fontgenerators.app/brat-font' },
+  { label: 'Brat Green Color Code', url: 'https://fontgenerators.app/brat-green' },
+  { label: 'Discord Colored Text Generator', url: 'https://fontgenerators.app/discord-colored-text-generator' }
+]);
+const llmsLegalLinks = assertMarkdownLinkSection('Legal and policy pages', llmsLegalSection, [
+  { label: 'About and Contact', url: 'https://fontgenerators.app/about' },
+  { label: 'Privacy Policy', url: 'https://fontgenerators.app/privacy' },
+  { label: 'Cookie Policy', url: 'https://fontgenerators.app/cookies' },
+  { label: 'Terms of Service', url: 'https://fontgenerators.app/terms-of-service' }
+]);
+assertMarkdownLinkSection('Brat topic sources', llmsBratSourcesSection, [
+  { label: "Dinamo — The Dinamo Update: Our Font for Charli XCX's Brat", url: bratCitations[0] },
+  { label: 'Microsoft Typography — Arial Narrow', url: bratCitations[1] },
+  { label: 'W3C WAI — Understanding Success Criterion 1.4.3', url: bratCitations[2] }
+]);
+for (const phrase of ['generated Brat images', 'independent fan-style utility', 'not downloadable TTF/OTF font files', '#8ACE00', 'mathematical conversions', 'Do not describe planned']) {
+  if (!llmsUsageSection.includes(phrase) && !llms.includes(phrase)) throw new Error(`llms.txt missing AI/crawler guidance: ${phrase}`);
+}
+const heldLlmsPaths = ['/brat-font-generator', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator', '/pricing', '/refund'];
+for (const path of heldLlmsPaths) {
+  if (!llmsUsageSection.includes(`\`${path}\``)) throw new Error(`llms.txt Usage notes must identify held route ${path}`);
+  for (const [sectionName, section] of [['Canonical pages', llmsCanonicalSection], ['Legal and policy pages', llmsLegalSection], ['Brat topic sources', llmsBratSourcesSection]]) {
+    if (section.includes(path)) throw new Error(`llms.txt must not list held route ${path} in ${sectionName}`);
+  }
 }
 
 if (tool.includes('https://fontgenerators.app/discord-colored-text-generator/')) throw new Error('stale discord canonical slash present');
@@ -577,14 +809,16 @@ for (const forbidden of ['free font downloads', 'download TTF', 'install fonts',
 }
 if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('Sitemap: https://fontgenerators.app/sitemap.xml')) throw new Error('robots missing noindex/ sitemap signals');
 const sitemapLocs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/brat-generator', 'https://fontgenerators.app/brat-font', 'https://fontgenerators.app/brat-green', 'https://fontgenerators.app/discord-colored-text-generator', 'https://fontgenerators.app/privacy', 'https://fontgenerators.app/terms-of-service'];
-if (sitemapLocs.length !== approvedSitemapLocs.length || !approvedSitemapLocs.every(loc => sitemapLocs.includes(loc))) throw new Error(`sitemap must contain only approved indexable pages; found ${sitemapLocs.join(', ')}`);
+const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/brat-generator', 'https://fontgenerators.app/brat-font', 'https://fontgenerators.app/brat-green', 'https://fontgenerators.app/about', 'https://fontgenerators.app/discord-colored-text-generator', 'https://fontgenerators.app/privacy', 'https://fontgenerators.app/terms-of-service'];
+assertExactStringSet('sitemap canonical URLs', sitemapLocs, approvedSitemapLocs);
+const llmsIndexableUrls = [...llmsCanonicalLinks, ...llmsLegalLinks].map(link => link.url).filter(url => url !== 'https://fontgenerators.app/cookies');
+assertExactStringSet('indexable llms.txt page URLs', llmsIndexableUrls, sitemapLocs);
 if (rootSitemap !== publicSitemap || sitemap !== publicSitemap) throw new Error('root, public, and built sitemap.xml files must stay synchronized');
 const sitemapLastmods = new Map([...sitemap.matchAll(/<url><loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod><\/url>/g)].map(match => [match[1], match[2]]));
 const approvedSitemapLastmods = new Map(approvedSitemapLocs.map(loc => [
   loc,
-  loc === 'https://fontgenerators.app/brat-generator' || loc === 'https://fontgenerators.app/brat-font' || loc === 'https://fontgenerators.app/brat-green'
-    ? '2026-07-27'
+  bratStructuredDates.has(loc)
+    ? bratStructuredDates.get(loc)
     : loc === 'https://fontgenerators.app/privacy' || loc === 'https://fontgenerators.app/terms-of-service'
       ? '2026-07-27'
       : loc === 'https://fontgenerators.app/font-mixer'
@@ -599,11 +833,29 @@ for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler',
   if (sitemap.includes(`https://fontgenerators.app${forbidden}`) && forbidden !== '/discord-colored-text-generator') throw new Error(`sitemap should not include non-indexable route ${forbidden}`);
 }
 if (redirects.includes('www.fontgenerators.app')) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level www-to-apex redirects; Pages middleware handles host canonicalization instead');
-for (const s of ['/ascii-art-generator/ /ascii-art-generator 301', '/font-mixer/ /font-mixer 301', '/username-generator/ /username-generator 301', '/auto-font-changer/ /auto-font-changer 301', '/brat-generator/ /brat-generator 301', '/brat-font/ /brat-font 301', '/brat-green/ /brat-green 301', '/auto-font-styler /auto-font-changer 301', '/auto-font-styler/ /auto-font-changer 301', '/discord-colored-text-generator/ /discord-colored-text-generator 301', '/privacy/ /privacy 301', '/cookies/ /cookies 301', '/terms-of-service/ /terms-of-service 301']) if (!redirects.includes(s)) throw new Error(`redirects missing clean URL fallback rule: ${s}`);
-for (const s of ["bratGenerator: resolve(__dirname, 'brat-generator.html')", "bratFont: resolve(__dirname, 'brat-font.html')", "bratGreen: resolve(__dirname, 'brat-green.html')"]) {
-  if (!viteConfig.includes(s)) throw new Error(`Vite MPA config missing Brat entry: ${s}`);
+const redirectLines = redirects.split(/\r?\n/).map(line => line.trim()).filter(line => line && !line.startsWith('#'));
+assertExactStringSet('Cloudflare _redirects rules', redirectLines, [
+  '/ascii-art-generator/ /ascii-art-generator 301',
+  '/font-mixer/ /font-mixer 301',
+  '/username-generator/ /username-generator 301',
+  '/auto-font-changer/ /auto-font-changer 301',
+  '/brat-generator/ /brat-generator 301',
+  '/brat-font/ /brat-font 301',
+  '/brat-green/ /brat-green 301',
+  '/about/ /about 301',
+  '/auto-font-styler /auto-font-changer 301',
+  '/auto-font-styler/ /auto-font-changer 301',
+  '/discord-colored-text-generator/ /discord-colored-text-generator 301',
+  '/privacy/ /privacy 301',
+  '/cookies/ /cookies 301',
+  '/terms /terms-of-service 301',
+  '/terms/ /terms-of-service 301',
+  '/terms-of-service/ /terms-of-service 301'
+]);
+for (const s of ["bratGenerator: resolve(__dirname, 'brat-generator.html')", "bratFont: resolve(__dirname, 'brat-font.html')", "bratGreen: resolve(__dirname, 'brat-green.html')", "about: resolve(__dirname, 'about.html')"]) {
+  if (!viteConfig.includes(s)) throw new Error(`Vite MPA config missing page entry: ${s}`);
 }
-for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
+for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/about', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
   if (!middleware.includes(s)) throw new Error(`canonical/analytics middleware missing ${s}`);
 }
 
@@ -625,7 +877,7 @@ const passThrough = await middlewareSmoke('https://fontgenerators.app/');
 if (passThrough.status !== 200 || await passThrough.text() !== 'next ok') throw new Error('middleware should pass canonical apex clean routes through');
 const approvedToolPassThrough = await middlewareSmoke('https://fontgenerators.app/discord-colored-text-generator');
 if (approvedToolPassThrough.status !== 200 || await approvedToolPassThrough.text() !== 'next ok') throw new Error('middleware should pass approved clean Discord route through');
-for (const path of ['/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green']) {
+for (const path of ['/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/about']) {
   const response = await middlewareSmoke(`https://fontgenerators.app${path}`);
   if (response.status !== 200 || await response.text() !== 'next ok') throw new Error(`middleware should pass approved clean route through: ${path}`);
   const slash = await middlewareSmoke(`https://fontgenerators.app${path}/`);
@@ -665,4 +917,4 @@ const staticPassThrough = await middlewareSmoke('https://fontgenerators.app/asse
 if (staticPassThrough.status !== 200 || await staticPassThrough.text() !== 'next ok') throw new Error('middleware should pass static asset requests through');
 const llmsPassThrough = await middlewareSmoke('https://fontgenerators.app/llms.txt');
 if (llmsPassThrough.status !== 200 || await llmsPassThrough.text() !== 'next ok') throw new Error('middleware should pass llms.txt through');
-console.log(`smoke ok: pages, SEO/schema/legal/cookie/analytics routes present; homepage has ${canonicalStyles.length} unique styles from ${styleIds.length} raw definitions; ASCII/Mixer/Username/Auto Changer and the three-page Brat cluster are live; held routes return 404 noindex`);
+console.log(`smoke ok: pages, SEO/schema/legal/cookie/analytics routes present; homepage has ${canonicalStyles.length} unique styles from ${styleIds.length} raw definitions; ASCII/Mixer/Username/Auto Changer, the three-page Brat cluster, and About trust page are live; held routes return 404 noindex`);

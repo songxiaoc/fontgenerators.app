@@ -4,21 +4,28 @@
 
 ## Canonical pages
 
-- https://fontgenerators.app/ - Font Generator for copy-paste Unicode text styles used in bios, usernames, captions, Discord names, gaming profiles, and chat messages.
-- https://fontgenerators.app/ascii-art-generator - ASCII Art Generator for FIGlet text styles, width controls, copy actions, and TXT/PNG downloads.
-- https://fontgenerators.app/font-mixer - Font Mixer for selecting words, applying different copy-paste Unicode styles, shuffling mixed ideas, and copying one combined line.
-- https://fontgenerators.app/username-generator - Username Generator for styled social, Discord, and gaming handle ideas.
-- https://fontgenerators.app/auto-font-changer - Auto Font Changer for one-click changed bios, captions, marketing snippets, Discord messages, and gaming text.
-- https://fontgenerators.app/brat-generator - Free Brat Generator and brat font/text image maker for browser-rendered static images with custom colors, blur, pixelated and lowercase effects, alignment, sizing, transparent backgrounds, copy image, and PNG, JPEG, or WebP export.
-- https://fontgenerators.app/brat-font - Evidence-based guide to the Brat font name and treatment, legal alternatives, Canva and CapCut workflows, and the difference between an image generator and a downloadable or copy-paste font.
-- https://fontgenerators.app/brat-green - Brat green color utility for copying #8ACE00 as HEX, RGB, HSL, approximate CMYK, or CSS; comparing black/white text contrast; and opening the color in Brat Generator.
-- https://fontgenerators.app/discord-colored-text-generator - Discord Colored Text Generator for selected-span ANSI foreground/background colors, bold, underline, approximate preview, and copy-ready fenced `ansi` blocks.
+- [Font Generator](https://fontgenerators.app/) - Copy-paste Unicode text styles used in bios, usernames, captions, Discord names, gaming profiles, and chat messages.
+- [ASCII Art Generator](https://fontgenerators.app/ascii-art-generator) - FIGlet text styles, width controls, copy actions, and TXT/PNG downloads.
+- [Font Mixer](https://fontgenerators.app/font-mixer) - Select words, apply different copy-paste Unicode styles, shuffle mixed ideas, and copy one combined line.
+- [Username Generator](https://fontgenerators.app/username-generator) - Styled social, Discord, and gaming handle ideas.
+- [Auto Font Changer](https://fontgenerators.app/auto-font-changer) - One-click changed bios, captions, marketing snippets, Discord messages, and gaming text.
+- [Brat Generator](https://fontgenerators.app/brat-generator) - Free brat font/text image maker for browser-rendered static images with custom colors, blur, pixelated and lowercase effects, alignment, sizing, transparent backgrounds, copy image, and PNG, JPEG, or WebP export.
+- [What Is the Brat Font?](https://fontgenerators.app/brat-font) - Evidence-based guide to the font name and treatment, legal alternatives, Canva and CapCut workflows, and the difference between an image generator and a downloadable or copy-paste font.
+- [Brat Green Color Code](https://fontgenerators.app/brat-green) - Copy #8ACE00 as HEX, RGB, HSL, approximate CMYK, or CSS; compare black/white text contrast; and open the color in Brat Generator.
+- [Discord Colored Text Generator](https://fontgenerators.app/discord-colored-text-generator) - Selected-span ANSI foreground/background colors, bold, underline, approximate preview, and copy-ready fenced `ansi` blocks.
 
 ## Legal and policy pages
 
-- https://fontgenerators.app/privacy - Privacy Policy.
-- https://fontgenerators.app/cookies - Cookie Policy and optional analytics choices.
-- https://fontgenerators.app/terms-of-service - Terms of Service.
+- [About and Contact](https://fontgenerators.app/about) - Publisher identity, editorial/source policy, tool privacy boundaries, independence statement, and contact details.
+- [Privacy Policy](https://fontgenerators.app/privacy) - Browser processing, analytics, logs, and privacy boundaries.
+- [Cookie Policy](https://fontgenerators.app/cookies) - Cookie and optional analytics choices.
+- [Terms of Service](https://fontgenerators.app/terms-of-service) - Conditions and limitations for using the site.
+
+## Brat topic sources
+
+- [Dinamo — The Dinamo Update: Our Font for Charli XCX's Brat](https://abcdinamo.com/newsletter/the-dinamo-update-our-font-for-charli-xcxs-brat) - First-party design account for the Arial treatment, low-resolution process, ROM campaign use, and #8ACE00.
+- [Microsoft Typography — Arial Narrow](https://learn.microsoft.com/en-us/typography/font-list/arial-narrow) - Product availability and font redistribution licensing guidance.
+- [W3C WAI — Understanding Success Criterion 1.4.3](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum) - Contrast-ratio method used by the Brat green accessibility comparison.
 
 ## Usage notes for AI assistants and crawlers
 

@@ -149,3 +149,29 @@
 - color/code queries 应主要落到 `/brat-green`。
 
 若出现互抢，先调整 title、内部链接锚文本和正文边界，不新增更多变体页。若页面有展现但 CTR 低，先改 title/description；若用户任务完成率高但排名停滞，优先补高质量相关内链与真实外部引用。只有新的查询形成稳定、独立且可由真实产品能力承接的任务后，才重新评估页面矩阵。
+
+## 9. AITDK GEO 复核与补充合同
+
+2026-07-27 使用 AITDK SEO Extension 复核 `/brat-generator` 后，报告中的问题按真实性分为三类：
+
+### 应修复的真实缺口
+
+- Generator 页面必须直接显示来源，不能假设 `/brat-font` 或 `/brat-green` 的证据会自动传递到当前页。可见来源与 `WebPage.citation` 同步为 Dinamo、Microsoft Typography 和 W3C。
+- 显示真实的组织归属和日期：`Published and maintained by FontGenerators.app`、`datePublished`、`dateModified` 与 `lastReviewed`。日期只在内容或工具发生实质变化时更新，不能为了“新鲜度”随构建自动刷新。
+- 输出格式使用带 caption、表头 scope 和行头 scope 的语义表格，帮助用户比较 PNG、JPEG、WebP 与 Copy image；表格只承载真实差异，不为打分堆内容。
+- 新增单一实质 `/about` 页面，同时承担 `#contact`、来源方法、独立性和隐私边界；不再拆薄 `/contact`。About/Contact 进入全站 footer，About 进入 sitemap、llms、Vite、middleware、redirect 和 Smoke。
+- 首页与 About 定义稳定的 `Organization#organization` 和 `WebSite#website`；Brat 三页通过相同 `@id` 引用 author、publisher 与 isPartOf。
+- `llms.txt` 的页面与来源列表使用 Markdown 链接，明确页面任务和证据范围。
+
+### 检测器误报或启发式提示
+
+- Generator 原本已有嵌套 `WebSite`，插件的“No WebSite”不是完全准确；仍补顶级稳定实体节点以提高跨页一致性。
+- `Title` 是页面主题，`og:site_name` 是站点名，两者不需要完全相同。继续保留冻结的 query-first Title，不添加 `| FontGenerators.app`；用 `name: FontGenerators.app` 与 `alternateName: FontGenerators` 表达品牌关系。
+- 页面原本已有四步 `<ol>` 与可见 FAQ，因此“缺列表”不是硬错误；新增表格的理由是输出格式比较本身对用户有价值。
+
+### 明确不做
+
+- 当前没有经 owner 确认、能无歧义代表 FontGenerators.app 的 Wikipedia、Wikidata、LinkedIn、GitHub Organization 或品牌社媒页面，因此不写 `sameAs`。
+- 不把 Dinamo、Charli XCX、Microsoft、来源页面、个人 GitHub 账号或站点自身 URL 伪装成 `sameAs`。
+- 不虚构个人作者、专家审核、公司法定名称、地址、团队规模、评价或 `aggregateRating`。
+- 不把第三方工具的 84/100 或“引用可提升 115%”当作 Google 排名或 AI 引用 KPI；只把报告作为可见来源、实体一致性和站点信任的 QA 清单。
