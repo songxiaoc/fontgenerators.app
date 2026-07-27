@@ -1,94 +1,151 @@
-# Brat Generator 内页与 SEO 上线规划
+# Brat 主题 SEO/GEO/AEO 最终实施方案
 
 日期：2026-07-27
-目标市场：英语用户，主域名 `https://fontgenerators.app`
+目标市场：Worldwide English
+主域名：`https://fontgenerators.app`
 
-## 1. 目标与结论
+## 1. 数据口径与研究结论
 
-- 新增唯一可索引工具页：`https://fontgenerators.app/brat-generator`。
-- 主关键词：`brat generator`。
-- 同页覆盖的相邻意图：`brat font generator`、`brat text generator`、`brat generator black`、`brat generator white`、`brat generator pink`、`brat generator transparent`、`brat generator png`、`brat generator different colors`。
-- v1 不拆分颜色页、字体页或“lyrics”页，避免重复内容和关键词内耗；只有后续 GSC 数据证明某个修饰词具备独立任务与内容价值时再拆页。
-- 产品定位为独立的 fan-style 工具，不宣称官方、同款字体或与 Charli XCX/唱片公司存在关联。
+用户提供的四份 Google Trends CSV 实际是两组 `Worldwide`、近 7 天 Related Queries 数据，每组分别按 Top 与 Rising 排序。CSV 中的 `search interest` 是该组查询之间的归一化热度指数，不是关键词搜索量，不能用来推导绝对流量、CPC 或竞争难度。Rising 中的 `Breakout` 代表相对增幅极高，也不等同于已经形成大体量。
 
-## 2. 竞品判断
+本次 SERP、自动补全、People also ask 与 People also search for 共同显示三类可区分任务：
 
-用户提供的五个站点中，主对标采用 `bratify.app/brat-generator`：
+1. `brat generator`、`brat font generator`、`brat text generator`、free、meme、cover、white/pink 是同一个“立即生成静态图片”任务。
+2. `brat font`、font name/download、Canva、CapCut、copy and paste 是信息查询任务。PAA 集中询问字体名称、从哪里获取，以及 Canva 中如何复现。
+3. `brat color code`、`brat green`、HEX/RGB/HSL/CMYK 是颜色复制、换算与对比度任务。虽然当前基数较低，但 `brat color code` 在 Rising 数据中为 Breakout，且 SERP 已形成独立颜色工具意图。
 
-- 优点：工具前置、实时 Canvas 预览、颜色预设、社媒比例、PNG/JPEG/WebP 与复制图片形成完整任务闭环。
-- 可借鉴：桌面端左右工作台、移动端纵向排列、所见即所得导出、简洁内容结构。
-- 需要超越：补充透明背景、浏览器侧隐私说明、可访问状态、完整 WebApplication/FAQ/HowTo 结构化数据和站内内链。
+核心事实优先采用一手或规范来源：
 
-其余站点只作为反例或功能补充参考：
+- Dinamo 设计团队资料：主封面文字以 Arial 为基础，经过拉伸和低分辨率处理；ROM 是 campaign secondary typeface；其资料给出绿色 `#8ACE00`。来源：<https://abcdinamo.com/newsletter/the-dinamo-update-our-font-for-charli-xcxs-brat>
+- Microsoft Arial Narrow 说明：Arial Narrow 随特定 Microsoft 产品提供，不提供任意再分发许可。来源：<https://learn.microsoft.com/en-us/typography/font-list/arial-narrow>
+- W3C WCAG 对比度说明：正文常规文本至少 4.5:1，大号文本至少 3:1。来源：<https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum>
 
-- 不加入导出水印，也不出现“无水印”与实际结果矛盾的情况。
-- 预览与下载必须走同一个渲染函数，避免样式、换行、翻转或噪点只在预览中生效。
-- 不使用假评价、无证据评分、广告式浮层、外链徽章或机械关键词密度文案。
-- 不声称提供下载、复制或高清尺寸，除非对应功能和输出已被自动化测试验证。
+## 2. 最终页面矩阵
 
-## 3. 页面与搜索意图合同
+| 路由 | 主搜索意图 | 页面角色 | 决策 |
+|---|---|---|---|
+| `/brat-generator` | `brat generator`、`brat font generator`、`brat text generator`、free、meme、cover、white/pink | 静态图片生成工具 | 强化现有工具页 |
+| `/brat-font` | `brat font`、font name/download、Canva、CapCut、copy and paste、PAA | 权威字体信息页 | 新增 |
+| `/brat-green` | `brat color code`、`brat green`、HEX/RGB/HSL/CMYK | 颜色复制、换算、对比度工具 | 新增真实工具页 |
+
+不建立以下薄页或能力不匹配页面：
+
+- `/brat-font-generator`、`/brat-text-generator`：与 `/brat-generator` 同一任务，拆分会造成内容重复和关键词内耗。
+- Canva、CapCut 独立页：当前可由 `/brat-font` 的专门章节充分回答，不需要模板化薄页。
+- `/brat-color`、`/brat-color-code`：与 `/brat-green` 同一颜色任务，不做别名落地页。
+- white、pink、meme、cover 颜色/场景变体页：先由生成器真实功能与正文承接。
+- `/brat-video-generator`、`/brat-lyric-generator`：与当前静态图片产品能力不同。
+- `Bratz`、`brat diet`、`beat generator` 等噪音词：完全排除。
+
+未知变体路由继续返回 `404`，同时发送 `X-Robots-Tag: noindex, nofollow` 并输出可见 noindex meta，不把它们 301 到相似页面。
+
+## 3. `/brat-generator` 实施合同
 
 ### Metadata
 
-- Title：`Brat Generator — Make Brat Text Images Free`
+- Title：`Brat Generator — Free Brat Font & Text Image Maker`
 - H1：`Brat Generator`
-- Meta description：强调自定义颜色、模糊、透明背景、社媒尺寸、PNG/JPEG/WebP、免费、无需注册和无水印，控制在 140–160 个英文字符。
+- Description：`Create brat-style text images with this free brat font generator. Customize colors, blur, alignment and size, then download PNG, JPEG or WebP—no signup.`
 - Canonical：`https://fontgenerators.app/brat-generator`
 - Robots：`index, follow`
-- OG/Twitter：标题、说明、canonical URL 与分享图完整；上线后可再把通用 logo 分享图升级为 1200×630 的页面专属图。
+- OG/Twitter：使用该路由专属 1200×630 原创分享图。
 
-### 首屏任务
+### 内容与功能边界
 
-- 输入文本并实时预览。
-- Brat Green `#8ACE00`、白、黑、粉、透明背景预设与自定义背景/文字颜色。
-- 居中、右对齐、两端对齐。
-- 1:1、9:16、16:9；方图支持 512–2048 px，竖图 1080×1920，横图 1920×1080。
-- 字号、模糊、自动小写、像素化。
-- PNG、JPEG、WebP 下载与支持时复制图片。
-- 本地重置；无账号、无上传、无服务端处理、无水印。
+- 工具保持首屏，H1 后用直接答案说明：这是 free brat font generator 和 brat text generator，输出静态图片，不输出 TTF/OTF、Unicode copy-paste 字体或视频。
+- 只描述已实现能力：自定义背景和文字颜色、透明背景、blur、pixelated、lowercase、alignment、尺寸、PNG/JPEG/WebP、copy image。
+- 不宣称 Mirror、Flip Vertical、Noise、视频、AI 歌词或字体文件下载。
+- 正文覆盖工具定义、真实功能、输出格式、使用场景、浏览器侧隐私与产品限制；详细字体事实链接 `/brat-font`，详细颜色换算链接 `/brat-green`。
+- FAQ 可见内容与 `FAQPage` 完全一致，覆盖：是否免费、字体名称、是否需要下载字体、copy image 与 copy-paste font 的区别、`#8ACE00`、透明背景、移动端、隐私、静态图片而非视频。
+- `WebApplication.featureList` 只能列出当前真实能力。
 
-### 正文顺序
+## 4. `/brat-font` 实施合同
 
-1. 工具工作台。
-2. 颜色预设与社媒尺寸。
-3. 四步使用方法。
-4. 浏览器侧隐私与独立工具免责声明。
-5. Brat generator 的定义、颜色/字体/模糊说明、输出格式和真实使用场景。
-6. FAQ。
-7. 相关文字工具和返回生成器 CTA。
+### Metadata
 
-正文目标约 900–1400 个有用英文词，以真实任务、限制和答案为主，不设置关键词密度目标。
+- Title：`What Is the Brat Font? Name, Canva, CapCut & Alternatives`
+- H1：`What Is the Brat Font?`
+- Description：`What font does Brat use? See the Arial-based treatment, #8ACE00 green, legal alternatives, Canva and CapCut workflows, and why no font file is needed.`
+- Canonical：`https://fontgenerators.app/brat-font`
+- Robots：`index, follow`
+- OG/Twitter：使用该路由专属 1200×630 原创分享图。
 
-## 4. AEO、Schema 与内容边界
+### Answer-first 与来源边界
 
-- `WebPage` + `WebApplication`：名称、URL、免费 Offer、浏览器运行、功能描述与输入/输出能力保持真实。
-- `HowTo`：四个可见步骤必须与页面文案一致。
-- `FAQPage`：只标记页面中可见的 FAQ，至少覆盖透明 PNG、`#8ACE00`、字体口径、黑白粉配色、长文本/短歌词、移动端、隐私、非官方关系。
-- 不添加评分、Review 或 AggregateRating。
-- 字体回答使用“condensed sans-serif inspired look”，不宣称包含或复制官方专有字体。
-- 用户可以输入自己的短句或合法使用的短文本；页面不提供受版权保护的歌词库，不建设歌词生成器。
+首屏先直接回答：主封面文字以 Arial 为基础，再经过拉伸和低分辨率处理；Arial Narrow 是常见近似方案，不是名为 “Brat Font” 的官方字体文件；ROM 是 campaign secondary typeface。
 
-## 5. 技术 SEO 与内链
+页面必须包含：
 
-- Vite MPA 增加独立构建入口。
-- Cloudflare Pages middleware 显式放行 `/brat-generator`，未知路由继续返回带 `noindex` 的 404。
-- `/brat-generator/` 301 到无尾斜杠 canonical；`www` 到 apex 时保留路径和查询参数。
-- 两份 sitemap 源保持一致，并在构建产物中验证新 URL。
-- `/llms.txt` 增加页面定位与 canonical。
-- 首页 “More text tools” 增加 Brat Generator 卡片；新页面回链 Font Generator、ASCII Art Generator 与 Font Mixer。
-- 所有用户文本和 Canvas 预览添加 Clarity mask；分析事件只记录比例、预设、格式、成功/失败等枚举值，不记录输入文本、文件名或图像内容。
+- “原始设计事实 / 常见近似 / 本站实现”对比表。
+- 本站 Canvas 的真实 fallback 与缩放/模糊说明，不能把 fallback 描述成官方字体。
+- font name、free download、Canva、CapCut、copy and paste 独立章节。
+- Canva/CapCut 的稳定工作流优先推荐：在本站导出 PNG，再作为 overlay 导入；不承诺平台当前字库必然包含某个字体。
+- 只链接合法来源，不托管或分发 Arial、Arial Narrow、ROM 等字体文件。
+- 明确搜索结果中的同名手写字体并非 Charli XCX 主封面字体。
+- 可见 last reviewed 与 Sources 区。
+- 可见 PAA 与 `FAQPage` 完全一致。
+- Schema：`WebPage + Article + BreadcrumbList + FAQPage`。
 
-## 6. 上线验收
+## 5. `/brat-green` 实施合同
 
-- 功能：五种背景、两种自定义颜色、三种对齐、三种比例、尺寸/字号/模糊、lowercase、pixelated、三种格式、下载、复制、重置全部可用。
-- 一致性：预览与导出共用渲染器；验证尺寸、MIME、透明 alpha、换行、长文本、多行、Emoji/非拉丁字符和空输入。
-- 响应式：390、768、960–1100、1440 px 无横向溢出，移动端核心操作不被 Cookie 浮层遮挡。
-- SEO：200、canonical、robots、title、description、唯一 H1、Schema、sitemap、llms、首页内链、尾斜杠 301 全部通过。
-- 发布：测试通过后同一版本 commit、push、Cloudflare Pages 部署；同时验证不可变部署 URL 与生产域名。
-- 搜索控制台：如当前环境没有 GSC/Bing 登录态，只记录“尚未提交”，不得把代码上线等同为已提交收录。
+### Metadata
 
-## 7. 首周监控
+- Title：`Brat Green Color Code — #8ACE00 Hex, RGB, HSL & CMYK`
+- H1：`Brat Green Color Code: #8ACE00`
+- Description：`Copy the Brat green color code #8ACE00 in HEX, RGB, HSL and CMYK. Compare black and white text contrast, copy CSS, and open it in the Brat Generator.`
+- Canonical：`https://fontgenerators.app/brat-green`
+- Robots：`index, follow`
+- OG/Twitter：使用该路由专属 1200×630 原创分享图。
 
-- GSC：抓取状态、canonical 选择、`brat generator` 与颜色/透明/PNG 修饰词的展现和点击。
-- GA4/Clarity：生成器开始、预设选择、比例、下载格式、复制成功/失败、重置；不采集用户文本。
-- 决策：若页面有展现但 CTR 低，先优化 title/description；若排名停滞但任务完成率高，补高质量相关内链和真实外部引用；只有修饰词形成稳定独立意图后再新增页面。
+### 真实工具合同
+
+提供键盘可访问的一键复制操作和 `aria-live` 状态反馈：
+
+- HEX：`#8ACE00`
+- RGB：`rgb(138, 206, 0)`
+- HSL：`hsl(80, 100%, 40.4%)`
+- 近似 CMYK：`33, 0, 100, 19`
+- CSS 变量：`--brat-green: #8ACE00;`
+
+页面展示黑字 `10.91:1`、白字 `1.92:1` 的对比度，并推荐黑字。`#8ACE00` 来自 Dinamo/设计团队资料；HSL 与 CMYK 是数字换算，不宣称为官方印刷规范。提供 Canva、Figma、CSS、PowerPoint 使用示例，以及 “Open in Brat Generator” CTA。Schema 为 `WebPage + WebApplication + BreadcrumbList + FAQPage`。
+
+## 6. 技术 SEO、GEO 与 AEO 合同
+
+- Vite MPA 对三个 Brat 路由分别构建静态 HTML。
+- Cloudflare Pages middleware 显式放行三个 clean URL；三条尾斜杠路径 301 到无尾斜杠 canonical；`www` 到 apex 保留路径与查询参数。
+- 根目录与 `public/` 两份 sitemap 内容完全一致，收录三个 Brat canonical，不收录 cookies、别名或未知变体。
+- `llms.txt` 描述三个页面的任务边界、静态图片限制、字体授权边界、颜色换算口径和禁止宣称的未上线页面。
+- 内链形成闭环：Generator → Font/Green；Font → Generator/Green；Green → Generator/Font。无需挤入主导航。
+- 每个核心问题先给 40–80 词直接答案，再展开表格、步骤与来源；Schema 只能标记页面可见内容。
+- 分享图使用原创短语，不复制专辑封面、歌词或官方素材。
+- 禁用表达：`official generator`、`exact replica`、虚构用户量或评价、未经授权字体下载、无限商业使用承诺。
+
+## 7. 测试与发布验收
+
+`npm run check` 必须验证：
+
+- 三页文件与专属 OG 资源存在。
+- 三页 title、H1、canonical 唯一且精确；robots 可索引。
+- 每页要求的 Schema 存在，`FAQPage` 问题均能在可见正文找到。
+- 三页完整互链，sitemap、llms、redirect 和 middleware 合同同步。
+- `/brat-font-generator`、`/brat-text-generator`、`/brat-color`、`/brat-color-code`、`/brat-video-generator`、`/brat-lyric-generator` 保持 404 + noindex。
+
+浏览器在 390、768、1440 px 验收：无横向溢出；颜色复制按钮、`aria-live`、键盘焦点和 CTA 正常；控制台与网络无阻断性错误。
+
+发布要求：
+
+1. 同一版本完成 commit 与 push。
+2. 使用该 commit 部署 Cloudflare Pages。
+3. 验证三个 clean URL 为 200，尾斜杠为 301，未批准别名为 404 + noindex。
+4. 验证正式域名与不可变部署 URL 内容一致，Schema、OG 资源、console/network 正常。
+5. 只有在确认存在 GSC/Bing 登录态时提交 sitemap 并分别请求抓取三个 URL；否则记录为待办，不能把“已部署”表述成“已收录”。
+
+## 8. 7 天与 28 天监控
+
+按 `query × page` 监控 GSC：
+
+- generator queries 应主要落到 `/brat-generator`。
+- font knowledge queries 应主要落到 `/brat-font`。
+- color/code queries 应主要落到 `/brat-green`。
+
+若出现互抢，先调整 title、内部链接锚文本和正文边界，不新增更多变体页。若页面有展现但 CTR 低，先改 title/description；若用户任务完成率高但排名停滞，优先补高质量相关内链与真实外部引用。只有新的查询形成稳定、独立且可由真实产品能力承接的任务后，才重新评估页面矩阵。

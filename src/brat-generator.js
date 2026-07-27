@@ -260,8 +260,11 @@ function scheduleRender() {
       el.canvas.style.width = '100%';
       el.canvas.style.height = '100%';
     }
-    el.sizeBadge.textContent = `${width} × ${height}`;
-    el.canvas.setAttribute('aria-label', `Brat-style image preview, ${width} by ${height} pixels`);
+    const sizeLabel = `${width} × ${height}`;
+    if (el.sizeBadge.textContent !== sizeLabel) el.sizeBadge.textContent = sizeLabel;
+    const previewText = normalizedText().trim().replace(/\s+/g, ' ').slice(0, 80) || 'empty text';
+    const backgroundLabel = state.background === 'transparent' ? 'transparent background' : `${state.background} background`;
+    el.canvas.setAttribute('aria-label', `Brat-style preview of “${previewText}” on ${backgroundLabel}, ${width} by ${height} pixels`);
   });
 }
 

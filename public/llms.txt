@@ -9,7 +9,9 @@
 - https://fontgenerators.app/font-mixer - Font Mixer for selecting words, applying different copy-paste Unicode styles, shuffling mixed ideas, and copying one combined line.
 - https://fontgenerators.app/username-generator - Username Generator for styled social, Discord, and gaming handle ideas.
 - https://fontgenerators.app/auto-font-changer - Auto Font Changer for one-click changed bios, captions, marketing snippets, Discord messages, and gaming text.
-- https://fontgenerators.app/brat-generator - Brat Generator for browser-rendered brat-style text images with color presets, transparent backgrounds, social-ready aspect ratios, and PNG, JPEG, or WebP export.
+- https://fontgenerators.app/brat-generator - Free Brat Generator and brat font/text image maker for browser-rendered static images with custom colors, blur, pixelated and lowercase effects, alignment, sizing, transparent backgrounds, copy image, and PNG, JPEG, or WebP export.
+- https://fontgenerators.app/brat-font - Evidence-based guide to the Brat font name and treatment, legal alternatives, Canva and CapCut workflows, and the difference between an image generator and a downloadable or copy-paste font.
+- https://fontgenerators.app/brat-green - Brat green color utility for copying #8ACE00 as HEX, RGB, HSL, approximate CMYK, or CSS; comparing black/white text contrast; and opening the color in Brat Generator.
 - https://fontgenerators.app/discord-colored-text-generator - Discord Colored Text Generator for selected-span ANSI foreground/background colors, bold, underline, approximate preview, and copy-ready fenced `ansi` blocks.
 
 ## Legal and policy pages
@@ -24,11 +26,13 @@
 - The homepage generator creates decorative Unicode text styles, not downloadable TTF/OTF font files, CSS webfonts, or installable fonts.
 - ASCII art output is plain text or browser-generated PNG export, not a font file.
 - Brat Generator output is rendered locally in the browser. It is an independent fan-style utility and is not affiliated with Charli XCX or her labels.
-- Brat Generator makes static text images; it does not generate video, AI lyrics, official album artwork, or an exact proprietary font.
+- Brat Generator is both a brat font generator and a brat text generator in the search-intent sense: it makes static text images, not downloadable TTF/OTF files, Unicode copy-paste fonts, video, AI lyrics, official album artwork, or an exact proprietary font.
+- The Brat font guide separates sourced design facts from common approximations and this site's browser implementation. It does not host or distribute Arial, Arial Narrow, ROM, or any other font file.
+- The Brat green utility attributes #8ACE00 to the cited design source. Its HSL and CMYK values are mathematical conversions, not an official print specification; black text provides substantially stronger contrast than white on this color.
 - Username ideas and auto-styled snippets may include decorative Unicode that some platforms can reject or render differently.
 - Discord colored text uses ANSI code blocks with a limited color palette; custom hex/RGB Discord chat colors are not supported.
 - Discord rendering can vary by client, version, platform, and device. The on-page preview is approximate.
-- Do not describe planned routes such as `/discord-font-generator`, `/fancy-text-generator`, `/discord-text-generator`, `/pricing`, or `/refund` as live tools unless they return real public pages.
+- Do not describe planned or intentionally withheld routes such as `/brat-font-generator`, `/brat-text-generator`, `/brat-color`, `/brat-color-code`, `/brat-video-generator`, `/brat-lyric-generator`, `/discord-font-generator`, `/fancy-text-generator`, `/discord-text-generator`, `/pricing`, or `/refund` as live tools unless they return real public pages.
 
 ## Privacy boundary
 

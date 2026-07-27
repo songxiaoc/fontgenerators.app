@@ -7,6 +7,8 @@ const files = [
   'dist/username-generator.html',
   'dist/auto-font-changer.html',
   'dist/brat-generator.html',
+  'dist/brat-font.html',
+  'dist/brat-green.html',
   'dist/discord-colored-text-generator.html',
   'dist/privacy.html',
   'dist/cookies.html',
@@ -16,6 +18,9 @@ const files = [
   'dist/llms.txt',
   'dist/logo.png',
   'dist/favicon.png',
+  'dist/og/brat-generator.png',
+  'dist/og/brat-font.png',
+  'dist/og/brat-green.png',
   'dist/fonts/dm-sans-latin.woff2',
   'dist/fonts/dm-sans-latin-ext.woff2',
   'dist/_redirects',
@@ -35,6 +40,8 @@ const mixer = readFileSync('dist/font-mixer.html', 'utf8');
 const username = readFileSync('dist/username-generator.html', 'utf8');
 const changer = readFileSync('dist/auto-font-changer.html', 'utf8');
 const brat = readFileSync('dist/brat-generator.html', 'utf8');
+const bratFont = readFileSync('dist/brat-font.html', 'utf8');
+const bratGreen = readFileSync('dist/brat-green.html', 'utf8');
 const privacy = readFileSync('dist/privacy.html', 'utf8');
 const cookies = readFileSync('dist/cookies.html', 'utf8');
 const terms = readFileSync('dist/terms-of-service.html', 'utf8');
@@ -44,6 +51,8 @@ const sourceMixer = readFileSync('font-mixer.html', 'utf8');
 const sourceUsername = readFileSync('username-generator.html', 'utf8');
 const sourceChanger = readFileSync('auto-font-changer.html', 'utf8');
 const sourceBrat = readFileSync('brat-generator.html', 'utf8');
+const sourceBratFont = readFileSync('brat-font.html', 'utf8');
+const sourceBratGreen = readFileSync('brat-green.html', 'utf8');
 const sourceTool = readFileSync('discord-colored-text-generator.html', 'utf8');
 const sourcePrivacy = readFileSync('privacy.html', 'utf8');
 const sourceCookies = readFileSync('cookies.html', 'utf8');
@@ -56,6 +65,7 @@ const mixerJs = readFileSync('src/font-mixer.js', 'utf8');
 const usernameJs = readFileSync('src/username-generator.js', 'utf8');
 const changerJs = readFileSync('src/auto-font-changer.js', 'utf8');
 const bratJs = readFileSync('src/brat-generator.js', 'utf8');
+const bratGreenJs = readFileSync('src/brat-green.js', 'utf8');
 const toolJs = readFileSync('src/tool.js', 'utf8');
 const analyticsJs = readFileSync('src/analytics.js', 'utf8');
 const styles = readFileSync('src/styles.css', 'utf8');
@@ -66,6 +76,7 @@ const rootSitemap = readFileSync('sitemap.xml', 'utf8');
 const redirects = readFileSync('dist/_redirects', 'utf8');
 const llms = readFileSync('dist/llms.txt', 'utf8');
 const middleware = readFileSync('functions/_middleware.js', 'utf8');
+const viteConfig = readFileSync('vite.config.js', 'utf8');
 
 const seoPages = [
   ['home', home, 'font generator', 'copy paste fonts'],
@@ -139,6 +150,8 @@ for (const [name, html, twoWordKeyword, threeWordKeyword] of seoPages) {
 // The Brat page uses intent/structure assertions below instead of the legacy
 // mechanical keyword-density thresholds used by established long-form pages.
 assertImageAlts('brat', brat);
+assertImageAlts('brat font', bratFont);
+assertImageAlts('brat green', bratGreen);
 
 for (const [name, content] of [
   ['home source', sourceHome],
@@ -147,17 +160,22 @@ for (const [name, content] of [
   ['username source', sourceUsername],
   ['changer source', sourceChanger],
   ['brat source', sourceBrat],
+  ['brat font source', sourceBratFont],
+  ['brat green source', sourceBratGreen],
   ['tool source', sourceTool],
   ['home js', homeJs],
   ['ascii js', asciiJs],
   ['username js', usernameJs],
   ['brat js', bratJs],
+  ['brat green js', bratGreenJs],
   ['built home', home],
   ['built ascii', ascii],
   ['built mixer', mixer],
   ['built username', username],
   ['built changer', changer],
   ['built brat', brat],
+  ['built brat font', bratFont],
+  ['built brat green', bratGreen],
   ['built tool', tool]
 ]) {
   if (/<span\b(?=[^>]*material-symbols-outlined)[^>]*>\s*[a-z][a-z0-9_]*\s*<\/span>/i.test(content)) {
@@ -172,6 +190,8 @@ for (const [name, html] of [
   ['username', sourceUsername],
   ['changer', sourceChanger],
   ['brat', sourceBrat],
+  ['brat font', sourceBratFont],
+  ['brat green', sourceBratGreen],
   ['tool', sourceTool],
   ['privacy', sourcePrivacy],
   ['cookies', sourceCookies],
@@ -195,19 +215,165 @@ const mustTool = ['Discord Colored Text Generator', 'Copy for Discord', 'Rainbow
 for (const s of mustTool) if (!tool.includes(s)) throw new Error(`tool missing ${s}`);
 const mustHome = ['Font Generator for Copy-Paste Fancy Text Styles', 'Type once, copy many text styles', 'These are Unicode copy-paste text styles, not downloadable font files', 'Open Discord Colored Text Generator', 'WebSite', 'WebApplication', 'FAQPage'];
 for (const s of mustHome) if (!home.includes(s)) throw new Error(`home missing ${s}`);
-const bratTitle = brat.match(/<title>(.*?)<\/title>/i)?.[1] || '';
-const bratDescription = brat.match(/<meta name="description" content="([^"]*)"/i)?.[1] || '';
-const bratMetadata = [
-  bratTitle,
-  ...[...brat.matchAll(/<meta\b[^>]*\bcontent="([^"]*)"[^>]*>/gi)].map(match => match[1])
-].join(' ');
-if (bratTitle !== 'Brat Generator — Make Brat Text Images Free') throw new Error(`brat title mismatch: ${bratTitle || 'missing'}`);
-if (bratDescription !== 'Make brat-style text images with custom colors, blur, transparent backgrounds, and social-ready sizes. Download PNG, JPEG, or WebP free—no signup or watermark.') throw new Error('brat meta description must match the researched search-intent copy');
-if (!brat.includes('<link rel="canonical" href="https://fontgenerators.app/brat-generator"')) throw new Error('brat canonical must use the clean production URL');
-if (!/<h1\b[^>]*>\s*Brat Generator\s*<\/h1>/i.test(brat)) throw new Error('brat page must expose one search-facing Brat Generator H1');
-if ((brat.match(/<h1\b/gi) || []).length !== 1) throw new Error('brat page must contain exactly one H1');
-for (const schemaType of ['WebApplication', 'FAQPage', 'HowTo']) {
-  if (!new RegExp(`"@type"\\s*:\\s*"${schemaType}"`).test(brat)) throw new Error(`brat page missing ${schemaType} structured data`);
+function decodeBasicEntities(value) {
+  return value
+    .replaceAll('&amp;', '&')
+    .replaceAll('&quot;', '"')
+    .replaceAll('&#39;', "'")
+    .replaceAll('&apos;', "'")
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>');
+}
+
+function getTagAttribute(tag, attribute) {
+  return tag.match(new RegExp(`\\b${attribute}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`, 'i'))?.slice(1).find(value => value !== undefined) || '';
+}
+
+function getMetaContent(html, attribute, value) {
+  for (const tag of html.match(/<meta\b[^>]*>/gi) || []) {
+    if (getTagAttribute(tag, attribute).toLowerCase() === value.toLowerCase()) return decodeBasicEntities(getTagAttribute(tag, 'content'));
+  }
+  return '';
+}
+
+function getCanonical(html) {
+  for (const tag of html.match(/<link\b[^>]*>/gi) || []) {
+    if (getTagAttribute(tag, 'rel').toLowerCase() === 'canonical') return getTagAttribute(tag, 'href');
+  }
+  return '';
+}
+
+function getJsonLdNodes(name, html) {
+  const nodes = [];
+  function visit(value) {
+    if (Array.isArray(value)) {
+      value.forEach(visit);
+      return;
+    }
+    if (!value || typeof value !== 'object') return;
+    nodes.push(value);
+    if (Array.isArray(value['@graph'])) value['@graph'].forEach(visit);
+  }
+  for (const match of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try {
+      visit(JSON.parse(match[1]));
+    } catch (error) {
+      throw new Error(`${name} contains invalid JSON-LD: ${error.message}`);
+    }
+  }
+  return nodes;
+}
+
+function hasSchemaType(nodes, expectedType) {
+  return nodes.some(node => {
+    const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
+    return types.includes(expectedType);
+  });
+}
+
+function searchableText(value) {
+  return decodeBasicEntities(String(value))
+    .toLowerCase()
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z#0-9]+;/gi, ' ')
+    .replace(/[^a-z0-9#]+/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
+}
+
+function assertVisibleFaqMatchesSchema(name, html, nodes) {
+  const faq = nodes.find(node => hasSchemaType([node], 'FAQPage'));
+  if (!faq || !Array.isArray(faq.mainEntity) || faq.mainEntity.length < 3) throw new Error(`${name} FAQPage must contain at least three visible questions`);
+  const visible = searchableText(html);
+  for (const question of faq.mainEntity) {
+    if (question?.['@type'] !== 'Question' || !question.name || !question.acceptedAnswer?.text) throw new Error(`${name} FAQPage contains an incomplete Question`);
+    if (!visible.includes(searchableText(question.name))) throw new Error(`${name} FAQ schema question is not visible on the page: ${question.name}`);
+    if (!visible.includes(searchableText(question.acceptedAnswer.text))) throw new Error(`${name} FAQ schema answer is not visible on the page: ${question.name}`);
+  }
+}
+
+const bratPageContracts = [
+  {
+    name: 'brat generator',
+    html: brat,
+    source: sourceBrat,
+    title: 'Brat Generator — Free Brat Font & Text Image Maker',
+    description: 'Create brat-style text images with this free brat font generator. Customize colors, blur, alignment and size, then download PNG, JPEG or WebP—no signup.',
+    h1: 'Brat Generator',
+    canonical: 'https://fontgenerators.app/brat-generator',
+    ogImage: 'https://fontgenerators.app/og/brat-generator.png',
+    schemaTypes: ['WebPage', 'WebApplication', 'HowTo', 'FAQPage'],
+    links: ['/brat-font', '/brat-green']
+  },
+  {
+    name: 'brat font',
+    html: bratFont,
+    source: sourceBratFont,
+    title: 'What Is the Brat Font? Name, Canva, CapCut & Alternatives',
+    description: 'What font does Brat use? See the Arial-based treatment, #8ACE00 green, legal alternatives, Canva and CapCut workflows, and why no font file is needed.',
+    h1: 'What Is the Brat Font?',
+    canonical: 'https://fontgenerators.app/brat-font',
+    ogImage: 'https://fontgenerators.app/og/brat-font.png',
+    schemaTypes: ['WebPage', 'Article', 'BreadcrumbList', 'FAQPage'],
+    links: ['/brat-generator', '/brat-green']
+  },
+  {
+    name: 'brat green',
+    html: bratGreen,
+    source: sourceBratGreen,
+    title: 'Brat Green Color Code — #8ACE00 Hex, RGB, HSL & CMYK',
+    description: 'Copy the Brat green color code #8ACE00 in HEX, RGB, HSL and CMYK. Compare black and white text contrast, copy CSS, and open it in the Brat Generator.',
+    h1: 'Brat Green Color Code: #8ACE00',
+    canonical: 'https://fontgenerators.app/brat-green',
+    ogImage: 'https://fontgenerators.app/og/brat-green.png',
+    schemaTypes: ['WebPage', 'WebApplication', 'BreadcrumbList', 'FAQPage'],
+    links: ['/brat-generator', '/brat-font']
+  }
+];
+
+for (const contract of bratPageContracts) {
+  const title = decodeBasicEntities(contract.html.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '');
+  const description = getMetaContent(contract.html, 'name', 'description');
+  const robots = getMetaContent(contract.html, 'name', 'robots').toLowerCase();
+  const h1Matches = [...contract.html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
+  const h1 = decodeBasicEntities(stripHtml(h1Matches[0]?.[1] || '').trim().replace(/\s+/g, ' '));
+  const nodes = getJsonLdNodes(contract.name, contract.html);
+  const metadata = [
+    title,
+    ...[...contract.html.matchAll(/<meta\b[^>]*\bcontent=(?:"([^"]*)"|'([^']*)')[^>]*>/gi)].map(match => match[1] ?? match[2] ?? '')
+  ].join(' ');
+
+  if (title !== contract.title) throw new Error(`${contract.name} title mismatch: ${title || 'missing'}`);
+  if (description !== contract.description) throw new Error(`${contract.name} meta description does not match the approved search-intent copy`);
+  if (getCanonical(contract.html) !== contract.canonical) throw new Error(`${contract.name} canonical must be ${contract.canonical}`);
+  if (h1Matches.length !== 1 || h1 !== contract.h1) throw new Error(`${contract.name} must expose exactly one H1 with approved text; found "${h1}"`);
+  if (!robots.includes('index') || !robots.includes('follow') || robots.includes('noindex')) throw new Error(`${contract.name} robots meta must be index, follow`);
+  if (getMetaContent(contract.html, 'property', 'og:url') !== contract.canonical) throw new Error(`${contract.name} og:url must match its canonical`);
+  if (getMetaContent(contract.html, 'property', 'og:image') !== contract.ogImage) throw new Error(`${contract.name} must use its dedicated 1200x630 OG image`);
+  if (getMetaContent(contract.html, 'property', 'og:image:width') !== '1200' || getMetaContent(contract.html, 'property', 'og:image:height') !== '630') throw new Error(`${contract.name} OG image metadata must declare 1200x630`);
+  if (getMetaContent(contract.html, 'name', 'twitter:image') !== contract.ogImage) throw new Error(`${contract.name} Twitter image must match its dedicated OG image`);
+  for (const type of contract.schemaTypes) if (!hasSchemaType(nodes, type)) throw new Error(`${contract.name} page missing ${type} structured data`);
+  assertVisibleFaqMatchesSchema(contract.name, contract.html, nodes);
+  for (const path of contract.links) if (!contract.source.includes(`href="${path}"`)) throw new Error(`${contract.name} must link to ${path}`);
+  if (/\b(?:official generator|exact replica)\b/i.test(metadata)) throw new Error(`${contract.name} search/social metadata contains a prohibited official/exact claim`);
+}
+
+const bratIdentityFields = bratPageContracts.map(contract => {
+  const title = decodeBasicEntities(contract.html.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '');
+  const h1 = decodeBasicEntities(stripHtml(contract.html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || '').trim().replace(/\s+/g, ' '));
+  return [title, h1, getCanonical(contract.html)];
+}).flat();
+if (new Set(bratIdentityFields).size !== bratIdentityFields.length) throw new Error('Brat topic-cluster pages must have unique title, H1, and canonical values');
+
+const bratApplicationSchema = getJsonLdNodes('brat generator', brat).find(node => hasSchemaType([node], 'WebApplication'));
+const bratFeatureList = JSON.stringify(bratApplicationSchema?.featureList || '');
+for (const s of ['color', 'blur', 'pixelated', 'lowercase', 'alignment', 'size', 'PNG', 'JPEG', 'WebP', 'copy image']) {
+  if (!bratFeatureList.toLowerCase().includes(s.toLowerCase())) throw new Error(`brat WebApplication featureList missing a current real feature: ${s}`);
+}
+for (const forbidden of ['Mirror', 'Flip Vertical', 'Noise', 'video generator']) {
+  if (bratFeatureList.toLowerCase().includes(forbidden.toLowerCase())) throw new Error(`brat WebApplication featureList must not claim unsupported feature: ${forbidden}`);
 }
 for (const id of ['brat-text', 'brat-canvas', 'brat-background-presets', 'brat-background-color', 'brat-text-color', 'brat-alignment', 'brat-aspect', 'brat-square-size', 'brat-square-size-value', 'brat-text-size', 'brat-text-size-value', 'brat-blur', 'brat-blur-value', 'brat-lowercase', 'brat-pixelated', 'brat-format', 'brat-download', 'brat-copy', 'brat-reset', 'brat-status']) {
   if (!sourceBrat.includes(`id="${id}"`)) throw new Error(`brat page missing renderer DOM contract #${id}`);
@@ -220,8 +386,22 @@ for (const control of ['data-brat-bg="#8ACE00"', 'data-brat-bg="#FFFFFF"', 'data
   if (!sourceBrat.includes(control)) throw new Error(`brat page missing control contract ${control}`);
 }
 if (!sourceBrat.includes('/src/brat-generator.js') || !sourceBrat.includes('data-clarity-mask="true"')) throw new Error('brat page must load its renderer and mask user content surfaces');
-if (/\b(?:official|exact)\b/i.test(bratMetadata)) throw new Error('brat search/social metadata must not claim an official or exact recreation');
+for (const className of ['brat-size-card--square', 'brat-size-card--story', 'brat-size-card--wide']) {
+  if (!sourceBrat.includes(className) || !styles.includes(`.${className}`)) throw new Error(`brat size examples must use semantic styling hook ${className}`);
+}
+if (!sourceBratGreen.includes('brat-green-faq') || !styles.includes('.brat-green-faq')) throw new Error('brat green FAQ must use a stable semantic styling hook');
+if (!bratJs.includes('if (el.sizeBadge.textContent !== sizeLabel)') || !bratJs.includes("el.canvas.setAttribute('aria-label'") || !bratJs.includes('previewText')) throw new Error('brat canvas must expose useful preview context without repeatedly announcing an unchanged size');
 if (wordTokens(brat).length < 800) throw new Error(`brat page should provide substantial intent-focused guidance; found ${wordTokens(brat).length} visible words`);
+if (wordTokens(bratFont).length < 650) throw new Error(`brat font page should provide a substantial sourced answer; found ${wordTokens(bratFont).length} visible words`);
+if (wordTokens(bratGreen).length < 500) throw new Error(`brat green page should provide a substantial usable color guide; found ${wordTokens(bratGreen).length} visible words`);
+for (const s of ['Arial', 'Arial Narrow', 'ROM', '#8ACE00', 'Last reviewed', 'https://abcdinamo.com/newsletter/the-dinamo-update-our-font-for-charli-xcxs-brat', 'https://learn.microsoft.com/en-us/typography/font-list/arial-narrow', 'Canva', 'CapCut', 'copy and paste']) {
+  if (!sourceBratFont.includes(s)) throw new Error(`brat font page missing sourced answer boundary: ${s}`);
+}
+for (const s of ['#8ACE00', 'rgb(138, 206, 0)', 'hsl(80, 100%, 40.4%)', '33, 0, 100, 19', '--brat-green: #8ACE00;', '10.91:1', '1.92:1', 'Canva', 'Figma', 'CSS', 'PowerPoint', 'https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum']) {
+  if (!sourceBratGreen.includes(s)) throw new Error(`brat green page missing color utility/source contract: ${s}`);
+}
+if (!sourceBratGreen.includes('aria-live="polite"') || !sourceBratGreen.includes('/src/brat-green.js')) throw new Error('brat green copy tool must expose polite aria-live feedback and load its interaction module');
+if (!bratGreenJs.includes('copyText') || !bratGreenJs.includes("addEventListener('click'")) throw new Error('brat green interaction must use the shared clipboard fallback and click handlers');
 if (!sourceHome.includes('href="/brat-generator"') || !sourceHome.includes('Open Brat Generator')) throw new Error('homepage More text tools section must link prominently to Brat Generator');
 for (const s of ['data-category="Favorites"', 'data-category="Bold"', 'data-category="Cursive"', 'data-category="Fancy"', 'data-category="Italic"', 'data-category="Stylish"', 'data-category="Cool"', 'data-category="Strikethrough"', 'data-category="Underline"', 'data-category="Cursed"', 'data-category="Big"']) if (!home.includes(s)) throw new Error(`home missing filter ${s}`);
 for (const s of ['data-category="Discord"', 'data-category="WhatsApp"', 'data-category="Twitter"']) if (sourceHome.includes(s)) throw new Error(`home should not expose platform tags as category filters: ${s}`);
@@ -266,7 +446,7 @@ for (const [name, html] of [['privacy', privacy], ['cookies', cookies], ['terms'
 }
 if (!cookies.includes('<meta name="robots" content="noindex"')) throw new Error('cookies page should remain noindex');
 
-for (const html of [home, ascii, mixer, username, changer, brat, tool, privacy, cookies, terms]) {
+for (const html of [home, ascii, mixer, username, changer, brat, bratFont, bratGreen, tool, privacy, cookies, terms]) {
   if (html.includes('href="/terms/"')) throw new Error('stale /terms/ link present');
   if (html.includes('href="/discord-colored-text-generator/"')) throw new Error('stale discord route slash link present');
   if (html.includes('href="/brat-generator/"')) throw new Error('stale brat route slash link present');
@@ -282,12 +462,12 @@ for (const html of [home, ascii, mixer, username, changer, brat, tool, privacy, 
   if (!html.includes('/> FontGenerators</a>')) throw new Error('visible brand label missing');
   if (html.includes('<span>Fg_</span>')) throw new Error('page should not use old text-only brand mark');
 }
-for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['tool', tool], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
+for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['brat font', bratFont], ['brat green', bratGreen], ['tool', tool], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
   for (const s of ['property="og:type"', 'property="og:url"', 'property="og:image"', 'property="og:image:alt"', 'name="twitter:card"', 'name="twitter:title"', 'name="twitter:description"', 'name="twitter:image"']) {
     if (!html.includes(s)) throw new Error(`${name} missing complete social metadata: ${s}`);
   }
 }
-for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixer', sourceMixer], ['username', sourceUsername], ['changer', sourceChanger], ['brat', sourceBrat], ['tool', sourceTool], ['privacy', sourcePrivacy], ['cookies', sourceCookies], ['terms', sourceTerms]]) {
+for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixer', sourceMixer], ['username', sourceUsername], ['changer', sourceChanger], ['brat', sourceBrat], ['brat font', sourceBratFont], ['brat green', sourceBratGreen], ['tool', sourceTool], ['privacy', sourcePrivacy], ['cookies', sourceCookies], ['terms', sourceTerms]]) {
   if (!html.includes('/src/analytics.js')) throw new Error(`${name} missing analytics module`);
   if (!html.includes('data-cookie-settings')) throw new Error(`${name} missing cookie settings control`);
 }
@@ -311,7 +491,11 @@ if (!styles.includes('.rainbow-control') || !styles.includes('linear-gradient(90
 if (!styles.includes('.palette-group .color-chip') || !styles.includes('width: 26px;') || !styles.includes('height: 26px;')) throw new Error('mobile Discord color chips should stay compact');
 if (!styles.includes('.preview-grid') || !styles.includes('grid-template-columns: 1fr;')) throw new Error('discord preview/output should stack into two rows');
 if (!styles.includes('.palette-group') || !styles.includes('.palette-label')) throw new Error('discord color palette clarity CSS missing');
-if (!styles.includes('#copy-status[data-toast-visible="true"]') || !styles.includes('.toast-line[data-toast-visible="true"]') || !styles.includes('visibility: hidden;') || !uiJs.includes("status.dataset.toastVisible = 'true'") || !uiJs.includes("setProperty('opacity', '1', 'important')") || !uiJs.includes("setProperty('visibility', 'visible', 'important')")) throw new Error('copy/favorite status should use a floating toast state');
+if (!styles.includes('#copy-status[data-toast-visible="true"]') || !styles.includes('.toast-line[data-toast-visible="true"]') || !uiJs.includes("status.dataset.toastVisible = 'true'") || !uiJs.includes("setProperty('opacity', '1', 'important')") || !uiJs.includes("setProperty('visibility', 'visible', 'important')")) throw new Error('copy/favorite status should use a floating toast state');
+const statusLineRule = styles.match(/\.status-line\s*\{([\s\S]*?)\}/)?.[1] || '';
+if (!statusLineRule.includes('visibility: visible;') || statusLineRule.includes('visibility: hidden;') || !statusLineRule.includes('opacity: 0;')) throw new Error('status live region must remain exposed to assistive technology while visually idle');
+if (!styles.includes('body:has([data-cookie-banner]) .status-line') || !styles.includes('bottom: 140px;')) throw new Error('status toast must clear the cookie banner');
+if (!styles.includes(':where(a, button, summary, [tabindex]):focus-visible') || !styles.includes('outline: 3px solid #0b5d35;')) throw new Error('interactive controls must expose a high-contrast keyboard focus ring');
 if (!sourceTool.includes('ansi-code-table') || !sourceTool.includes('<code>30</code>') || !sourceTool.includes('<code>47</code>')) throw new Error('discord page missing visible ANSI code table');
 if (!sourceTool.includes('data-clarity-mask="true"')) throw new Error('discord editor/output surfaces must be masked for Clarity');
 if (!sourceTool.includes('data-preset="rainbow"') || !sourceTool.includes('31, 33, 32, 36, 34, and 35')) throw new Error('discord page missing rainbow ANSI preset UI/explanation');
@@ -337,7 +521,7 @@ if (styles.includes('max-width: 980px') || styles.includes('right: clamp(14px, 4
 for (const forbidden of ['raw input text', 'generated ANSI output', 'clipboard content']) {
   if (!cookies.includes(forbidden) && !privacy.includes(forbidden)) throw new Error(`privacy/cookies should disclose analytics forbidden payload: ${forbidden}`);
 }
-for (const s of ['https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/brat-generator', 'https://fontgenerators.app/discord-colored-text-generator', 'generated Brat images', 'independent fan-style utility', 'not downloadable TTF/OTF font files', 'Do not describe planned routes']) {
+for (const s of ['https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/brat-generator', 'https://fontgenerators.app/brat-font', 'https://fontgenerators.app/brat-green', 'https://fontgenerators.app/discord-colored-text-generator', 'generated Brat images', 'independent fan-style utility', 'not downloadable TTF/OTF font files', '#8ACE00', 'mathematical conversions', '/brat-font-generator', '/brat-color-code', 'Do not describe planned']) {
   if (!llms.includes(s)) throw new Error(`llms.txt missing AI/crawler guidance: ${s}`);
 }
 
@@ -393,13 +577,13 @@ for (const forbidden of ['free font downloads', 'download TTF', 'install fonts',
 }
 if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('Sitemap: https://fontgenerators.app/sitemap.xml')) throw new Error('robots missing noindex/ sitemap signals');
 const sitemapLocs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/brat-generator', 'https://fontgenerators.app/discord-colored-text-generator', 'https://fontgenerators.app/privacy', 'https://fontgenerators.app/terms-of-service'];
+const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/brat-generator', 'https://fontgenerators.app/brat-font', 'https://fontgenerators.app/brat-green', 'https://fontgenerators.app/discord-colored-text-generator', 'https://fontgenerators.app/privacy', 'https://fontgenerators.app/terms-of-service'];
 if (sitemapLocs.length !== approvedSitemapLocs.length || !approvedSitemapLocs.every(loc => sitemapLocs.includes(loc))) throw new Error(`sitemap must contain only approved indexable pages; found ${sitemapLocs.join(', ')}`);
 if (rootSitemap !== publicSitemap || sitemap !== publicSitemap) throw new Error('root, public, and built sitemap.xml files must stay synchronized');
 const sitemapLastmods = new Map([...sitemap.matchAll(/<url><loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod><\/url>/g)].map(match => [match[1], match[2]]));
 const approvedSitemapLastmods = new Map(approvedSitemapLocs.map(loc => [
   loc,
-  loc === 'https://fontgenerators.app/brat-generator'
+  loc === 'https://fontgenerators.app/brat-generator' || loc === 'https://fontgenerators.app/brat-font' || loc === 'https://fontgenerators.app/brat-green'
     ? '2026-07-27'
     : loc === 'https://fontgenerators.app/privacy' || loc === 'https://fontgenerators.app/terms-of-service'
       ? '2026-07-27'
@@ -411,12 +595,15 @@ for (const [loc, expectedLastmod] of approvedSitemapLastmods) {
   const actualLastmod = sitemapLastmods.get(loc);
   if (actualLastmod !== expectedLastmod) throw new Error(`sitemap lastmod for ${loc} must be ${expectedLastmod}; found ${actualLastmod || 'missing'}`);
 }
-for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator']) {
+for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler', '/brat-font-generator', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator']) {
   if (sitemap.includes(`https://fontgenerators.app${forbidden}`) && forbidden !== '/discord-colored-text-generator') throw new Error(`sitemap should not include non-indexable route ${forbidden}`);
 }
 if (redirects.includes('www.fontgenerators.app')) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level www-to-apex redirects; Pages middleware handles host canonicalization instead');
-for (const s of ['/ascii-art-generator/ /ascii-art-generator 301', '/font-mixer/ /font-mixer 301', '/username-generator/ /username-generator 301', '/auto-font-changer/ /auto-font-changer 301', '/brat-generator/ /brat-generator 301', '/auto-font-styler /auto-font-changer 301', '/auto-font-styler/ /auto-font-changer 301', '/discord-colored-text-generator/ /discord-colored-text-generator 301', '/privacy/ /privacy 301', '/cookies/ /cookies 301', '/terms-of-service/ /terms-of-service 301']) if (!redirects.includes(s)) throw new Error(`redirects missing clean URL fallback rule: ${s}`);
-for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
+for (const s of ['/ascii-art-generator/ /ascii-art-generator 301', '/font-mixer/ /font-mixer 301', '/username-generator/ /username-generator 301', '/auto-font-changer/ /auto-font-changer 301', '/brat-generator/ /brat-generator 301', '/brat-font/ /brat-font 301', '/brat-green/ /brat-green 301', '/auto-font-styler /auto-font-changer 301', '/auto-font-styler/ /auto-font-changer 301', '/discord-colored-text-generator/ /discord-colored-text-generator 301', '/privacy/ /privacy 301', '/cookies/ /cookies 301', '/terms-of-service/ /terms-of-service 301']) if (!redirects.includes(s)) throw new Error(`redirects missing clean URL fallback rule: ${s}`);
+for (const s of ["bratGenerator: resolve(__dirname, 'brat-generator.html')", "bratFont: resolve(__dirname, 'brat-font.html')", "bratGreen: resolve(__dirname, 'brat-green.html')"]) {
+  if (!viteConfig.includes(s)) throw new Error(`Vite MPA config missing Brat entry: ${s}`);
+}
+for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
   if (!middleware.includes(s)) throw new Error(`canonical/analytics middleware missing ${s}`);
 }
 
@@ -438,7 +625,7 @@ const passThrough = await middlewareSmoke('https://fontgenerators.app/');
 if (passThrough.status !== 200 || await passThrough.text() !== 'next ok') throw new Error('middleware should pass canonical apex clean routes through');
 const approvedToolPassThrough = await middlewareSmoke('https://fontgenerators.app/discord-colored-text-generator');
 if (approvedToolPassThrough.status !== 200 || await approvedToolPassThrough.text() !== 'next ok') throw new Error('middleware should pass approved clean Discord route through');
-for (const path of ['/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator']) {
+for (const path of ['/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green']) {
   const response = await middlewareSmoke(`https://fontgenerators.app${path}`);
   if (response.status !== 200 || await response.text() !== 'next ok') throw new Error(`middleware should pass approved clean route through: ${path}`);
   const slash = await middlewareSmoke(`https://fontgenerators.app${path}/`);
@@ -465,7 +652,7 @@ const injectedHtml = await injectedResponse.text();
 for (const s of ['google-site-verification', 'gsc-test-token', 'ahrefs-site-verification', 'ahrefs-test-token', 'FONTGENERATORS_ANALYTICS_CONFIG', 'G-TEST123', 'clarity-test', 'ahrefs-analytics-test']) {
   if (!injectedHtml.includes(s)) throw new Error(`middleware injection missing ${s}`);
 }
-const heldPaths = ['/pricing', '/pricing/', '/refund', '/refund/', '/discord-font-generator', '/discord-font-generator/', '/fancy-text-generator', '/fancy-text-generator/', '/discord-text-generator', '/not-a-real-mvp-route'];
+const heldPaths = ['/pricing', '/pricing/', '/refund', '/refund/', '/brat-font-generator', '/brat-font-generator/', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/discord-font-generator', '/discord-font-generator/', '/fancy-text-generator', '/fancy-text-generator/', '/discord-text-generator', '/not-a-real-mvp-route'];
 for (const path of heldPaths) {
   const response = await middlewareSmoke(`https://fontgenerators.app${path}`);
   const body = await response.text();
@@ -478,4 +665,4 @@ const staticPassThrough = await middlewareSmoke('https://fontgenerators.app/asse
 if (staticPassThrough.status !== 200 || await staticPassThrough.text() !== 'next ok') throw new Error('middleware should pass static asset requests through');
 const llmsPassThrough = await middlewareSmoke('https://fontgenerators.app/llms.txt');
 if (llmsPassThrough.status !== 200 || await llmsPassThrough.text() !== 'next ok') throw new Error('middleware should pass llms.txt through');
-console.log(`smoke ok: pages, SEO/schema/legal/cookie/analytics routes present; homepage has ${canonicalStyles.length} unique styles from ${styleIds.length} raw definitions; ASCII/Mixer/Username/Auto Changer/Brat routes are live; held routes return 404 noindex`);
+console.log(`smoke ok: pages, SEO/schema/legal/cookie/analytics routes present; homepage has ${canonicalStyles.length} unique styles from ${styleIds.length} raw definitions; ASCII/Mixer/Username/Auto Changer and the three-page Brat cluster are live; held routes return 404 noindex`);
