@@ -14,6 +14,7 @@ export default defineConfig({
         fontMixer: resolve(__dirname, 'font-mixer.html'),
         usernameGenerator: resolve(__dirname, 'username-generator.html'),
         autoFontChanger: resolve(__dirname, 'auto-font-changer.html'),
+        bratGenerator: resolve(__dirname, 'brat-generator.html'),
         tool: resolve(__dirname, 'discord-colored-text-generator.html'),
         privacy: resolve(__dirname, 'privacy.html'),
         cookies: resolve(__dirname, 'cookies.html'),

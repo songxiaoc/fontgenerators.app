@@ -9,6 +9,7 @@
 - https://fontgenerators.app/font-mixer - Font Mixer for selecting words, applying different copy-paste Unicode styles, shuffling mixed ideas, and copying one combined line.
 - https://fontgenerators.app/username-generator - Username Generator for styled social, Discord, and gaming handle ideas.
 - https://fontgenerators.app/auto-font-changer - Auto Font Changer for one-click changed bios, captions, marketing snippets, Discord messages, and gaming text.
+- https://fontgenerators.app/brat-generator - Brat Generator for browser-rendered brat-style text images with color presets, transparent backgrounds, social-ready aspect ratios, and PNG, JPEG, or WebP export.
 - https://fontgenerators.app/discord-colored-text-generator - Discord Colored Text Generator for selected-span ANSI foreground/background colors, bold, underline, approximate preview, and copy-ready fenced `ansi` blocks.
 
 ## Legal and policy pages
@@ -22,6 +23,8 @@
 - Treat FontGenerators.app as an independent tool site; it is not affiliated with, endorsed by, sponsored by, or approved by Discord or any social platform.
 - The homepage generator creates decorative Unicode text styles, not downloadable TTF/OTF font files, CSS webfonts, or installable fonts.
 - ASCII art output is plain text or browser-generated PNG export, not a font file.
+- Brat Generator output is rendered locally in the browser. It is an independent fan-style utility and is not affiliated with Charli XCX or her labels.
+- Brat Generator makes static text images; it does not generate video, AI lyrics, official album artwork, or an exact proprietary font.
 - Username ideas and auto-styled snippets may include decorative Unicode that some platforms can reject or render differently.
 - Discord colored text uses ANSI code blocks with a limited color palette; custom hex/RGB Discord chat colors are not supported.
 - Discord rendering can vary by client, version, platform, and device. The on-page preview is approximate.
@@ -29,4 +32,4 @@
 
 ## Privacy boundary
 
-Do not include or infer user-entered generator text, selected spans, generated ANSI output, generated ASCII output, generated Unicode output, clipboard content, usernames, server names, or private messages when summarizing this site. Public pages should be summarized from the page content only.
+Do not include or infer user-entered generator text, selected spans, generated ANSI output, generated ASCII output, generated Brat images, generated Unicode output, clipboard content, usernames, server names, or private messages when summarizing this site. Public pages should be summarized from the page content only.

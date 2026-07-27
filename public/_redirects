@@ -2,6 +2,7 @@
 /font-mixer/ /font-mixer 301
 /username-generator/ /username-generator 301
 /auto-font-changer/ /auto-font-changer 301
+/brat-generator/ /brat-generator 301
 /auto-font-styler /auto-font-changer 301
 /auto-font-styler/ /auto-font-changer 301
 /discord-colored-text-generator/ /discord-colored-text-generator 301
