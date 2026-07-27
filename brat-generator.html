@@ -184,15 +184,15 @@
         "name": "Do I need to install anything?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. The editor uses fonts already available to the browser and exports an image. It does not install, host, or distribute font files."
+          "text": "No installation is required. The editor uses fonts already available to the browser and exports an image without hosting or distributing font files."
         }
       },
       {
         "@type": "Question",
-        "name": "What does Copy image copy?",
+        "name": "What goes to the clipboard?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Copy image copies the rendered PNG, not editable text. Plain text cannot preserve the background, horizontal scaling, blur, or pixelation; download a PNG if clipboard access is unavailable."
+          "text": "The button copies the rendered PNG, not editable text. Plain text cannot preserve the background, horizontal scaling, blur, or pixelation; download a PNG if clipboard access is unavailable."
         }
       },
       {
@@ -216,7 +216,7 @@
         "name": "Does the Brat Generator work on mobile?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. The editor works in current mobile and desktop browsers. Copy image support varies by browser, but image download remains available."
+          "text": "Yes. The editor works in current mobile and desktop browsers. Image clipboard support varies by browser, but image download remains available."
         }
       },
       {
@@ -224,7 +224,7 @@
         "name": "Is my text or image uploaded?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. Text rendering and image creation happen locally in your browser. The tool does not require an account and does not upload your canvas to create a download."
+          "text": "No. Text rendering and image creation stay in your browser. No account is required, and your canvas remains on your device through download."
         }
       },
       {
@@ -232,7 +232,7 @@
         "name": "Does this generator make Brat videos?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. This tool creates static PNG, JPEG, or WebP images. It does not generate video, animate lyrics, add audio, or export MP4 files."
+          "text": "No. This tool creates static PNG, JPEG, or WebP images. Video, lyric animation, audio, and MP4 export are outside its scope."
         }
       }
     ]
@@ -250,7 +250,7 @@
     <section class="tool-page brat-tool-page">
       <div class="tool-page__intro brat-tool-intro">
         <h1>Brat Generator</h1>
-        <p>This free <strong>brat font generator</strong> and <strong>brat text generator</strong> turns your words into a static image with custom colors, blur, pixelation, alignment, and social-ready sizes. It exports PNG, JPEG, or WebP in your browser—it does not create a TTF/OTF font file, Unicode copy-paste typeface, or video.</p>
+        <p>This free <strong>brat font generator</strong> and <strong>brat text generator</strong> turns your words into a static image with custom colors, blur, pixelation, alignment, and social-ready sizes. It exports PNG, JPEG, or WebP in your browser; the output is a static image rather than a TTF/OTF font file, Unicode copy-paste typeface, or video.</p>
       </div>
 
       <section id="brat-tool" class="brat-workbench" aria-labelledby="brat-editor-title">
@@ -263,7 +263,7 @@
             <span class="brat-size-badge" aria-live="polite">1080 × 1080</span>
           </div>
           <div class="brat-canvas-frame clarity-mask" data-clarity-mask="true">
-            <canvas id="brat-canvas" class="clarity-mask" data-clarity-mask="true" width="1080" height="1080" role="img" aria-label="Preview of your brat-style text image">Your browser does not support the canvas preview.</canvas>
+            <canvas id="brat-canvas" class="clarity-mask" data-clarity-mask="true" width="1080" height="1080" role="img" aria-label="Preview of your brat-style text image">Canvas preview unavailable in this browser.</canvas>
           </div>
         </div>
 
@@ -395,14 +395,14 @@
       <div>
         <h2 id="brat-privacy-title">Made in your browser</h2>
         <p>Your text and finished canvas stay on your device while the image is generated. There is no account, upload, or watermark required. Avoid entering private information into any online tool, and check that you have permission to use text or lyrics before publishing them.</p>
-        <p class="brat-disclaimer"><strong>Independent fan-style tool:</strong> This generator is not affiliated with, endorsed by, or sponsored by Charli XCX, her team, or her record labels. It does not reproduce or claim to provide an exact official typeface.</p>
+        <p class="brat-disclaimer"><strong>Independent fan-style tool:</strong> This generator is not affiliated with, endorsed by, or sponsored by Charli XCX, her team, or her record labels. It makes no claim to reproduce or provide an exact official typeface.</p>
       </div>
     </section>
 
     <section class="seo-content content-band brat-guide" aria-labelledby="brat-generator-guide">
       <h2 id="brat-generator-guide">What this free Brat Generator makes</h2>
-      <p>A Brat Generator is an image-making tool: type a phrase, choose the look, and export the visible canvas. This page covers the shared search intent behind <em>brat generator</em>, <em>brat font generator</em>, and <em>brat text generator</em> without pretending to distribute a font. The result is a flattened static graphic, so its background, narrow lettering, blur, and pixelated edges stay together when you post or import it elsewhere.</p>
-      <p>The live preview uses the same browser canvas composition as the downloaded file. You can select a preset or custom background, choose a text color, keep or disable lowercase, adjust text size and blur, add pixelation, and align lines to the center, right, or justified width. These are the real controls available here; the generator does not mirror or vertically flip text, add noise, animate a lyric timeline, or create video.</p>
+      <p>A Brat Generator is an image-making tool: type a phrase, choose the look, and export the visible canvas. It also covers the phrases <em>brat font generator</em> and <em>brat text generator</em> without pretending to distribute a font. The result is a flattened static graphic, so its background, narrow lettering, blur, and pixelated edges stay together when you post or import it elsewhere.</p>
+      <p>The live preview uses the same browser canvas composition as the downloaded file. You can select a preset or custom background, choose a text color, keep or disable lowercase, adjust text size and blur, add pixelation, and align lines to the center, right, or justified width. These are the real controls available here; mirror, vertical flip, noise, lyric animation, and video creation are outside the current tool.</p>
 
       <h2>How the preview builds the look</h2>
       <p>The browser preview narrows and softens the lettering, with optional blur and pixelation. Its local fallback chain starts with <strong>Arial Narrow</strong> when available, then uses other browser-safe sans-serif options. For the source treatment, licensing context, and Canva or CapCut workflows, read the <a href="/brat-font">font treatment guide</a>.</p>
@@ -425,8 +425,8 @@
       <p>PNG is the dependable choice for sharp text and transparent output. WebP can also preserve transparency while often producing a smaller file. JPEG is widely compatible for solid-color graphics but cannot store transparent pixels, so choosing JPEG with a transparent background switches the export back to PNG. Copy image writes a PNG to the clipboard in supported secure browsers; if the browser blocks image clipboard access, downloading the PNG is the reliable fallback.</p>
 
       <h2>Uses, privacy, and limits</h2>
-      <p>Use the output for an original social post, meme, playlist graphic, invitation, reaction image, announcement, slide, or personal cover. A download is only a layout export: it does not grant rights to somebody else’s lyrics, trademarks, names, photographs, or artwork. Enter text you wrote or have permission to use, avoid copying official artwork, and review the rights required by the place where you intend to publish it.</p>
-      <p>Rendering and export happen locally with browser canvas technology. No account or image upload is required, and the page does not store a cloud project history. Basic analytics may record that a tool action occurred, but the text field and canvas are masked from session analytics and are not placed in event labels. Browser font availability can slightly change the result, while image clipboard support varies most on mobile and in-app browsers.</p>
+      <p>Use the output for an original social post, meme, playlist graphic, invitation, reaction image, announcement, slide, or personal cover. A download is only a layout export and grants no rights to somebody else’s lyrics, trademarks, names, photographs, or artwork. Enter text you wrote or have permission to use, avoid copying official artwork, and review the rights required by the place where you intend to publish it.</p>
+      <p>Rendering and export happen locally with browser canvas technology. No account or image upload is required, and no cloud project history is stored. Basic analytics may record that a tool action occurred, but the text field and canvas are masked from session analytics and are not placed in event labels. Browser font availability can slightly change the result, while image clipboard support varies most on mobile and in-app browsers.</p>
 
       <h2>Brat Generator FAQ</h2>
       <div class="faq-mini seo-faq">
@@ -440,11 +440,11 @@
         </details>
         <details>
           <summary>Do I need to install anything?</summary>
-          <p>No. The editor uses fonts already available to the browser and exports an image. It does not install, host, or distribute font files.</p>
+          <p>No installation is required. The editor uses fonts already available to the browser and exports an image without hosting or distributing font files.</p>
         </details>
         <details>
-          <summary>What does Copy image copy?</summary>
-          <p>Copy image copies the rendered PNG, not editable text. Plain text cannot preserve the background, horizontal scaling, blur, or pixelation; download a PNG if clipboard access is unavailable.</p>
+          <summary>What goes to the clipboard?</summary>
+          <p>The button copies the rendered PNG, not editable text. Plain text cannot preserve the background, horizontal scaling, blur, or pixelation; download a PNG if clipboard access is unavailable.</p>
         </details>
         <details>
           <summary>Can I use the green preset?</summary>
@@ -456,15 +456,15 @@
         </details>
         <details>
           <summary>Does the Brat Generator work on mobile?</summary>
-          <p>Yes. The editor works in current mobile and desktop browsers. Copy image support varies by browser, but image download remains available.</p>
+          <p>Yes. The editor works in current mobile and desktop browsers. Image clipboard support varies by browser, but image download remains available.</p>
         </details>
         <details>
           <summary>Is my text or image uploaded?</summary>
-          <p>No. Text rendering and image creation happen locally in your browser. The tool does not require an account and does not upload your canvas to create a download.</p>
+          <p>No. Text rendering and image creation stay in your browser. No account is required, and your canvas remains on your device through download.</p>
         </details>
         <details>
           <summary>Does this generator make Brat videos?</summary>
-          <p>No. This tool creates static PNG, JPEG, or WebP images. It does not generate video, animate lyrics, add audio, or export MP4 files.</p>
+          <p>No. This tool creates static PNG, JPEG, or WebP images. Video, lyric animation, audio, and MP4 export are outside its scope.</p>
         </details>
       </div>
     </section>

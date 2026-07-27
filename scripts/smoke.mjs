@@ -507,14 +507,16 @@ const bratKeywordOwnershipContracts = [
     html: brat,
     primary: 'brat generator',
     secondary: ['brat font generator', 'brat text generator'],
-    siblingPrimaries: ['brat font', 'brat green']
+    siblingPrimaries: ['brat font', 'brat green'],
+    incidentalPhrases: ['does not', 'copy image']
   },
   {
     name: 'brat font',
     html: bratFont,
     primary: 'brat font',
     secondary: ['what is the brat font', 'brat font name'],
-    siblingPrimaries: ['brat generator', 'brat green']
+    siblingPrimaries: ['brat generator', 'brat green'],
+    incidentalPhrases: ['arial narrow', 'the main']
   },
   {
     name: 'brat green',
@@ -534,6 +536,12 @@ for (const contract of bratKeywordOwnershipContracts) {
   }
   for (const phrase of contract.secondary) {
     if (countPhrase(mainTokens, phrase) < 1) throw new Error(`${contract.name} missing assigned secondary phrase: ${phrase}`);
+  }
+  for (const phrase of contract.incidentalPhrases || []) {
+    const incidentalCount = countPhrase(mainTokens, phrase);
+    if (primaryCount <= incidentalCount) {
+      throw new Error(`${contract.name} primary phrase must outrank incidental phrase "${phrase}"; ${contract.primary}=${primaryCount}, ${phrase}=${incidentalCount}`);
+    }
   }
   const title = decodeBasicEntities(contract.html.match(/<title>([\s\S]*?)<\/title>/i)?.[1] || '').toLowerCase();
   for (const phrase of contract.siblingPrimaries) {

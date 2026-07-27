@@ -193,4 +193,6 @@
 - Font 与 Green 保留通往 Generator 的必要上下文链接，但同一页不反复使用 `Brat Generator` 精确锚文本。
 - 相关卡片各保留一次目标页的精确锚文本，用来声明主题归属；不把所有内链改成泛化词。
 - Smoke 只验证“本页主词高于两个 sibling 主词”和 assigned secondary phrase 存在，不设置固定密度门槛。
+- 页面中的无意图重复句式和控件说明也应低于主词，例如 Generator 页的 `does not`、`copy image`，以及 Font 页的 `Arial Narrow`、`the main`；Smoke 只验证相对归属，不设置任意固定密度阈值。
+- 不把按钮名、FAQ 或正文转移到 CSS `content` 来规避关键词统计。CSS 只负责装饰，语义内容保留在 HTML 中，确保读屏、无 JS 抓取与 Schema 对账可靠。
 - 上线后按 `query × page` 看 GSC：工具查询归 Generator，字体知识查询归 Font，颜色/代码查询归 Green；若出现互抢，先调 Title、H1、段落边界和锚文本，不增加变体页。
