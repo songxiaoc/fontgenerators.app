@@ -415,7 +415,7 @@ const bratPageContracts = [
     name: 'brat generator',
     html: brat,
     source: sourceBrat,
-    title: 'Brat Generator — Free Brat Font & Text Image Maker',
+    title: 'Brat Generator — Free Brat Text & Image Maker',
     description: 'Create brat-style text images with this free brat font generator. Customize colors, blur, alignment and size, then download PNG, JPEG or WebP—no signup.',
     h1: 'Brat Generator',
     canonical: 'https://fontgenerators.app/brat-generator',
@@ -431,7 +431,7 @@ const bratPageContracts = [
     html: bratFont,
     source: sourceBratFont,
     title: 'What Is the Brat Font? Name, Canva, CapCut & Alternatives',
-    description: 'What font does Brat use? See the Arial-based treatment, #8ACE00 green, legal alternatives, Canva and CapCut workflows, and why no font file is needed.',
+    description: 'What font does Brat use? See the Arial-based cover treatment, legal alternatives, Canva and CapCut workflows, and why no font file is needed.',
     h1: 'What Is the Brat Font?',
     canonical: 'https://fontgenerators.app/brat-font',
     ogImage: 'https://fontgenerators.app/og/brat-font.png',
@@ -447,7 +447,7 @@ const bratPageContracts = [
     html: bratGreen,
     source: sourceBratGreen,
     title: 'Brat Green Color Code — #8ACE00 Hex, RGB, HSL & CMYK',
-    description: 'Copy the Brat green color code #8ACE00 in HEX, RGB, HSL and CMYK. Compare black and white text contrast, copy CSS, and open it in the Brat Generator.',
+    description: 'Copy the Brat green color code #8ACE00 in HEX, RGB, HSL and CMYK. Compare black and white text contrast, copy CSS, and open it in the image editor.',
     h1: 'Brat Green Color Code: #8ACE00',
     canonical: 'https://fontgenerators.app/brat-green',
     ogImage: 'https://fontgenerators.app/og/brat-green.png',
@@ -499,6 +499,46 @@ for (const contract of bratPageContracts) {
   assertVisibleFaqMatchesSchema(contract.name, contract.html, nodes);
   for (const path of contract.links) if (!contract.source.includes(`href="${path}"`)) throw new Error(`${contract.name} must link to ${path}`);
   if (/\b(?:official generator|exact replica)\b/i.test(metadata)) throw new Error(`${contract.name} search/social metadata contains a prohibited official/exact claim`);
+}
+
+const bratKeywordOwnershipContracts = [
+  {
+    name: 'brat generator',
+    html: brat,
+    primary: 'brat generator',
+    secondary: ['brat font generator', 'brat text generator'],
+    siblingPrimaries: ['brat font', 'brat green']
+  },
+  {
+    name: 'brat font',
+    html: bratFont,
+    primary: 'brat font',
+    secondary: ['what is the brat font', 'brat font name'],
+    siblingPrimaries: ['brat generator', 'brat green']
+  },
+  {
+    name: 'brat green',
+    html: bratGreen,
+    primary: 'brat green',
+    secondary: ['brat green color code', 'brat color code'],
+    siblingPrimaries: ['brat generator', 'brat font']
+  }
+];
+for (const contract of bratKeywordOwnershipContracts) {
+  const mainTokens = wordTokens(getElementHtml(contract.name, contract.html, 'main'));
+  const primaryCount = countPhrase(mainTokens, contract.primary);
+  const siblingCounts = contract.siblingPrimaries.map(phrase => [phrase, countPhrase(mainTokens, phrase)]);
+  const strongestSibling = Math.max(...siblingCounts.map(([, count]) => count));
+  if (primaryCount <= strongestSibling) {
+    throw new Error(`${contract.name} primary phrase must remain the strongest Brat head term; ${contract.primary}=${primaryCount}, ${siblingCounts.map(([phrase, count]) => `${phrase}=${count}`).join(', ')}`);
+  }
+  for (const phrase of contract.secondary) {
+    if (countPhrase(mainTokens, phrase) < 1) throw new Error(`${contract.name} missing assigned secondary phrase: ${phrase}`);
+  }
+  const title = decodeBasicEntities(contract.html.match(/<title>([\s\S]*?)<\/title>/i)?.[1] || '').toLowerCase();
+  for (const phrase of contract.siblingPrimaries) {
+    if (title.includes(phrase)) throw new Error(`${contract.name} title must not target sibling primary phrase: ${phrase}`);
+  }
 }
 
 const bratIdentityFields = bratPageContracts.map(contract => {

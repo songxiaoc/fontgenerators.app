@@ -43,7 +43,7 @@
 
 ### Metadata
 
-- Title：`Brat Generator — Free Brat Font & Text Image Maker`
+- Title：`Brat Generator — Free Brat Text & Image Maker`
 - H1：`Brat Generator`
 - Description：`Create brat-style text images with this free brat font generator. Customize colors, blur, alignment and size, then download PNG, JPEG or WebP—no signup.`
 - Canonical：`https://fontgenerators.app/brat-generator`
@@ -65,7 +65,7 @@
 
 - Title：`What Is the Brat Font? Name, Canva, CapCut & Alternatives`
 - H1：`What Is the Brat Font?`
-- Description：`What font does Brat use? See the Arial-based treatment, #8ACE00 green, legal alternatives, Canva and CapCut workflows, and why no font file is needed.`
+- Description：`What font does Brat use? See the Arial-based cover treatment, legal alternatives, Canva and CapCut workflows, and why no font file is needed.`
 - Canonical：`https://fontgenerators.app/brat-font`
 - Robots：`index, follow`
 - OG/Twitter：使用该路由专属 1200×630 原创分享图。
@@ -92,7 +92,7 @@
 
 - Title：`Brat Green Color Code — #8ACE00 Hex, RGB, HSL & CMYK`
 - H1：`Brat Green Color Code: #8ACE00`
-- Description：`Copy the Brat green color code #8ACE00 in HEX, RGB, HSL and CMYK. Compare black and white text contrast, copy CSS, and open it in the Brat Generator.`
+- Description：`Copy the Brat green color code #8ACE00 in HEX, RGB, HSL and CMYK. Compare black and white text contrast, copy CSS, and open it in the image editor.`
 - Canonical：`https://fontgenerators.app/brat-green`
 - Robots：`index, follow`
 - OG/Twitter：使用该路由专属 1200×630 原创分享图。
@@ -175,3 +175,22 @@
 - 不把 Dinamo、Charli XCX、Microsoft、来源页面、个人 GitHub 账号或站点自身 URL 伪装成 `sameAs`。
 - 不虚构个人作者、专家审核、公司法定名称、地址、团队规模、评价或 `aggregateRating`。
 - 不把第三方工具的 84/100 或“引用可提升 115%”当作 Google 排名或 AI 引用 KPI；只把报告作为可见来源、实体一致性和站点信任的 QA 清单。
+
+## 10. 三页关键词 Ownership 与防互抢合同
+
+每页只承接一个主意图。主词在该页 `<main>` 可见文本中必须高于另外两页的主词，但不设置机械百分比、不为密度重复句子。字体实体、颜色值和产品名称只有在回答真实用户任务时才保留。
+
+| 路由 | 主词（该页最高） | 次级词与修饰词 | 只作内链，不主动承接 |
+|---|---|---|---|
+| `/brat-generator` | `brat generator` | `brat font generator`、`brat text generator`、free、image maker、static image、meme、cover、PNG/JPEG/WebP | `brat font`、`brat green`、`brat color code`、font name/download、Canva/CapCut |
+| `/brat-font` | `brat font` | `what is the brat font`、`what font does Brat use`、`brat font name`、`brat font download`、Canva、CapCut、copy and paste、Arial/Arial Narrow | `brat generator`、`brat green color code`、HEX/RGB/HSL/CMYK |
+| `/brat-green` | `brat green` | `brat green color code`、`brat color code`、`#8ACE00`、HEX、RGB、HSL、CMYK、contrast | `brat generator`、`brat font`、font name/download、video |
+
+实施边界：
+
+- 三页 Title/H1 只强化各自主词；Generator Title 不再使用独立知识意图 `Brat Font`，但正文保留工具意图长尾 `brat font generator`。
+- Generator 只解释预览、控制项、导出、隐私和限制；字体来源/授权与颜色换算分别交给 Font、Green。
+- Font 与 Green 保留通往 Generator 的必要上下文链接，但同一页不反复使用 `Brat Generator` 精确锚文本。
+- 相关卡片各保留一次目标页的精确锚文本，用来声明主题归属；不把所有内链改成泛化词。
+- Smoke 只验证“本页主词高于两个 sibling 主词”和 assigned secondary phrase 存在，不设置固定密度门槛。
+- 上线后按 `query × page` 看 GSC：工具查询归 Generator，字体知识查询归 Font，颜色/代码查询归 Green；若出现互抢，先调 Title、H1、段落边界和锚文本，不增加变体页。
