@@ -2233,7 +2233,7 @@ summary {
   font-size: clamp(16px, 1.5vw, 19px);
 }
 .brat-workbench {
-  width: min(100%, 1320px);
+  width: min(100%, 1120px);
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(360px, .9fr) minmax(460px, 1.1fr);
@@ -2553,14 +2553,16 @@ summary {
   transform: translateX(18px);
 }
 .brat-primary-actions {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
 }
 .brat-primary-actions .button {
+  flex: 0 0 auto;
   min-width: 0;
   min-height: 44px;
-  padding-inline: 12px;
+  padding-inline: 18px;
   font-size: 13px;
 }
 .brat-primary-actions .button.primary,
@@ -2940,8 +2942,11 @@ summary {
     font-size: 11px;
   }
   .brat-color-pickers,
-  .brat-toggle-grid,
+  .brat-toggle-grid {
+    grid-template-columns: 1fr;
+  }
   .brat-primary-actions {
+    display: grid;
     grid-template-columns: 1fr;
   }
   .brat-segmented-control button {
