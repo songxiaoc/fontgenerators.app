@@ -212,6 +212,10 @@ for (const schemaType of ['WebApplication', 'FAQPage', 'HowTo']) {
 for (const id of ['brat-text', 'brat-canvas', 'brat-background-presets', 'brat-background-color', 'brat-text-color', 'brat-alignment', 'brat-aspect', 'brat-square-size', 'brat-square-size-value', 'brat-text-size', 'brat-text-size-value', 'brat-blur', 'brat-blur-value', 'brat-lowercase', 'brat-pixelated', 'brat-format', 'brat-download', 'brat-copy', 'brat-reset', 'brat-status']) {
   if (!sourceBrat.includes(`id="${id}"`)) throw new Error(`brat page missing renderer DOM contract #${id}`);
 }
+if ((sourceBrat.match(/class="tool-field brat-color-field"/g) || []).length !== 2 || (sourceBrat.match(/Choose color/g) || []).length !== 2) {
+  throw new Error('brat custom background and text color controls must expose full-row native color-picker affordances');
+}
+if (!bratJs.includes("querySelector('.brat-color-value')")) throw new Error('brat color controls must keep their visible hex values synchronized');
 for (const control of ['data-brat-bg="#8ACE00"', 'data-brat-bg="#FFFFFF"', 'data-brat-bg="#111111"', 'data-brat-bg="#FB0080"', 'data-brat-bg="transparent"', 'data-brat-align="center"', 'data-brat-align="right"', 'data-brat-align="justify"', 'data-brat-aspect="1:1"', 'data-brat-aspect="9:16"', 'data-brat-aspect="16:9"', 'data-brat-format="png"', 'data-brat-format="jpeg"', 'data-brat-format="webp"']) {
   if (!sourceBrat.includes(control)) throw new Error(`brat page missing control contract ${control}`);
 }

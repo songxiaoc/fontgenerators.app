@@ -274,8 +274,10 @@ function setPressed(container, selector, value, attribute) {
 }
 
 function updateColorLabel(input) {
-  const label = input?.closest('.brat-color-input')?.querySelector('span');
-  if (label) label.textContent = input.value.toUpperCase();
+  const picker = input?.closest('.brat-color-input');
+  const value = picker?.querySelector('.brat-color-value');
+  if (!picker || !value) return;
+  value.textContent = input.value.toUpperCase();
 }
 
 function updateControls() {

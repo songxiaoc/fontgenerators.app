@@ -227,14 +227,22 @@
           </fieldset>
 
           <div class="brat-color-pickers">
-            <div class="tool-field">
-              <label for="brat-background-color">Custom background</label>
-              <div class="brat-color-input"><input id="brat-background-color" class="clarity-mask" data-clarity-mask="true" type="color" value="#8ACE00" /><span>#8ACE00</span></div>
-            </div>
-            <div class="tool-field">
-              <label for="brat-text-color">Text color</label>
-              <div class="brat-color-input"><input id="brat-text-color" class="clarity-mask" data-clarity-mask="true" type="color" value="#111111" /><span>#111111</span></div>
-            </div>
+            <label class="tool-field brat-color-field">
+              <span class="brat-field-label">Custom background</span>
+              <span class="brat-color-input">
+                <input id="brat-background-color" class="clarity-mask" data-clarity-mask="true" type="color" value="#8ACE00" />
+                <span class="brat-color-value" aria-hidden="true">#8ACE00</span>
+                <span class="brat-color-action" aria-hidden="true"><span class="material-symbols-outlined" data-icon="palette"></span>Choose color</span>
+              </span>
+            </label>
+            <label class="tool-field brat-color-field">
+              <span class="brat-field-label">Text color</span>
+              <span class="brat-color-input">
+                <input id="brat-text-color" class="clarity-mask" data-clarity-mask="true" type="color" value="#111111" />
+                <span class="brat-color-value" aria-hidden="true">#111111</span>
+                <span class="brat-color-action" aria-hidden="true"><span class="material-symbols-outlined" data-icon="palette"></span>Choose color</span>
+              </span>
+            </label>
           </div>
 
           <fieldset id="brat-alignment" class="brat-control-group">

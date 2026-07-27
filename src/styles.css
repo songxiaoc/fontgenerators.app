@@ -2330,7 +2330,8 @@ summary {
   border: 0;
 }
 .brat-controls legend,
-.brat-controls .tool-field > label {
+.brat-controls .tool-field > label,
+.brat-controls .brat-field-label {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -2404,15 +2405,22 @@ summary {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
+.brat-color-field {
+  min-width: 0;
+  display: block;
+  cursor: pointer;
+}
 .brat-color-input {
   min-height: 36px;
   display: flex;
   align-items: center;
   gap: 9px;
-  padding: 4px 10px 4px 5px;
+  padding: 4px 8px 4px 5px;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 4px;
+  cursor: pointer;
+  transition: background .16s ease, border-color .16s ease, box-shadow .16s ease;
 }
 .brat-color-input input[type="color"] {
   width: 28px;
@@ -2423,13 +2431,36 @@ summary {
   border: 1px solid #d9d4cb;
   border-radius: 3px;
   box-shadow: none;
+  cursor: pointer;
 }
-.brat-color-input span {
+.brat-color-field:hover .brat-color-input,
+.brat-color-field:focus-within .brat-color-input {
+  background: #fbfef4;
+  border-color: #6fb000;
+}
+.brat-color-field:focus-within .brat-color-input {
+  box-shadow: 0 0 0 3px rgba(111, 176, 0, .16);
+}
+.brat-color-value {
   min-width: 0;
   color: #3b4555;
   font-family: var(--font-code);
   font-size: 11px;
   font-weight: 700;
+}
+.brat-color-action {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  color: #1b6b38;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.brat-color-action .material-symbols-outlined {
+  font-size: 16px;
 }
 .brat-segmented-control {
   display: grid;
