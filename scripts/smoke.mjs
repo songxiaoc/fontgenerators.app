@@ -136,8 +136,8 @@ function assertSeoMetrics(name, html, twoWordKeyword, threeWordKeyword) {
   if (/(?:\||-|–|—)\s*FontGenerators(?:\.app)?\s*$/i.test(title) || /FontGenerators\.app/i.test(title)) throw new Error(`${name} title should not append the brand name`);
   if (description.length < 140 || description.length > 160) throw new Error(`${name} description must be 140-160 characters; found ${description.length}`);
   if (tokens.length < 1000) throw new Error(`${name} should have at least 1000 visible words; found ${tokens.length}`);
-  if (twoWordDensity < 3) throw new Error(`${name} "${twoWordKeyword}" density must be >=3%; found ${twoWordDensity.toFixed(2)}%`);
-  if (threeWordDensity < 1) throw new Error(`${name} "${threeWordKeyword}" density must be >=1%; found ${threeWordDensity.toFixed(2)}%`);
+  if (Number(twoWordDensity.toFixed(2)) < 3) throw new Error(`${name} "${twoWordKeyword}" density must be >=3%; found ${twoWordDensity.toFixed(2)}%`);
+  if (Number(threeWordDensity.toFixed(2)) < 1) throw new Error(`${name} "${threeWordKeyword}" density must be >=1%; found ${threeWordDensity.toFixed(2)}%`);
 }
 
 function assertImageAlts(name, html) {
@@ -807,6 +807,9 @@ for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], 
   if (html.includes('href="/discord-colored-text-generator/"')) throw new Error('stale discord route slash link present');
   if (html.includes('href="/brat-generator/"')) throw new Error('stale brat route slash link present');
   if (!html.includes('href="/brat-generator"')) throw new Error('page missing clean Brat Generator primary navigation link');
+  const primaryNavigation = html.match(/<nav\b[^>]*id="primary-navigation"[^>]*>[\s\S]*?<\/nav>/i)?.[0] || '';
+  const gothicNavigationLinks = getAnchors(primaryNavigation).filter(anchor => anchor.href === '/gothic-font' && anchor.label === 'Gothic');
+  if (gothicNavigationLinks.length !== 1) throw new Error(`${name} primary navigation must expose exactly one Gothic link`);
   const footerAnchors = getAnchors(getElementHtml(name, html, 'footer'));
   if (!footerAnchors.some(anchor => anchor.href === '/about' && anchor.label === 'About') || !footerAnchors.some(anchor => anchor.href === '/about#contact' && anchor.label === 'Contact')) throw new Error(`${name} footer must expose visible About and Contact links`);
   if (html.includes('mailto:') || html.includes('/cdn-cgi/l/email-protection')) throw new Error('page should not expose Cloudflare-obfuscated email links');
@@ -843,6 +846,7 @@ if (!styles.includes('.brand-mark') || !styles.includes('.brand.mini .brand-mark
 if (!styles.includes('backdrop-filter: blur(28px) saturate(180%) contrast(112%)') || !styles.includes('-webkit-backdrop-filter: blur(28px) saturate(180%) contrast(112%)')) throw new Error('topbar glass effect CSS missing');
 if (!styles.includes('.topbar::before') || !styles.includes('feTurbulence') || !styles.includes('mix-blend-mode: multiply')) throw new Error('topbar frosted texture layer missing');
 if (!styles.includes('.nav-toggle') || !styles.includes('.topbar[data-nav-open="true"] nav') || !analyticsJs.includes('bindMobileNavigation') || !analyticsJs.includes('header.dataset.navOpen')) throw new Error('mobile topbar navigation should use a hamburger toggle menu');
+if (!styles.includes('@media (max-width: 1080px)') || styles.includes('@media (max-width: 960px)')) throw new Error('expanded primary navigation should collapse before the eight-link desktop row can clip');
 if (!homeJs.includes('svgIcon') || homeJs.includes('material-symbols-outlined') || homeJs.includes('data-icon="content_copy"')) throw new Error('homepage copy/favorite controls should use inline svg icons, not visible ligature text');
 if (!styles.includes('.inline-icon svg') || !styles.includes('.inline-icon svg.is-filled') || styles.includes('[data-category="Favorites"]::before')) throw new Error('homepage favorite/copy icons should use svg styling without text pseudo-elements');
 if (!styles.includes('.rainbow-control') || !styles.includes('linear-gradient(90deg, #f87171, #facc15, #34d399, #22d3ee, #60a5fa, #f472b6)')) throw new Error('discord rainbow preset styling missing');

@@ -1681,7 +1681,7 @@ summary {
   font-size: 13px;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1080px) {
   .topbar {
     justify-content: space-between;
     gap: 16px;
