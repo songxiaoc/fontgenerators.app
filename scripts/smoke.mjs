@@ -480,8 +480,12 @@ const gothicAnswerWordCount = gothicAnswerFirst.split(/\s+/).filter(Boolean).len
 if (gothicAnswerWordCount < 40 || gothicAnswerWordCount > 80) throw new Error(`gothic answer-first definition must be 40-80 words; found ${gothicAnswerWordCount}`);
 const gothicMain = sourceGothic.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || '';
 const gothicMainTokens = wordTokens(gothicMain);
+const gothicTwoWordPhrase = 'gothic font';
+const gothicTwoWordCount = countPhrase(gothicMainTokens, gothicTwoWordPhrase);
+const gothicTwoWordDensity = gothicTwoWordCount / gothicMainTokens.length;
 const gothicPrimaryPhrase = 'gothic font generator';
 const gothicPrimaryCount = countPhrase(gothicMainTokens, gothicPrimaryPhrase);
+const gothicPrimaryDensity = gothicPrimaryCount / gothicMainTokens.length;
 const gothicTrigramCounts = new Map();
 for (let index = 0; index <= gothicMainTokens.length - 3; index++) {
   const phrase = gothicMainTokens.slice(index, index + 3).join(' ');
@@ -493,7 +497,9 @@ const highestOtherGothicTrigram = Math.max(
     .filter(([phrase]) => phrase !== gothicPrimaryPhrase)
     .map(([, phraseCount]) => phraseCount)
 );
-if (gothicPrimaryCount < 6 || gothicPrimaryCount <= highestOtherGothicTrigram) throw new Error(`gothic primary phrase must be the most frequent visible three-word phrase; found ${gothicPrimaryCount} versus ${highestOtherGothicTrigram}`);
+if (gothicTwoWordDensity < 0.0275 || gothicTwoWordDensity > 0.0325) throw new Error(`gothic two-word phrase should remain naturally close to 3%; found ${(gothicTwoWordDensity * 100).toFixed(3)}%`);
+if (gothicPrimaryDensity < 0.009 || gothicPrimaryDensity > 0.011) throw new Error(`gothic primary three-word phrase should remain naturally close to 1%; found ${(gothicPrimaryDensity * 100).toFixed(3)}%`);
+if (gothicPrimaryCount <= highestOtherGothicTrigram) throw new Error(`gothic primary phrase must be the most frequent visible three-word phrase; found ${gothicPrimaryCount} versus ${highestOtherGothicTrigram}`);
 for (const phrase of ['decorated variant using', 'variant using classic', 'using classic fraktur']) {
   if (countPhrase(gothicMainTokens, phrase) !== 0) throw new Error(`gothic visible copy must avoid the mechanical repeated phrase: ${phrase}`);
 }
@@ -559,8 +565,8 @@ const gothicSectionOrder = [
   'id="gothic-results"',
   'id="gothic-alphabet-title"',
   'id="gothic-terms-title"',
-  'How to Copy and Paste Gothic Text',
-  'Where Gothic Text Works Best',
+  'How to Use the Gothic Font Generator',
+  'Where Gothic Font Text Works Best',
   'id="gothic-faq-title"',
   'id="gothic-related-title"'
 ].map(marker => sourceGothic.indexOf(marker));
