@@ -3639,3 +3639,274 @@ summary {
 body:has([data-cookie-banner]) .status-line {
   bottom: 140px;
 }
+
+/* Gothic Font Generator */
+.gothic-page {
+  min-width: 0;
+}
+.gothic-breadcrumb {
+  width: min(calc(100% - 64px), 1120px);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 auto;
+  padding-top: 24px;
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+.gothic-breadcrumb a {
+  color: var(--primary);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.gothic-hero {
+  width: min(100%, 1184px);
+  padding-top: 34px;
+  padding-bottom: 56px;
+}
+.gothic-intro {
+  max-width: 920px;
+  margin-left: 0;
+  margin-bottom: 30px;
+  text-align: left;
+}
+.gothic-intro h1 {
+  max-width: 880px;
+  margin-left: 0;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1.02;
+}
+.gothic-intro > p {
+  max-width: 880px;
+  margin-left: 0;
+}
+.gothic-answer-first {
+  font-size: 17px !important;
+  line-height: 1.68 !important;
+}
+.gothic-generator {
+  width: 100%;
+  padding: 28px;
+}
+.gothic-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+}
+.gothic-input-row .tool-field input {
+  min-height: 48px;
+  font-size: 18px;
+}
+.gothic-input-row .button {
+  min-height: 48px;
+}
+.gothic-input-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px 0 18px;
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.gothic-results {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.gothic-results .style-row {
+  min-height: 136px;
+}
+.gothic-results .style-row.is-empty {
+  background: var(--surface-soft);
+}
+.gothic-results .style-row.is-empty .style-output {
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 15px;
+}
+.gothic-results .icon-copy:disabled {
+  cursor: not-allowed;
+  opacity: .42;
+  transform: none;
+}
+.gothic-style-note {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.gothic-results .style-output {
+  padding-top: 4px;
+  font-size: clamp(22px, 2.4vw, 30px);
+}
+.gothic-trust-note {
+  margin: 18px 0 0;
+}
+.gothic-content-section,
+.gothic-related-tools {
+  width: min(calc(100% - 64px), 1120px);
+  margin-bottom: 56px;
+  padding: 34px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.gothic-content-section > :last-child,
+.gothic-content-section > div > :last-child {
+  margin-bottom: 0;
+}
+.gothic-content-section > p {
+  max-width: 86ch;
+}
+.gothic-content-section.split {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.gothic-content-section.split > div {
+  padding: 32px;
+}
+.gothic-table-wrap {
+  max-width: 100%;
+  margin-top: 22px;
+  overflow-x: auto;
+  border-radius: var(--radius);
+}
+.gothic-alphabet-table {
+  min-width: 860px;
+}
+.gothic-alphabet-table caption {
+  padding: 12px 14px;
+  color: var(--muted);
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  font-family: var(--font-code);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.gothic-alphabet-value {
+  font-family: "Segoe UI Symbol", "Noto Sans Math", "Apple Symbols", var(--font-code), system-ui, sans-serif;
+  font-size: 20px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+.gothic-term-table {
+  min-width: 720px;
+}
+.gothic-source-list {
+  display: grid;
+  gap: 12px;
+  max-width: 86ch;
+  padding-left: 22px;
+}
+.gothic-source-list a {
+  color: var(--primary);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+.gothic-reviewed {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted) !important;
+  font-family: var(--font-code);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+.gothic-related-tools {
+  padding: 34px;
+}
+.gothic-related-tools .tool-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.gothic-related-tools .tool-grid article {
+  padding: 24px;
+}
+
+@media (max-width: 900px) {
+  .gothic-results,
+  .gothic-related-tools .tool-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .gothic-breadcrumb {
+    width: calc(100% - 32px);
+    padding-top: 18px;
+    font-size: 10px;
+  }
+  .gothic-hero {
+    padding: 24px 16px 42px;
+  }
+  .gothic-intro h1 {
+    font-size: 38px;
+  }
+  .gothic-answer-first {
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+  }
+  .gothic-generator {
+    padding: 16px;
+  }
+  .gothic-generator .tool-panel__header {
+    align-items: flex-start;
+  }
+  .gothic-generator .badge {
+    display: none;
+  }
+  .gothic-input-row {
+    grid-template-columns: 1fr;
+  }
+  .gothic-input-row .button {
+    width: fit-content;
+  }
+  .gothic-input-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .gothic-results .style-row {
+    min-height: 128px;
+    padding: 18px;
+  }
+  .gothic-results .style-output {
+    padding-right: 4px;
+    font-size: 22px;
+  }
+  .gothic-content-section,
+  .gothic-related-tools {
+    width: calc(100% - 32px);
+    margin-right: 16px;
+    margin-left: 16px;
+    padding: 22px;
+  }
+  .gothic-content-section.split {
+    padding: 0;
+  }
+  .gothic-content-section.split > div {
+    padding: 22px;
+  }
+  .gothic-table-wrap {
+    margin-right: -6px;
+    margin-left: -6px;
+  }
+  .gothic-related-tools .tool-grid article {
+    padding: 20px;
+  }
+}

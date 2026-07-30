@@ -9,6 +9,7 @@ const files = [
   'dist/brat-generator.html',
   'dist/brat-font.html',
   'dist/brat-green.html',
+  'dist/gothic-font.html',
   'dist/discord-colored-text-generator.html',
   'dist/about.html',
   'dist/privacy.html',
@@ -43,6 +44,7 @@ const changer = readFileSync('dist/auto-font-changer.html', 'utf8');
 const brat = readFileSync('dist/brat-generator.html', 'utf8');
 const bratFont = readFileSync('dist/brat-font.html', 'utf8');
 const bratGreen = readFileSync('dist/brat-green.html', 'utf8');
+const gothic = readFileSync('dist/gothic-font.html', 'utf8');
 const privacy = readFileSync('dist/privacy.html', 'utf8');
 const cookies = readFileSync('dist/cookies.html', 'utf8');
 const terms = readFileSync('dist/terms-of-service.html', 'utf8');
@@ -55,6 +57,7 @@ const sourceChanger = readFileSync('auto-font-changer.html', 'utf8');
 const sourceBrat = readFileSync('brat-generator.html', 'utf8');
 const sourceBratFont = readFileSync('brat-font.html', 'utf8');
 const sourceBratGreen = readFileSync('brat-green.html', 'utf8');
+const sourceGothic = readFileSync('gothic-font.html', 'utf8');
 const sourceTool = readFileSync('discord-colored-text-generator.html', 'utf8');
 const sourceAbout = readFileSync('about.html', 'utf8');
 const sourcePrivacy = readFileSync('privacy.html', 'utf8');
@@ -69,6 +72,7 @@ const usernameJs = readFileSync('src/username-generator.js', 'utf8');
 const changerJs = readFileSync('src/auto-font-changer.js', 'utf8');
 const bratJs = readFileSync('src/brat-generator.js', 'utf8');
 const bratGreenJs = readFileSync('src/brat-green.js', 'utf8');
+const gothicJs = readFileSync('src/gothic-font.js', 'utf8');
 const toolJs = readFileSync('src/tool.js', 'utf8');
 const analyticsJs = readFileSync('src/analytics.js', 'utf8');
 const styles = readFileSync('src/styles.css', 'utf8');
@@ -155,6 +159,7 @@ for (const [name, html, twoWordKeyword, threeWordKeyword] of seoPages) {
 assertImageAlts('brat', brat);
 assertImageAlts('brat font', bratFont);
 assertImageAlts('brat green', bratGreen);
+assertImageAlts('gothic', gothic);
 assertImageAlts('about', about);
 
 for (const [name, content] of [
@@ -166,6 +171,7 @@ for (const [name, content] of [
   ['brat source', sourceBrat],
   ['brat font source', sourceBratFont],
   ['brat green source', sourceBratGreen],
+  ['gothic source', sourceGothic],
   ['tool source', sourceTool],
   ['about source', sourceAbout],
   ['home js', homeJs],
@@ -173,6 +179,7 @@ for (const [name, content] of [
   ['username js', usernameJs],
   ['brat js', bratJs],
   ['brat green js', bratGreenJs],
+  ['gothic js', gothicJs],
   ['built home', home],
   ['built ascii', ascii],
   ['built mixer', mixer],
@@ -181,6 +188,7 @@ for (const [name, content] of [
   ['built brat', brat],
   ['built brat font', bratFont],
   ['built brat green', bratGreen],
+  ['built gothic', gothic],
   ['built about', about],
   ['built tool', tool]
 ]) {
@@ -198,6 +206,7 @@ for (const [name, html] of [
   ['brat', sourceBrat],
   ['brat font', sourceBratFont],
   ['brat green', sourceBratGreen],
+  ['gothic', sourceGothic],
   ['tool', sourceTool],
   ['about', sourceAbout],
   ['privacy', sourcePrivacy],
@@ -394,6 +403,22 @@ function assertVisibleFaqMatchesSchema(name, html, nodes) {
   }
 }
 
+function normalizedVisibleText(value) {
+  return decodeBasicEntities(stripHtml(String(value))).trim().replace(/\s+/g, ' ');
+}
+
+function getVisibleDetails(name, html, sectionLabelId) {
+  const section = [...html.matchAll(/<section\b[^>]*>[\s\S]*?<\/section>/gi)]
+    .map(match => match[0])
+    .find(value => getTagAttribute(value.match(/^<section\b[^>]*>/i)?.[0] || '', 'aria-labelledby') === sectionLabelId);
+  if (!section) throw new Error(`${name} missing visible FAQ section labelled by ${sectionLabelId}`);
+  return [...section.matchAll(/<details\b[^>]*>\s*<summary>([\s\S]*?)<\/summary>\s*<p>([\s\S]*?)<\/p>\s*<\/details>/gi)]
+    .map(match => ({
+      question: normalizedVisibleText(match[1]),
+      answer: normalizedVisibleText(match[2])
+    }));
+}
+
 const aboutNodes = getJsonLdNodes('about', about);
 const aboutTitle = decodeBasicEntities(about.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '');
 const aboutH1 = decodeBasicEntities(stripHtml(about.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || '').trim().replace(/\s+/g, ' '));
@@ -409,6 +434,92 @@ if (aboutPageSchema.name !== aboutTitle) throw new Error('about AboutPage name m
 if (aboutPageSchema.about?.['@id'] !== 'https://fontgenerators.app/#organization' || aboutPageSchema.author?.['@id'] !== 'https://fontgenerators.app/#organization' || aboutPageSchema.publisher?.['@id'] !== 'https://fontgenerators.app/#organization' || aboutPageSchema.isPartOf?.['@id'] !== 'https://fontgenerators.app/#website') throw new Error('about AboutPage must reference the shared Organization and WebSite entities');
 if (!sourceAbout.includes('id="contact"') || !sourceAbout.includes('How factual claims are reviewed') || !sourceAbout.includes('contact<span class="email-at"')) throw new Error('about page must expose editorial policy and a visible contact section');
 if (wordTokens(about).length < 350) throw new Error(`about page should provide substantive publisher and editorial information; found ${wordTokens(about).length} visible words`);
+
+const gothicTitle = decodeBasicEntities(gothic.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '');
+const gothicDescription = getMetaContent(gothic, 'name', 'description');
+const gothicCanonical = 'https://fontgenerators.app/gothic-font';
+const gothicH1Matches = [...gothic.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
+const gothicH1 = normalizedVisibleText(gothicH1Matches[0]?.[1] || '');
+const gothicNodes = getJsonLdNodes('gothic', gothic);
+if (gothicTitle !== 'Gothic Font Generator — Copy & Paste Gothic Text') throw new Error(`gothic title mismatch: ${gothicTitle || 'missing'}`);
+if (gothicDescription !== 'Turn plain text into Gothic and Fraktur-style Unicode. Preview six copy-ready styles for bios, usernames, Discord, gaming, and tattoo drafts.') throw new Error('gothic meta description must match the approved copy');
+if (getCanonical(gothic) !== gothicCanonical || gothic.includes(`${gothicCanonical}/`)) throw new Error('gothic canonical and metadata must use the clean production URL');
+if (gothicH1Matches.length !== 1 || gothicH1 !== 'Gothic Font Generator') throw new Error(`gothic page must expose one exact H1; found ${gothicH1Matches.length}: ${gothicH1 || 'missing'}`);
+if (!getMetaContent(gothic, 'name', 'robots').includes('index, follow')) throw new Error('gothic page must remain indexable');
+if (getMetaContent(gothic, 'property', 'og:url') !== gothicCanonical) throw new Error('gothic og:url must match the canonical');
+if (getMetaContent(gothic, 'property', 'og:image') !== 'https://fontgenerators.app/logo.png' || getMetaContent(gothic, 'name', 'twitter:image') !== 'https://fontgenerators.app/logo.png') throw new Error('gothic social images must use the existing brand image');
+for (const type of ['Organization', 'WebSite', 'WebPage', 'WebApplication', 'BreadcrumbList', 'FAQPage']) {
+  if (!hasSchemaType(gothicNodes, type)) throw new Error(`gothic page missing ${type} structured data`);
+}
+const gothicPageSchema = getSingleSchemaNode('gothic', gothicNodes, 'WebPage');
+const gothicAppSchema = getSingleSchemaNode('gothic', gothicNodes, 'WebApplication');
+const gothicBreadcrumbSchema = getSingleSchemaNode('gothic', gothicNodes, 'BreadcrumbList');
+const gothicFaqSchema = getSingleSchemaNode('gothic', gothicNodes, 'FAQPage');
+if (gothicPageSchema['@id'] !== `${gothicCanonical}#webpage` || gothicPageSchema.url !== gothicCanonical || gothicPageSchema.name !== gothicTitle) throw new Error('gothic WebPage identity must match the title and canonical');
+if (gothicPageSchema.isPartOf?.['@id'] !== 'https://fontgenerators.app/#website' || gothicPageSchema.author?.['@id'] !== 'https://fontgenerators.app/#organization' || gothicPageSchema.publisher?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error('gothic WebPage must reference the shared WebSite and Organization');
+if (gothicPageSchema.mainEntity?.['@id'] !== `${gothicCanonical}#app` || gothicPageSchema.breadcrumb?.['@id'] !== `${gothicCanonical}#breadcrumb`) throw new Error('gothic WebPage must reference its app and breadcrumb');
+assertExactStringSet('gothic WebPage citations', gothicPageSchema.citation, ['https://unicode.org/charts/nameslist/n_1D400.html', 'https://www.unicode.org/faq/latin_cyrillic.html']);
+for (const field of ['datePublished', 'dateModified', 'lastReviewed']) {
+  if (gothicPageSchema[field] !== '2026-07-30') throw new Error(`gothic WebPage ${field} must use the actual publication date`);
+}
+if (gothicAppSchema['@id'] !== `${gothicCanonical}#app` || gothicAppSchema.url !== gothicCanonical || gothicAppSchema.name !== 'Gothic Font Generator') throw new Error('gothic WebApplication identity mismatch');
+if (gothicAppSchema.creator?.['@id'] !== 'https://fontgenerators.app/#organization' || gothicAppSchema.provider?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error('gothic WebApplication must reference the shared Organization');
+if (gothicAppSchema.isAccessibleForFree !== true || gothicAppSchema.offers?.price !== '0' || gothicAppSchema.featureList?.length !== 6) throw new Error('gothic WebApplication must describe the free six-result tool');
+if (gothicBreadcrumbSchema['@id'] !== `${gothicCanonical}#breadcrumb` || gothicBreadcrumbSchema.itemListElement?.length !== 2 || gothicBreadcrumbSchema.itemListElement[1]?.item !== gothicCanonical) throw new Error('gothic BreadcrumbList must resolve to the clean canonical');
+if (gothicFaqSchema['@id'] !== `${gothicCanonical}#faq` || gothicFaqSchema.mainEntity?.length !== 7) throw new Error('gothic FAQPage must contain the seven approved questions');
+if (gothicNodes.some(node => hasSchemaType([node], 'AggregateRating') || hasSchemaType([node], 'Review')) || /aggregateRating|reviewCount/i.test(sourceGothic)) throw new Error('gothic structured data must not invent ratings or reviews');
+assertVisibleFaqMatchesSchema('gothic', gothic, gothicNodes);
+const visibleGothicFaq = getVisibleDetails('gothic', sourceGothic, 'gothic-faq-title');
+const schemaGothicFaq = gothicFaqSchema.mainEntity.map(item => ({
+  question: normalizedVisibleText(item.name),
+  answer: normalizedVisibleText(item.acceptedAnswer?.text || '')
+}));
+if (JSON.stringify(visibleGothicFaq) !== JSON.stringify(schemaGothicFaq)) throw new Error('gothic visible FAQ and FAQPage schema must remain exactly synchronized');
+const gothicAnswerFirst = normalizedVisibleText(sourceGothic.match(/<p\b[^>]*class="gothic-answer-first"[^>]*>([\s\S]*?)<\/p>/i)?.[1] || '');
+const gothicAnswerWordCount = gothicAnswerFirst.split(/\s+/).filter(Boolean).length;
+if (gothicAnswerWordCount < 40 || gothicAnswerWordCount > 80) throw new Error(`gothic answer-first definition must be 40-80 words; found ${gothicAnswerWordCount}`);
+const gothicStyleIds = [...sourceGothic.matchAll(/\bdata-gothic-style="([^"]+)"/g)].map(match => match[1]);
+const gothicCopyIds = [...sourceGothic.matchAll(/\bdata-copy-style="([^"]+)"/g)].map(match => match[1]);
+const approvedGothicStyleIds = ['classic-fraktur', 'bold-fraktur', 'spaced-gothic', 'gothic-brackets', 'gothic-stars', 'gothic-moon'];
+assertExactStringSet('gothic result styles', gothicStyleIds, approvedGothicStyleIds);
+assertExactStringSet('gothic copy controls', gothicCopyIds, approvedGothicStyleIds);
+for (const required of [
+  'value="Gothic Font"',
+  '𝔊𝔬𝔱𝔥𝔦𝔠 𝔉𝔬𝔫𝔱',
+  '𝕲𝖔𝖙𝖍𝖎𝖈 𝕱𝖔𝖓𝖙',
+  '𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
+  '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷',
+  '𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',
+  '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟',
+  'https://unicode.org/charts/nameslist/n_1D400.html',
+  'https://www.unicode.org/faq/latin_cyrillic.html',
+  'Gothic vs Blackletter vs Fraktur vs Old English',
+  'Decorated variant',
+  'data-clarity-mask="true"',
+  'role="status" aria-live="polite" aria-atomic="true"'
+]) {
+  if (!sourceGothic.includes(required)) throw new Error(`gothic page missing approved static/source contract: ${required}`);
+}
+for (const link of ['/', '/font-mixer', '/username-generator', '/discord-colored-text-generator']) {
+  if (!sourceGothic.includes(`href="${link}"`)) throw new Error(`gothic page missing related internal link ${link}`);
+}
+const gothicSectionOrder = [
+  'class="gothic-breadcrumb"',
+  'class="tool-page gothic-hero"',
+  'id="gothic-results"',
+  'id="gothic-alphabet-title"',
+  'id="gothic-terms-title"',
+  'How to Copy and Paste Gothic Text',
+  'Where Gothic Text Works Best',
+  'id="gothic-faq-title"',
+  'id="gothic-related-title"'
+].map(marker => sourceGothic.indexOf(marker));
+if (gothicSectionOrder.some(index => index < 0) || gothicSectionOrder.some((index, position) => position > 0 && index <= gothicSectionOrder[position - 1])) throw new Error('gothic visible sections must keep the approved answer-first content order');
+if (!sourceHome.includes('href="/gothic-font"') || !sourceMixer.includes('href="/gothic-font"')) throw new Error('homepage and Font Mixer must link to the Gothic Font Generator');
+if (wordTokens(gothic).length < 650) throw new Error(`gothic page should provide substantive task and terminology guidance; found ${wordTokens(gothic).length} visible words`);
+for (const forbidden of ['works everywhere', 'free font downloads', 'download TTF', 'official Gothic font']) {
+  if (gothic.toLowerCase().includes(forbidden.toLowerCase())) throw new Error(`gothic page contains forbidden claim: ${forbidden}`);
+}
 
 const bratPageContracts = [
   {
@@ -691,7 +802,7 @@ for (const [name, html] of [['about', about], ['privacy', privacy], ['cookies', 
 }
 if (!cookies.includes('<meta name="robots" content="noindex"')) throw new Error('cookies page should remain noindex');
 
-for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['brat font', bratFont], ['brat green', bratGreen], ['tool', tool], ['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
+for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['brat font', bratFont], ['brat green', bratGreen], ['gothic', gothic], ['tool', tool], ['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
   if (html.includes('href="/terms/"')) throw new Error('stale /terms/ link present');
   if (html.includes('href="/discord-colored-text-generator/"')) throw new Error('stale discord route slash link present');
   if (html.includes('href="/brat-generator/"')) throw new Error('stale brat route slash link present');
@@ -709,12 +820,12 @@ for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], 
   if (!html.includes('/> FontGenerators</a>')) throw new Error('visible brand label missing');
   if (html.includes('<span>Fg_</span>')) throw new Error('page should not use old text-only brand mark');
 }
-for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['brat font', bratFont], ['brat green', bratGreen], ['tool', tool], ['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
+for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['brat font', bratFont], ['brat green', bratGreen], ['gothic', gothic], ['tool', tool], ['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
   for (const s of ['property="og:type"', 'property="og:url"', 'property="og:image"', 'property="og:image:alt"', 'name="twitter:card"', 'name="twitter:title"', 'name="twitter:description"', 'name="twitter:image"']) {
     if (!html.includes(s)) throw new Error(`${name} missing complete social metadata: ${s}`);
   }
 }
-for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixer', sourceMixer], ['username', sourceUsername], ['changer', sourceChanger], ['brat', sourceBrat], ['brat font', sourceBratFont], ['brat green', sourceBratGreen], ['tool', sourceTool], ['about', sourceAbout], ['privacy', sourcePrivacy], ['cookies', sourceCookies], ['terms', sourceTerms]]) {
+for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixer', sourceMixer], ['username', sourceUsername], ['changer', sourceChanger], ['brat', sourceBrat], ['brat font', sourceBratFont], ['brat green', sourceBratGreen], ['gothic', sourceGothic], ['tool', sourceTool], ['about', sourceAbout], ['privacy', sourcePrivacy], ['cookies', sourceCookies], ['terms', sourceTerms]]) {
   if (!html.includes('/src/analytics.js')) throw new Error(`${name} missing analytics module`);
   if (!html.includes('data-cookie-settings')) throw new Error(`${name} missing cookie settings control`);
 }
@@ -776,6 +887,7 @@ const llmsCanonicalLinks = assertMarkdownLinkSection('Canonical pages', llmsCano
   { label: 'Font Generator', url: 'https://fontgenerators.app/' },
   { label: 'ASCII Art Generator', url: 'https://fontgenerators.app/ascii-art-generator' },
   { label: 'Font Mixer', url: 'https://fontgenerators.app/font-mixer' },
+  { label: 'Gothic Font Generator', url: 'https://fontgenerators.app/gothic-font' },
   { label: 'Username Generator', url: 'https://fontgenerators.app/username-generator' },
   { label: 'Auto Font Changer', url: 'https://fontgenerators.app/auto-font-changer' },
   { label: 'Brat Generator', url: 'https://fontgenerators.app/brat-generator' },
@@ -794,10 +906,10 @@ assertMarkdownLinkSection('Brat topic sources', llmsBratSourcesSection, [
   { label: 'Microsoft Typography — Arial Narrow', url: bratCitations[1] },
   { label: 'W3C WAI — Understanding Success Criterion 1.4.3', url: bratCitations[2] }
 ]);
-for (const phrase of ['generated Brat images', 'independent fan-style utility', 'not downloadable TTF/OTF font files', '#8ACE00', 'mathematical conversions', 'Do not describe planned']) {
+for (const phrase of ['generated Brat images', 'independent fan-style utility', 'not downloadable TTF/OTF font files', '#8ACE00', 'mathematical conversions', 'Unicode Mathematical Fraktur', 'four decorated variants', 'Do not describe planned']) {
   if (!llmsUsageSection.includes(phrase) && !llms.includes(phrase)) throw new Error(`llms.txt missing AI/crawler guidance: ${phrase}`);
 }
-const heldLlmsPaths = ['/brat-font-generator', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator', '/pricing', '/refund'];
+const heldLlmsPaths = ['/brat-font-generator', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/gothic-font-generator', '/gothic-text-generator', '/blackletter-font', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator', '/pricing', '/refund'];
 for (const path of heldLlmsPaths) {
   if (!llmsUsageSection.includes(`\`${path}\``)) throw new Error(`llms.txt Usage notes must identify held route ${path}`);
   for (const [sectionName, section] of [['Canonical pages', llmsCanonicalSection], ['Legal and policy pages', llmsLegalSection], ['Brat topic sources', llmsBratSourcesSection]]) {
@@ -820,7 +932,50 @@ for (const s of ['rainbowColors', 'applyRainbow', 'setRangePattern', "from './ui
 for (const s of ['findTextEditRange', 'syncSpansAfterTextEdit', 'syncSpansAfterTextEdit(lastText, el.msg.value)']) if (!toolJs.includes(s)) throw new Error(`tool missing style-preserving edit helper ${s}`);
 if (toolJs.includes("if (el.msg.value !== lastText) spans = []")) throw new Error('editing Discord text should preserve existing style spans');
 if (toolJs.includes('[button.dataset.style]: true')) throw new Error('bold/underline controls must be toggles, not one-way true setters');
+for (const required of [
+  "resolveStyle('medieval-times')",
+  "resolveStyle('the-north')",
+  "from './ui.js'",
+  'copyText(value)',
+  'selectElementText(output)',
+  'addLetterSpacing',
+  "input.addEventListener('input', render)",
+  "clearButton.addEventListener('click'",
+  "input.value = ''",
+  'button.disabled = disabled',
+  'Type text above to generate this style.',
+  "window.fgTrack?.('gothic_style_copied', { style_id: variant.id })"
+]) {
+  if (!gothicJs.includes(required)) throw new Error(`gothic interaction missing behavior contract: ${required}`);
+}
+for (const styleId of approvedGothicStyleIds) {
+  if (!gothicJs.includes(`id: '${styleId}'`)) throw new Error(`gothic interaction missing variant ${styleId}`);
+}
+if (gothicJs.includes('input.value })') || gothicJs.includes('text: input.value') || gothicJs.includes('content: input.value')) throw new Error('gothic analytics must never receive user-entered text');
+for (const cssHook of ['.gothic-page', '.gothic-breadcrumb', '.gothic-generator', '.gothic-results', '.gothic-content-section', '.gothic-table-wrap', '.gothic-related-tools']) {
+  if (!styles.includes(cssHook)) throw new Error(`gothic scoped CSS missing ${cssHook}`);
+}
+const gothicCssStart = styles.indexOf('/* Gothic Font Generator */');
+if (gothicCssStart < 0) throw new Error('gothic CSS must have a clearly scoped section');
+const gothicCss = styles.slice(gothicCssStart);
+for (const selector of gothicCss.matchAll(/^\s*(\.[^{]+)\{/gm)) {
+  const selectorText = selector[1].trim();
+  if (!selectorText.includes('.gothic-')) throw new Error(`new Gothic CSS must remain scoped to .gothic-* selectors: ${selectorText}`);
+}
 const { fontbStyles, resolveStyle, styleAliases, styleAliasGroups, styles: canonicalStyles, transformStyle } = await import('../src/font-styles.js');
+const classicFraktur = resolveStyle('medieval-times');
+const boldFraktur = resolveStyle('the-north');
+if (!classicFraktur || !boldFraktur) throw new Error('gothic page must reuse the existing Medieval Times and The North mappings');
+const gothicPreservationProbe = 'Gothic 2026?! 🦇 café';
+for (const [name, style] of [['Classic Fraktur', classicFraktur], ['Bold Fraktur', boldFraktur]]) {
+  const output = style.transform(gothicPreservationProbe);
+  for (const preserved of ['2026?!', '🦇', 'é']) {
+    if (!output.includes(preserved)) throw new Error(`${name} must preserve unsupported characters: ${preserved}`);
+  }
+  if (output.includes('Gothic')) throw new Error(`${name} must transform supported ASCII letters`);
+  const longOutput = style.transform('Long Gothic text '.repeat(500));
+  if (!longOutput || longOutput.length < 1000) throw new Error(`${name} should transform long browser-side input without truncation`);
+}
 const styleIds = fontbStyles.map(style => style.id);
 if (styleIds.length < 140) throw new Error(`home has only ${styleIds.length} style transforms`);
 if (new Set(styleIds).size !== styleIds.length) throw new Error('duplicate homepage style ids');
@@ -857,7 +1012,7 @@ for (const forbidden of ['free font downloads', 'download TTF', 'install fonts',
 }
 if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('Sitemap: https://fontgenerators.app/sitemap.xml')) throw new Error('robots missing noindex/ sitemap signals');
 const sitemapLocs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/brat-generator', 'https://fontgenerators.app/brat-font', 'https://fontgenerators.app/brat-green', 'https://fontgenerators.app/about', 'https://fontgenerators.app/discord-colored-text-generator', 'https://fontgenerators.app/privacy', 'https://fontgenerators.app/terms-of-service'];
+const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/gothic-font', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/brat-generator', 'https://fontgenerators.app/brat-font', 'https://fontgenerators.app/brat-green', 'https://fontgenerators.app/about', 'https://fontgenerators.app/discord-colored-text-generator', 'https://fontgenerators.app/privacy', 'https://fontgenerators.app/terms-of-service'];
 assertExactStringSet('sitemap canonical URLs', sitemapLocs, approvedSitemapLocs);
 const llmsIndexableUrls = [...llmsCanonicalLinks, ...llmsLegalLinks].map(link => link.url).filter(url => url !== 'https://fontgenerators.app/cookies');
 assertExactStringSet('indexable llms.txt page URLs', llmsIndexableUrls, sitemapLocs);
@@ -867,17 +1022,19 @@ const approvedSitemapLastmods = new Map(approvedSitemapLocs.map(loc => [
   loc,
   bratStructuredDates.has(loc)
     ? bratStructuredDates.get(loc)
-    : loc === 'https://fontgenerators.app/privacy' || loc === 'https://fontgenerators.app/terms-of-service'
-      ? '2026-07-27'
-      : loc === 'https://fontgenerators.app/font-mixer'
-        ? '2026-07-04'
-        : '2026-06-29'
+    : loc === 'https://fontgenerators.app/gothic-font'
+      ? '2026-07-30'
+      : loc === 'https://fontgenerators.app/privacy' || loc === 'https://fontgenerators.app/terms-of-service'
+        ? '2026-07-27'
+        : loc === 'https://fontgenerators.app/font-mixer'
+          ? '2026-07-04'
+          : '2026-06-29'
 ]));
 for (const [loc, expectedLastmod] of approvedSitemapLastmods) {
   const actualLastmod = sitemapLastmods.get(loc);
   if (actualLastmod !== expectedLastmod) throw new Error(`sitemap lastmod for ${loc} must be ${expectedLastmod}; found ${actualLastmod || 'missing'}`);
 }
-for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler', '/brat-font-generator', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator']) {
+for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler', '/brat-font-generator', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/gothic-font-generator', '/gothic-text-generator', '/blackletter-font', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator']) {
   if (sitemap.includes(`https://fontgenerators.app${forbidden}`) && forbidden !== '/discord-colored-text-generator') throw new Error(`sitemap should not include non-indexable route ${forbidden}`);
 }
 if (redirects.includes('www.fontgenerators.app')) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level www-to-apex redirects; Pages middleware handles host canonicalization instead');
@@ -890,6 +1047,7 @@ assertExactStringSet('Cloudflare _redirects rules', redirectLines, [
   '/brat-generator/ /brat-generator 301',
   '/brat-font/ /brat-font 301',
   '/brat-green/ /brat-green 301',
+  '/gothic-font/ /gothic-font 301',
   '/about/ /about 301',
   '/auto-font-styler /auto-font-changer 301',
   '/auto-font-styler/ /auto-font-changer 301',
@@ -900,10 +1058,10 @@ assertExactStringSet('Cloudflare _redirects rules', redirectLines, [
   '/terms/ /terms-of-service 301',
   '/terms-of-service/ /terms-of-service 301'
 ]);
-for (const s of ["bratGenerator: resolve(__dirname, 'brat-generator.html')", "bratFont: resolve(__dirname, 'brat-font.html')", "bratGreen: resolve(__dirname, 'brat-green.html')", "about: resolve(__dirname, 'about.html')"]) {
+for (const s of ["bratGenerator: resolve(__dirname, 'brat-generator.html')", "bratFont: resolve(__dirname, 'brat-font.html')", "bratGreen: resolve(__dirname, 'brat-green.html')", "gothicFont: resolve(__dirname, 'gothic-font.html')", "about: resolve(__dirname, 'about.html')"]) {
   if (!viteConfig.includes(s)) throw new Error(`Vite MPA config missing page entry: ${s}`);
 }
-for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/about', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
+for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/gothic-font', '/about', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
   if (!middleware.includes(s)) throw new Error(`canonical/analytics middleware missing ${s}`);
 }
 
@@ -925,7 +1083,7 @@ const passThrough = await middlewareSmoke('https://fontgenerators.app/');
 if (passThrough.status !== 200 || await passThrough.text() !== 'next ok') throw new Error('middleware should pass canonical apex clean routes through');
 const approvedToolPassThrough = await middlewareSmoke('https://fontgenerators.app/discord-colored-text-generator');
 if (approvedToolPassThrough.status !== 200 || await approvedToolPassThrough.text() !== 'next ok') throw new Error('middleware should pass approved clean Discord route through');
-for (const path of ['/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/about']) {
+for (const path of ['/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/gothic-font', '/about']) {
   const response = await middlewareSmoke(`https://fontgenerators.app${path}`);
   if (response.status !== 200 || await response.text() !== 'next ok') throw new Error(`middleware should pass approved clean route through: ${path}`);
   const slash = await middlewareSmoke(`https://fontgenerators.app${path}/`);
@@ -952,7 +1110,7 @@ const injectedHtml = await injectedResponse.text();
 for (const s of ['google-site-verification', 'gsc-test-token', 'ahrefs-site-verification', 'ahrefs-test-token', 'FONTGENERATORS_ANALYTICS_CONFIG', 'G-TEST123', 'clarity-test', 'ahrefs-analytics-test']) {
   if (!injectedHtml.includes(s)) throw new Error(`middleware injection missing ${s}`);
 }
-const heldPaths = ['/pricing', '/pricing/', '/refund', '/refund/', '/brat-font-generator', '/brat-font-generator/', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/discord-font-generator', '/discord-font-generator/', '/fancy-text-generator', '/fancy-text-generator/', '/discord-text-generator', '/not-a-real-mvp-route'];
+const heldPaths = ['/pricing', '/pricing/', '/refund', '/refund/', '/brat-font-generator', '/brat-font-generator/', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/gothic-font-generator', '/gothic-font-generator/', '/gothic-text-generator', '/gothic-text-generator/', '/blackletter-font', '/blackletter-font/', '/discord-font-generator', '/discord-font-generator/', '/fancy-text-generator', '/fancy-text-generator/', '/discord-text-generator', '/not-a-real-mvp-route'];
 for (const path of heldPaths) {
   const response = await middlewareSmoke(`https://fontgenerators.app${path}`);
   const body = await response.text();
@@ -965,4 +1123,4 @@ const staticPassThrough = await middlewareSmoke('https://fontgenerators.app/asse
 if (staticPassThrough.status !== 200 || await staticPassThrough.text() !== 'next ok') throw new Error('middleware should pass static asset requests through');
 const llmsPassThrough = await middlewareSmoke('https://fontgenerators.app/llms.txt');
 if (llmsPassThrough.status !== 200 || await llmsPassThrough.text() !== 'next ok') throw new Error('middleware should pass llms.txt through');
-console.log(`smoke ok: pages, SEO/schema/legal/cookie/analytics routes present; homepage has ${canonicalStyles.length} unique styles from ${styleIds.length} raw definitions; ASCII/Mixer/Username/Auto Changer, the three-page Brat cluster, and About trust page are live; held routes return 404 noindex`);
+console.log(`smoke ok: pages, SEO/schema/legal/cookie/analytics routes present; homepage has ${canonicalStyles.length} unique styles from ${styleIds.length} raw definitions; ASCII/Mixer/Username/Auto Changer, Gothic Font, the three-page Brat cluster, and About trust page are live; held routes return 404 noindex`);

@@ -17,6 +17,7 @@ export default defineConfig({
         bratGenerator: resolve(__dirname, 'brat-generator.html'),
         bratFont: resolve(__dirname, 'brat-font.html'),
         bratGreen: resolve(__dirname, 'brat-green.html'),
+        gothicFont: resolve(__dirname, 'gothic-font.html'),
         tool: resolve(__dirname, 'discord-colored-text-generator.html'),
         about: resolve(__dirname, 'about.html'),
         privacy: resolve(__dirname, 'privacy.html'),
