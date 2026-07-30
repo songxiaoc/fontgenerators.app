@@ -442,7 +442,7 @@ const gothicH1Matches = [...gothic.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
 const gothicH1 = normalizedVisibleText(gothicH1Matches[0]?.[1] || '');
 const gothicNodes = getJsonLdNodes('gothic', gothic);
 if (gothicTitle !== 'Gothic Font Generator — Copy & Paste Gothic Text') throw new Error(`gothic title mismatch: ${gothicTitle || 'missing'}`);
-if (gothicDescription !== 'Turn plain text into Gothic and Fraktur-style Unicode. Preview six copy-ready styles for bios, usernames, Discord, gaming, and tattoo drafts.') throw new Error('gothic meta description must match the approved copy');
+if (gothicDescription !== 'Turn plain text into Gothic and Fraktur-style Unicode. Preview 16 copy-ready styles for bios, usernames, Discord, gaming, and tattoo drafts.') throw new Error('gothic meta description must match the approved copy');
 if (getCanonical(gothic) !== gothicCanonical || gothic.includes(`${gothicCanonical}/`)) throw new Error('gothic canonical and metadata must use the clean production URL');
 if (gothicH1Matches.length !== 1 || gothicH1 !== 'Gothic Font Generator') throw new Error(`gothic page must expose one exact H1; found ${gothicH1Matches.length}: ${gothicH1 || 'missing'}`);
 if (!getMetaContent(gothic, 'name', 'robots').includes('index, follow')) throw new Error('gothic page must remain indexable');
@@ -464,7 +464,7 @@ for (const field of ['datePublished', 'dateModified', 'lastReviewed']) {
 }
 if (gothicAppSchema['@id'] !== `${gothicCanonical}#app` || gothicAppSchema.url !== gothicCanonical || gothicAppSchema.name !== 'Gothic Font Generator') throw new Error('gothic WebApplication identity mismatch');
 if (gothicAppSchema.creator?.['@id'] !== 'https://fontgenerators.app/#organization' || gothicAppSchema.provider?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error('gothic WebApplication must reference the shared Organization');
-if (gothicAppSchema.isAccessibleForFree !== true || gothicAppSchema.offers?.price !== '0' || gothicAppSchema.featureList?.length !== 6) throw new Error('gothic WebApplication must describe the free six-result tool');
+if (gothicAppSchema.isAccessibleForFree !== true || gothicAppSchema.offers?.price !== '0' || gothicAppSchema.featureList?.length !== 6) throw new Error('gothic WebApplication must describe the free 16-result tool');
 if (gothicBreadcrumbSchema['@id'] !== `${gothicCanonical}#breadcrumb` || gothicBreadcrumbSchema.itemListElement?.length !== 2 || gothicBreadcrumbSchema.itemListElement[1]?.item !== gothicCanonical) throw new Error('gothic BreadcrumbList must resolve to the clean canonical');
 if (gothicFaqSchema['@id'] !== `${gothicCanonical}#faq` || gothicFaqSchema.mainEntity?.length !== 7) throw new Error('gothic FAQPage must contain the seven approved questions');
 if (gothicNodes.some(node => hasSchemaType([node], 'AggregateRating') || hasSchemaType([node], 'Review')) || /aggregateRating|reviewCount/i.test(sourceGothic)) throw new Error('gothic structured data must not invent ratings or reviews');
@@ -480,13 +480,34 @@ const gothicAnswerWordCount = gothicAnswerFirst.split(/\s+/).filter(Boolean).len
 if (gothicAnswerWordCount < 40 || gothicAnswerWordCount > 80) throw new Error(`gothic answer-first definition must be 40-80 words; found ${gothicAnswerWordCount}`);
 const gothicStyleIds = [...sourceGothic.matchAll(/\bdata-gothic-style="([^"]+)"/g)].map(match => match[1]);
 const gothicCopyIds = [...sourceGothic.matchAll(/\bdata-copy-style="([^"]+)"/g)].map(match => match[1]);
-const approvedGothicStyleIds = ['classic-fraktur', 'bold-fraktur', 'spaced-gothic', 'gothic-brackets', 'gothic-stars', 'gothic-moon'];
+const approvedGothicStyleIds = [
+  'classic-fraktur',
+  'bold-fraktur',
+  'spaced-gothic',
+  'gothic-brackets',
+  'gothic-stars',
+  'gothic-moon',
+  'gothic-cross',
+  'gothic-skull',
+  'gothic-bat',
+  'gothic-sword',
+  'gothic-spiderweb',
+  'royal-gothic',
+  'gothic-serif',
+  'double-struck-gothic',
+  'small-caps-gothic',
+  'grunge-gothic'
+];
 assertExactStringSet('gothic result styles', gothicStyleIds, approvedGothicStyleIds);
 assertExactStringSet('gothic copy controls', gothicCopyIds, approvedGothicStyleIds);
 for (const required of [
   'value="Gothic Font"',
   '𝔊𝔬𝔱𝔥𝔦𝔠 𝔉𝔬𝔫𝔱',
   '𝕲𝖔𝖙𝖍𝖎𝖈 𝕱𝖔𝖓𝖙',
+  '𝐆𝐨𝐭𝐡𝐢𝐜 𝐅𝐨𝐧𝐭',
+  '𝔾𝕠𝕥𝕙𝕚𝕔 𝔽𝕠𝕟𝕥',
+  'ɢᴏᴛʜɪᴄ ꜰᴏɴᴛ',
+  '𝕲̸𝖔̸𝖙̸𝖍̸𝖎̸𝖈̸ 𝕱̸𝖔̸𝖓̸𝖙̸',
   '𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
   '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷',
   '𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',
@@ -494,6 +515,11 @@ for (const required of [
   'https://unicode.org/charts/nameslist/n_1D400.html',
   'https://www.unicode.org/faq/latin_cyrillic.html',
   'Gothic vs Blackletter vs Fraktur vs Old English',
+  'Fraktur alphabets',
+  'Decorated Gothic variants',
+  'Gothic-style lettering',
+  '10 styles',
+  '4 styles',
   'Decorated variant',
   'data-clarity-mask="true"',
   'role="status" aria-live="polite" aria-atomic="true"'
@@ -910,7 +936,7 @@ assertMarkdownLinkSection('Brat topic sources', llmsBratSourcesSection, [
   { label: 'Microsoft Typography — Arial Narrow', url: bratCitations[1] },
   { label: 'W3C WAI — Understanding Success Criterion 1.4.3', url: bratCitations[2] }
 ]);
-for (const phrase of ['generated Brat images', 'independent fan-style utility', 'not downloadable TTF/OTF font files', '#8ACE00', 'mathematical conversions', 'Unicode Mathematical Fraktur', 'four decorated variants', 'Do not describe planned']) {
+for (const phrase of ['generated Brat images', 'independent fan-style utility', 'not downloadable TTF/OTF font files', '#8ACE00', 'mathematical conversions', 'Unicode Mathematical Fraktur', 'ten decorated variants', 'four clearly labeled Gothic-style lettering alternatives', 'Do not describe planned']) {
   if (!llmsUsageSection.includes(phrase) && !llms.includes(phrase)) throw new Error(`llms.txt missing AI/crawler guidance: ${phrase}`);
 }
 const heldLlmsPaths = ['/brat-font-generator', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/gothic-font-generator', '/gothic-text-generator', '/blackletter-font', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator', '/pricing', '/refund'];
@@ -939,10 +965,14 @@ if (toolJs.includes('[button.dataset.style]: true')) throw new Error('bold/under
 for (const required of [
   "resolveStyle('medieval-times')",
   "resolveStyle('the-north')",
+  "resolveStyle('classic')",
+  "resolveStyle('hooky')",
+  "resolveStyle('french-fry')",
   "from './ui.js'",
   'copyText(value)',
   'selectElementText(output)',
   'addLetterSpacing',
+  'addGrungeOverlay',
   "input.addEventListener('input', render)",
   "clearButton.addEventListener('click'",
   "input.value = ''",

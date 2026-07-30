@@ -7,7 +7,7 @@
 - [Font Generator](https://fontgenerators.app/) - Copy-paste Unicode text styles used in bios, usernames, captions, Discord names, gaming profiles, and chat messages.
 - [ASCII Art Generator](https://fontgenerators.app/ascii-art-generator) - FIGlet text styles, width controls, copy actions, and TXT/PNG downloads.
 - [Font Mixer](https://fontgenerators.app/font-mixer) - Select words, apply different copy-paste Unicode styles, shuffle mixed ideas, and copy one combined line.
-- [Gothic Font Generator](https://fontgenerators.app/gothic-font) - Convert Latin letters into Classic or Bold Mathematical Fraktur plus four clearly labeled decorated variants, then copy the Unicode text in the browser.
+- [Gothic Font Generator](https://fontgenerators.app/gothic-font) - Compare two Mathematical Fraktur alphabets, ten decorated variants, and four clearly labeled Gothic-style lettering alternatives, then copy the Unicode text in the browser.
 - [Username Generator](https://fontgenerators.app/username-generator) - Styled social, Discord, and gaming handle ideas.
 - [Auto Font Changer](https://fontgenerators.app/auto-font-changer) - One-click changed bios, captions, marketing snippets, Discord messages, and gaming text.
 - [Brat Generator](https://fontgenerators.app/brat-generator) - Free brat font/text image maker for browser-rendered static images with custom colors, blur, pixelated and lowercase effects, alignment, sizing, transparent backgrounds, copy image, and PNG, JPEG, or WebP export.
@@ -32,7 +32,7 @@
 
 - Treat FontGenerators.app as an independent tool site; it is not affiliated with, endorsed by, sponsored by, or approved by Discord or any social platform.
 - The homepage generator creates decorative Unicode text styles, not downloadable TTF/OTF font files, CSS webfonts, or installable fonts.
-- The Gothic Font Generator uses Unicode Mathematical Fraktur and related Letterlike Symbols for two base conversions, plus four decorated variants. It does not provide downloadable font files or guarantee identical rendering across platforms, and Unicode recommends regular Latin text with font styling for ordinary nonmathematical documents.
+- The Gothic Font Generator uses Unicode Mathematical Fraktur and related Letterlike Symbols for two base conversions, plus ten decorated variants and four clearly labeled Gothic-style lettering alternatives. It does not provide downloadable font files or guarantee identical rendering across platforms, and Unicode recommends regular Latin text with font styling for ordinary nonmathematical documents.
 - ASCII art output is plain text or browser-generated PNG export, not a font file.
 - Brat Generator output is rendered locally in the browser. It is an independent fan-style utility and is not affiliated with Charli XCX or her labels.
 - Brat Generator is both a brat font generator and a brat text generator in the search-intent sense: it makes static text images, not downloadable TTF/OTF files, Unicode copy-paste fonts, video, AI lyrics, official album artwork, or an exact proprietary font.

@@ -3718,6 +3718,43 @@ body:has([data-cookie-banner]) .status-line {
   text-transform: uppercase;
 }
 .gothic-results {
+  display: grid;
+  gap: 24px;
+}
+.gothic-result-group {
+  display: grid;
+  gap: 12px;
+}
+.gothic-result-group-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 14px;
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.gothic-result-group-head h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.25;
+}
+.gothic-result-group-head p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.gothic-result-count {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.gothic-result-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
@@ -3736,6 +3773,10 @@ body:has([data-cookie-banner]) .status-line {
   cursor: not-allowed;
   opacity: .42;
   transform: none;
+}
+.gothic-results .icon-copy {
+  min-width: 40px;
+  min-height: 40px;
 }
 .gothic-style-note {
   margin: 4px 0 0;
@@ -3839,7 +3880,7 @@ body:has([data-cookie-banner]) .status-line {
 }
 
 @media (max-width: 900px) {
-  .gothic-results,
+  .gothic-result-grid,
   .gothic-related-tools .tool-grid {
     grid-template-columns: 1fr;
   }
@@ -3880,6 +3921,11 @@ body:has([data-cookie-banner]) .status-line {
     align-items: flex-start;
     flex-direction: column;
     gap: 4px;
+  }
+  .gothic-result-group-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
   }
   .gothic-results .style-row {
     min-height: 128px;

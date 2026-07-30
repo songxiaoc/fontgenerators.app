@@ -10,15 +10,24 @@ const setStatus = createToast(status);
 
 const classicStyle = resolveStyle('medieval-times');
 const boldStyle = resolveStyle('the-north');
+const serifStyle = resolveStyle('classic');
+const doubleStruckStyle = resolveStyle('hooky');
+const smallCapsStyle = resolveStyle('french-fry');
 
-if (!classicStyle || !boldStyle) {
-  throw new Error('Gothic Font Generator requires the existing Fraktur style mappings.');
+if (!classicStyle || !boldStyle || !serifStyle || !doubleStruckStyle || !smallCapsStyle) {
+  throw new Error('Gothic Font Generator requires the existing shared style mappings.');
 }
 
 function addLetterSpacing(value) {
   return value
     .split(/(\s+)/u)
     .map(part => /\s/u.test(part) ? part : Array.from(part).join('\u2009'))
+    .join('');
+}
+
+function addGrungeOverlay(value) {
+  return Array.from(value)
+    .map(character => /[A-Za-z]/u.test(character) ? `${boldStyle.transform(character)}\u0338` : character)
     .join('');
 }
 
@@ -52,6 +61,56 @@ const variants = [
     id: 'gothic-moon',
     name: 'Gothic Moon',
     transform: value => `☾ ${classicStyle.transform(value)} ☽`,
+  },
+  {
+    id: 'gothic-cross',
+    name: 'Gothic Cross',
+    transform: value => `✝ ${classicStyle.transform(value)} ✝`,
+  },
+  {
+    id: 'gothic-skull',
+    name: 'Gothic Skull',
+    transform: value => `☠ ${classicStyle.transform(value)} ☠`,
+  },
+  {
+    id: 'gothic-bat',
+    name: 'Gothic Bat',
+    transform: value => `🦇 ${classicStyle.transform(value)} 🦇`,
+  },
+  {
+    id: 'gothic-sword',
+    name: 'Gothic Sword',
+    transform: value => `⚔ ${boldStyle.transform(value)} ⚔`,
+  },
+  {
+    id: 'gothic-spiderweb',
+    name: 'Gothic Spiderweb',
+    transform: value => `🕸 ${classicStyle.transform(value)} 🕸`,
+  },
+  {
+    id: 'royal-gothic',
+    name: 'Royal Gothic',
+    transform: value => `♛ ${boldStyle.transform(value)} ♚`,
+  },
+  {
+    id: 'gothic-serif',
+    name: 'Gothic Serif',
+    transform: value => serifStyle.transform(value),
+  },
+  {
+    id: 'double-struck-gothic',
+    name: 'Double Struck Gothic',
+    transform: value => doubleStruckStyle.transform(value),
+  },
+  {
+    id: 'small-caps-gothic',
+    name: 'Small Caps Gothic',
+    transform: value => smallCapsStyle.transform(value),
+  },
+  {
+    id: 'grunge-gothic',
+    name: 'Grunge Gothic',
+    transform: value => addGrungeOverlay(value),
   },
 ];
 
