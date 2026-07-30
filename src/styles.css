@@ -3934,6 +3934,11 @@ body:has([data-cookie-banner]) .status-line {
   .gothic-results .style-output {
     padding-right: 4px;
     font-size: 22px;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
   .gothic-content-section,
   .gothic-related-tools {

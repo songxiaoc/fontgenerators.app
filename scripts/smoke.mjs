@@ -466,7 +466,7 @@ if (gothicAppSchema['@id'] !== `${gothicCanonical}#app` || gothicAppSchema.url !
 if (gothicAppSchema.creator?.['@id'] !== 'https://fontgenerators.app/#organization' || gothicAppSchema.provider?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error('gothic WebApplication must reference the shared Organization');
 if (gothicAppSchema.isAccessibleForFree !== true || gothicAppSchema.offers?.price !== '0' || gothicAppSchema.featureList?.length !== 6) throw new Error('gothic WebApplication must describe the free 16-result tool');
 if (gothicBreadcrumbSchema['@id'] !== `${gothicCanonical}#breadcrumb` || gothicBreadcrumbSchema.itemListElement?.length !== 2 || gothicBreadcrumbSchema.itemListElement[1]?.item !== gothicCanonical) throw new Error('gothic BreadcrumbList must resolve to the clean canonical');
-if (gothicFaqSchema['@id'] !== `${gothicCanonical}#faq` || gothicFaqSchema.mainEntity?.length !== 7) throw new Error('gothic FAQPage must contain the seven approved questions');
+if (gothicFaqSchema['@id'] !== `${gothicCanonical}#faq` || gothicFaqSchema.mainEntity?.length !== 10) throw new Error('gothic FAQPage must contain the ten approved questions');
 if (gothicNodes.some(node => hasSchemaType([node], 'AggregateRating') || hasSchemaType([node], 'Review')) || /aggregateRating|reviewCount/i.test(sourceGothic)) throw new Error('gothic structured data must not invent ratings or reviews');
 assertVisibleFaqMatchesSchema('gothic', gothic, gothicNodes);
 const visibleGothicFaq = getVisibleDetails('gothic', sourceGothic, 'gothic-faq-title');
@@ -478,6 +478,25 @@ if (JSON.stringify(visibleGothicFaq) !== JSON.stringify(schemaGothicFaq)) throw 
 const gothicAnswerFirst = normalizedVisibleText(sourceGothic.match(/<p\b[^>]*class="gothic-answer-first"[^>]*>([\s\S]*?)<\/p>/i)?.[1] || '');
 const gothicAnswerWordCount = gothicAnswerFirst.split(/\s+/).filter(Boolean).length;
 if (gothicAnswerWordCount < 40 || gothicAnswerWordCount > 80) throw new Error(`gothic answer-first definition must be 40-80 words; found ${gothicAnswerWordCount}`);
+const gothicMain = sourceGothic.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || '';
+const gothicMainTokens = wordTokens(gothicMain);
+const gothicPrimaryPhrase = 'gothic font generator';
+const gothicPrimaryCount = countPhrase(gothicMainTokens, gothicPrimaryPhrase);
+const gothicTrigramCounts = new Map();
+for (let index = 0; index <= gothicMainTokens.length - 3; index++) {
+  const phrase = gothicMainTokens.slice(index, index + 3).join(' ');
+  gothicTrigramCounts.set(phrase, (gothicTrigramCounts.get(phrase) || 0) + 1);
+}
+const highestOtherGothicTrigram = Math.max(
+  0,
+  ...[...gothicTrigramCounts.entries()]
+    .filter(([phrase]) => phrase !== gothicPrimaryPhrase)
+    .map(([, phraseCount]) => phraseCount)
+);
+if (gothicPrimaryCount < 6 || gothicPrimaryCount <= highestOtherGothicTrigram) throw new Error(`gothic primary phrase must be the most frequent visible three-word phrase; found ${gothicPrimaryCount} versus ${highestOtherGothicTrigram}`);
+for (const phrase of ['decorated variant using', 'variant using classic', 'using classic fraktur']) {
+  if (countPhrase(gothicMainTokens, phrase) !== 0) throw new Error(`gothic visible copy must avoid the mechanical repeated phrase: ${phrase}`);
+}
 const gothicStyleIds = [...sourceGothic.matchAll(/\bdata-gothic-style="([^"]+)"/g)].map(match => match[1]);
 const gothicCopyIds = [...sourceGothic.matchAll(/\bdata-copy-style="([^"]+)"/g)].map(match => match[1]);
 const approvedGothicStyleIds = [
@@ -520,7 +539,12 @@ for (const required of [
   'Gothic-style lettering',
   '10 styles',
   '4 styles',
-  'Decorated variant',
+  'Thin spaces between Fraktur letters',
+  'Gothic Font Alphabet and Letters',
+  'Old English font generator',
+  'Gothic font numbers and symbols',
+  'Gothic tattoo font draft',
+  'Cyrillic input stays unchanged',
   'data-clarity-mask="true"',
   'role="status" aria-live="polite" aria-atomic="true"'
 ]) {
@@ -992,6 +1016,7 @@ for (const cssHook of ['.gothic-page', '.gothic-breadcrumb', '.gothic-generator'
 const gothicCssStart = styles.indexOf('/* Gothic Font Generator */');
 if (gothicCssStart < 0) throw new Error('gothic CSS must have a clearly scoped section');
 const gothicCss = styles.slice(gothicCssStart);
+if (!/\.gothic-results \.style-output\s*\{[^}]*white-space:\s*pre-wrap;/s.test(gothicCss)) throw new Error('gothic mobile result text must wrap instead of clipping');
 for (const selector of gothicCss.matchAll(/^\s*(\.[^{]+)\{/gm)) {
   const selectorText = selector[1].trim();
   if (!selectorText.includes('.gothic-')) throw new Error(`new Gothic CSS must remain scoped to .gothic-* selectors: ${selectorText}`);
