@@ -854,7 +854,8 @@ for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], 
   const footerAnchors = getAnchors(getElementHtml(name, html, 'footer'));
   if (!footerAnchors.some(anchor => anchor.href === '/about' && anchor.label === 'About') || !footerAnchors.some(anchor => anchor.href === '/about#contact' && anchor.label === 'Contact')) throw new Error(`${name} footer must expose visible About and Contact links`);
   if (html.includes('mailto:') || html.includes('/cdn-cgi/l/email-protection')) throw new Error('page should not expose Cloudflare-obfuscated email links');
-  if (html.includes('contact@fontgenerators.app')) throw new Error('page should not expose a contiguous email address');
+  if (html.includes('contact@fontgenerator.best')) throw new Error('page should not expose a contiguous email address');
+  if (!html.includes('contact at fontgenerator dot best') || !html.includes('fontgenerator.best</span>')) throw new Error(`${name} must expose the obfuscated new-domain contact address`);
   if (html.includes('alt=""')) throw new Error('page should not contain empty image alt attributes');
   if (!html.includes('rel="icon" href="/favicon.png"')) throw new Error('page missing png favicon link');
   if (!html.includes('class="brand-mark" src="/logo.png"')) throw new Error('page missing logo brand mark');
@@ -1132,10 +1133,12 @@ async function middlewareSmoke(url, options = {}) {
 }
 const wwwRedirect = await middlewareSmoke('https://www.fontgenerator.best/discord-colored-text-generator/?utm_source=test');
 if (wwwRedirect.status !== 301 || wwwRedirect.headers.get('location') !== 'https://fontgenerator.best/discord-colored-text-generator?utm_source=test') throw new Error('middleware must 301 new www tool URL to apex clean URL and preserve query');
-const legacyApexRedirect = await middlewareSmoke('https://fontgenerators.app/font-mixer?utm_source=legacy');
-if (legacyApexRedirect.status !== 301 || legacyApexRedirect.headers.get('location') !== 'https://fontgenerator.best/font-mixer?utm_source=legacy') throw new Error('middleware must 301 the legacy apex host to the new apex and preserve path and query');
-const legacyWwwRedirect = await middlewareSmoke('https://www.fontgenerators.app/discord-colored-text-generator/?utm_source=legacy');
-if (legacyWwwRedirect.status !== 301 || legacyWwwRedirect.headers.get('location') !== 'https://fontgenerator.best/discord-colored-text-generator?utm_source=legacy') throw new Error('middleware must 301 the legacy www host to the new apex, clean the path, and preserve query');
+for (const legacyUrl of ['https://fontgenerators.app/font-mixer?utm_source=legacy', 'https://www.fontgenerators.app/discord-colored-text-generator/?utm_source=legacy']) {
+  const legacyResponse = await middlewareSmoke(legacyUrl);
+  if (legacyResponse.status !== 410) throw new Error('middleware must return 410 Gone for retired legacy web domains');
+  if (legacyResponse.headers.has('location')) throw new Error('retired legacy web domains must not redirect to the new domain');
+  if (!legacyResponse.headers.get('x-robots-tag')?.includes('noindex')) throw new Error('retired legacy web domains must send x-robots-tag noindex');
+}
 const slashRedirect = await middlewareSmoke('https://fontgenerator.best/terms/');
 if (slashRedirect.status !== 301 || slashRedirect.headers.get('location') !== 'https://fontgenerator.best/terms-of-service') throw new Error('middleware must preserve legacy clean-route redirects');
 const cookieSlashRedirect = await middlewareSmoke('https://fontgenerator.best/cookies/');

@@ -89,6 +89,31 @@ function notFoundResponse(pathname) {
   });
 }
 
+function retiredDomainResponse() {
+  return new Response(`<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Site unavailable</title>
+</head>
+<body>
+  <main>
+    <h1>Site unavailable</h1>
+    <p>This website is no longer available at this address.</p>
+  </main>
+</body>
+</html>`, {
+    status: 410,
+    headers: {
+      'content-type': 'text/html; charset=utf-8',
+      'x-robots-tag': 'noindex, nofollow',
+      'cache-control': 'public, max-age=300',
+    },
+  });
+}
+
 function firstEnv(env, keys) {
   for (const key of keys) {
     const value = env?.[key];
@@ -159,9 +184,10 @@ export async function onRequest(context) {
   let shouldRedirect = false;
 
   if (LEGACY_HOSTS.has(url.hostname)) {
-    url.hostname = APEX_HOST;
-    shouldRedirect = true;
-  } else if (url.hostname === WWW_HOST) {
+    return retiredDomainResponse();
+  }
+
+  if (url.hostname === WWW_HOST) {
     url.hostname = APEX_HOST;
     shouldRedirect = true;
   }
