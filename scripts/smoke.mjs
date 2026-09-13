@@ -1066,26 +1066,7 @@ const llmsIndexableUrls = [...llmsCanonicalLinks, ...llmsLegalLinks].map(link =>
 assertExactStringSet('indexable llms.txt page URLs', llmsIndexableUrls, sitemapLocs);
 if (rootSitemap !== publicSitemap || sitemap !== publicSitemap) throw new Error('root, public, and built sitemap.xml files must stay synchronized');
 const sitemapLastmods = new Map([...sitemap.matchAll(/<url><loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod><\/url>/g)].map(match => [match[1], match[2]]));
-const revisedCopyUrls = new Set([
-  'https://fontgenerator.best/',
-  'https://fontgenerator.best/ascii-art-generator',
-  'https://fontgenerator.best/font-mixer',
-  'https://fontgenerator.best/gothic-font',
-  'https://fontgenerator.best/username-generator',
-  'https://fontgenerator.best/auto-font-changer',
-  'https://fontgenerator.best/brat-generator',
-  'https://fontgenerator.best/discord-colored-text-generator'
-]);
-const approvedSitemapLastmods = new Map(approvedSitemapLocs.map(loc => [
-  loc,
-  revisedCopyUrls.has(loc)
-    ? '2026-09-13'
-    : bratStructuredDates.has(loc)
-    ? bratStructuredDates.get(loc)
-    : loc === 'https://fontgenerator.best/privacy' || loc === 'https://fontgenerator.best/terms-of-service'
-        ? '2026-07-27'
-        : '2026-07-27'
-]));
+const approvedSitemapLastmods = new Map(approvedSitemapLocs.map(loc => [loc, '2026-09-13']));
 for (const [loc, expectedLastmod] of approvedSitemapLastmods) {
   const actualLastmod = sitemapLastmods.get(loc);
   if (actualLastmod !== expectedLastmod) throw new Error(`sitemap lastmod for ${loc} must be ${expectedLastmod}; found ${actualLastmod || 'missing'}`);
