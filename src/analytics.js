@@ -90,7 +90,6 @@ function loadAhrefsAnalytics() {
 }
 
 function loadConsentAnalytics() {
-  loadGoogleAnalytics();
   loadClarity();
   loadAhrefsAnalytics();
 }
@@ -119,8 +118,8 @@ window.fgTrack = function fgTrack(eventName, props = {}) {
   const name = safeEventName(eventName);
   const safeProps = safeEventProps(props);
   if (typeof window.plausible === 'function') window.plausible(name, { props: safeProps });
-  if (readConsent() !== ACCEPTED) return;
   if (typeof window.gtag === 'function') window.gtag('event', name, safeProps);
+  if (readConsent() !== ACCEPTED) return;
   if (typeof window.clarity === 'function') window.clarity('event', name);
 };
 
@@ -205,6 +204,7 @@ function init() {
   bindCookieControls();
   // Vite injects the Plausible loader into every page; only prepare its event queue here.
   preparePlausible();
+  loadGoogleAnalytics();
   const consent = readConsent();
   if (consent === ACCEPTED) loadConsentAnalytics();
   if (!consent) renderBanner();

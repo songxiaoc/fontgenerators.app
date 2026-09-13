@@ -926,9 +926,11 @@ for (const oldTrackingValue of ['G-JX2VGXPG5J', 'x8r8lczazd', 'pa-31uX2txOmuueW8
 }
 const consentFn = analyticsJs.match(/function loadConsentAnalytics\(\) \{([\s\S]*?)\n\}/)?.[1] || '';
 if (!consentFn || consentFn.includes('preparePlausible(')) throw new Error('Plausible must not be behind cookie consent');
+if (consentFn.includes('loadGoogleAnalytics(')) throw new Error('Google Analytics must not be behind cookie consent');
 if (!analyticsJs.match(/function init\(\) \{[\s\S]*preparePlausible\(\);[\s\S]*const consent = readConsent\(\)/)) throw new Error('Plausible event queue must be ready before checking cookie consent');
+if (!analyticsJs.match(/function init\(\) \{[\s\S]*loadGoogleAnalytics\(\);[\s\S]*const consent = readConsent\(\)/)) throw new Error('Google Analytics must load before checking cookie consent');
 if (analyticsJs.includes("loadScript('fg-plausible-script'")) throw new Error('analytics module must not inject a second Plausible loader');
-if (!analyticsJs.match(/if \(typeof window\.plausible === 'function'\) window\.plausible\(name, \{ props: safeProps \}\);[\s\S]*if \(readConsent\(\) !== ACCEPTED\) return;/)) throw new Error('Plausible events should fire before cookie-gated analytics return');
+if (!analyticsJs.match(/if \(typeof window\.plausible === 'function'\) window\.plausible\(name, \{ props: safeProps \}\);[\s\S]*if \(typeof window\.gtag === 'function'\) window\.gtag\('event', name, safeProps\);[\s\S]*if \(readConsent\(\) !== ACCEPTED\) return;/)) throw new Error('Plausible and GA4 events should fire before cookie-gated analytics return');
 if (!privacy.includes('Plausible Analytics is loaded as privacy-friendly analytics without requiring cookie consent')) throw new Error('privacy page must disclose Plausible no-consent behavior');
 if (!cookies.includes('Plausible Analytics may load without cookie consent')) throw new Error('cookie policy must disclose Plausible no-consent behavior');
 if (!terms.includes('Plausible may run without cookie consent')) throw new Error('terms page must mention Plausible no-consent behavior');
