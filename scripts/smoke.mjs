@@ -86,15 +86,18 @@ const middleware = readFileSync('functions/_middleware.js', 'utf8');
 const viteConfig = readFileSync('vite.config.js', 'utf8');
 
 const seoPages = [
-  ['home', home, 'font generator', 'copy paste fonts'],
-  ['ascii', ascii, 'ascii art', 'ascii art generator'],
-  ['mixer', mixer, 'font mixer', 'font mixer tool'],
-  ['username', username, 'username generator', 'fancy username generator'],
-  ['changer', changer, 'font changer', 'auto font changer'],
-  ['tool', tool, 'colored text', 'discord colored text'],
   ['privacy', privacy, 'privacy policy', 'browser privacy policy'],
   ['cookies', cookies, 'cookie policy', 'analytics cookie policy'],
   ['terms', terms, 'service terms', 'terms of service']
+];
+
+const revisedCopyPages = [
+  ['home', home, 'Font Generator – Copy & Paste Fancy Text Fonts Online Free', 'Use our free font generator to create copy and paste fancy fonts for Instagram, TikTok, Discord, gaming names, bios, captions, usernames, and more.', 'Font Generator for Copy Paste Fonts'],
+  ['ascii', ascii, 'ASCII Art Generator – Create FIGlet Text Art Online for Free', 'Use our free ASCII art generator to turn text into FIGlet ASCII art. Compare styles, adjust width, copy the result, or download TXT and PNG files.', 'ASCII Art Generator'],
+  ['mixer', mixer, 'Font Mixer – Mix Fancy Unicode Fonts Word by Word for Free', 'Use Font Mixer to combine bold, cursive, Gothic, bubble, tiny, monospace, and other Unicode font styles word by word, then copy your mixed text online.', 'Font Mixer'],
+  ['username', username, 'Username Generator – Create Fancy Username Ideas for Free', 'Use our username generator to create fancy username ideas for Instagram, TikTok, Discord, gaming, and social profiles. Choose a style and copy a name.', 'Username Generator'],
+  ['changer', changer, 'Auto Font Changer – Change Text to Fancy Fonts Online Free', 'Use our auto font changer to turn plain text into a readable mix of fancy Unicode fonts for bios, captions, Discord, gaming profiles, and social posts.', 'Auto Font Changer'],
+  ['tool', tool, 'Discord Colored Text Generator – Create ANSI Text for Free', 'Create Discord colored text with ANSI code blocks. Apply supported text colors, highlights, bold, underline, or rainbow formatting, then copy the result.', 'Discord Colored Text Generator']
 ];
 
 function stripHtml(html) {
@@ -129,15 +132,10 @@ function assertSeoMetrics(name, html, twoWordKeyword, threeWordKeyword) {
   const title = html.match(/<title>(.*?)<\/title>/i)?.[1] || '';
   const description = html.match(/<meta name="description" content="([^"]*)"/i)?.[1] || '';
   const tokens = wordTokens(html);
-  const twoWordDensity = (countPhrase(tokens, twoWordKeyword) / tokens.length) * 100;
-  const threeWordDensity = (countPhrase(tokens, threeWordKeyword) / tokens.length) * 100;
-
   if (!title || title.length > 60) throw new Error(`${name} title must be present and <=60 characters; found ${title.length}`);
   if (/(?:\||-|–|—)\s*FontGenerators(?:\.app)?\s*$/i.test(title) || /FontGenerators\.app/i.test(title)) throw new Error(`${name} title should not append the brand name`);
   if (description.length < 140 || description.length > 160) throw new Error(`${name} description must be 140-160 characters; found ${description.length}`);
   if (tokens.length < 1000) throw new Error(`${name} should have at least 1000 visible words; found ${tokens.length}`);
-  if (Number(twoWordDensity.toFixed(2)) < 3) throw new Error(`${name} "${twoWordKeyword}" density must be >=3%; found ${twoWordDensity.toFixed(2)}%`);
-  if (Number(threeWordDensity.toFixed(2)) < 1) throw new Error(`${name} "${threeWordKeyword}" density must be >=1%; found ${threeWordDensity.toFixed(2)}%`);
 }
 
 function assertImageAlts(name, html) {
@@ -152,6 +150,19 @@ function assertImageAlts(name, html) {
 
 for (const [name, html, twoWordKeyword, threeWordKeyword] of seoPages) {
   assertSeoMetrics(name, html, twoWordKeyword, threeWordKeyword);
+  assertImageAlts(name, html);
+}
+for (const [name, html, expectedTitle, expectedDescription, expectedH1] of revisedCopyPages) {
+  const title = decodeBasicEntities(html.match(/<title>(.*?)<\/title>/i)?.[1] || '');
+  const description = decodeBasicEntities(html.match(/<meta name="description" content="([^"]*)"/i)?.[1] || '');
+  const h1Matches = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
+  const h1 = decodeBasicEntities(stripHtml(h1Matches[0]?.[1] || '').trim().replace(/\s+/g, ' '));
+  if (title !== expectedTitle) throw new Error(`${name} title mismatch: ${title || 'missing'}`);
+  if (description !== expectedDescription) throw new Error(`${name} description mismatch`);
+  if (h1Matches.length !== 1 || h1 !== expectedH1) throw new Error(`${name} must expose one exact revised-copy H1; found ${h1Matches.length}: ${h1 || 'missing'}`);
+  for (const forbidden of ['guide for real use', 'quality checklist', 'this is why the guidance repeats the core phrase', 'support AEO and GEO answers']) {
+    if (stripHtml(html).toLowerCase().includes(forbidden.toLowerCase())) throw new Error(`${name} exposes removed implementation/SEO copy: ${forbidden}`);
+  }
   assertImageAlts(name, html);
 }
 // The Brat page uses intent/structure assertions below instead of the legacy
@@ -227,9 +238,9 @@ if (!styles.includes('src: url("/fonts/dm-sans-latin.woff2") format("woff2")') |
 }
 if (!styles.includes('--font-display: "DM Sans", system-ui, sans-serif;') || styles.includes('Space Grotesk')) throw new Error('display headings should use the self-hosted DM Sans family on first load');
 
-const mustTool = ['Discord Colored Text Generator', 'Copy for Discord', 'Rainbow', 'Unofficial tool; not made, endorsed, or sponsored by Discord', 'Discord ANSI uses a limited palette', 'FAQPage', 'WebApplication', 'HowTo'];
+const mustTool = ['Discord Colored Text Generator', 'Create ANSI-formatted Discord colored text', 'Copy for Discord', 'Rainbow', 'This is an unofficial tool and is not made, endorsed, or sponsored by Discord', 'Discord ANSI uses a limited palette', 'Discord Colored Text Limits', 'FAQPage', 'WebApplication', 'HowTo'];
 for (const s of mustTool) if (!tool.includes(s)) throw new Error(`tool missing ${s}`);
-const mustHome = ['Font Generator for Copy-Paste Fancy Text Styles', 'Type once, copy many text styles', 'These are Unicode copy-paste text styles, not downloadable font files', 'Open Discord Colored Text Generator', 'WebSite', 'WebApplication', 'FAQPage'];
+const mustHome = ['Type Once, Copy Many Font Styles', 'These are Unicode copy paste fonts, not downloadable font files', 'Open Discord Colored Text Generator', 'WebSite', 'WebApplication', 'FAQPage'];
 for (const s of mustHome) if (!home.includes(s)) throw new Error(`home missing ${s}`);
 function decodeBasicEntities(value) {
   return value
@@ -441,8 +452,8 @@ const gothicCanonical = 'https://fontgenerators.app/gothic-font';
 const gothicH1Matches = [...gothic.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
 const gothicH1 = normalizedVisibleText(gothicH1Matches[0]?.[1] || '');
 const gothicNodes = getJsonLdNodes('gothic', gothic);
-if (gothicTitle !== 'Gothic Font Generator — Copy & Paste Gothic Text') throw new Error(`gothic title mismatch: ${gothicTitle || 'missing'}`);
-if (gothicDescription !== 'Turn plain text into Gothic and Fraktur-style Unicode. Preview 16 copy-ready styles for bios, usernames, Discord, gaming, and tattoo drafts.') throw new Error('gothic meta description must match the approved copy');
+if (gothicTitle !== 'Gothic Font Generator – Copy & Paste Fraktur Text for Free') throw new Error(`gothic title mismatch: ${gothicTitle || 'missing'}`);
+if (gothicDescription !== 'Use our Gothic font generator to create copy and paste Gothic and Fraktur text. Try classic Fraktur, bold Fraktur, decorated styles, and more online.') throw new Error('gothic meta description must match the revised copy');
 if (getCanonical(gothic) !== gothicCanonical || gothic.includes(`${gothicCanonical}/`)) throw new Error('gothic canonical and metadata must use the clean production URL');
 if (gothicH1Matches.length !== 1 || gothicH1 !== 'Gothic Font Generator') throw new Error(`gothic page must expose one exact H1; found ${gothicH1Matches.length}: ${gothicH1 || 'missing'}`);
 if (!getMetaContent(gothic, 'name', 'robots').includes('index, follow')) throw new Error('gothic page must remain indexable');
@@ -459,14 +470,15 @@ if (gothicPageSchema['@id'] !== `${gothicCanonical}#webpage` || gothicPageSchema
 if (gothicPageSchema.isPartOf?.['@id'] !== 'https://fontgenerators.app/#website' || gothicPageSchema.author?.['@id'] !== 'https://fontgenerators.app/#organization' || gothicPageSchema.publisher?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error('gothic WebPage must reference the shared WebSite and Organization');
 if (gothicPageSchema.mainEntity?.['@id'] !== `${gothicCanonical}#app` || gothicPageSchema.breadcrumb?.['@id'] !== `${gothicCanonical}#breadcrumb`) throw new Error('gothic WebPage must reference its app and breadcrumb');
 assertExactStringSet('gothic WebPage citations', gothicPageSchema.citation, ['https://unicode.org/charts/nameslist/n_1D400.html', 'https://www.unicode.org/faq/latin_cyrillic.html']);
-for (const field of ['datePublished', 'dateModified', 'lastReviewed']) {
-  if (gothicPageSchema[field] !== '2026-07-30') throw new Error(`gothic WebPage ${field} must use the actual publication date`);
+if (gothicPageSchema.datePublished !== '2026-07-30') throw new Error('gothic WebPage datePublished must preserve the original publication date');
+for (const field of ['dateModified', 'lastReviewed']) {
+  if (gothicPageSchema[field] !== '2026-09-13') throw new Error(`gothic WebPage ${field} must match the revised-copy publication date`);
 }
 if (gothicAppSchema['@id'] !== `${gothicCanonical}#app` || gothicAppSchema.url !== gothicCanonical || gothicAppSchema.name !== 'Gothic Font Generator') throw new Error('gothic WebApplication identity mismatch');
 if (gothicAppSchema.creator?.['@id'] !== 'https://fontgenerators.app/#organization' || gothicAppSchema.provider?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error('gothic WebApplication must reference the shared Organization');
 if (gothicAppSchema.isAccessibleForFree !== true || gothicAppSchema.offers?.price !== '0' || gothicAppSchema.featureList?.length !== 6) throw new Error('gothic WebApplication must describe the free 16-result tool');
 if (gothicBreadcrumbSchema['@id'] !== `${gothicCanonical}#breadcrumb` || gothicBreadcrumbSchema.itemListElement?.length !== 2 || gothicBreadcrumbSchema.itemListElement[1]?.item !== gothicCanonical) throw new Error('gothic BreadcrumbList must resolve to the clean canonical');
-if (gothicFaqSchema['@id'] !== `${gothicCanonical}#faq` || gothicFaqSchema.mainEntity?.length !== 10) throw new Error('gothic FAQPage must contain the ten approved questions');
+if (gothicFaqSchema['@id'] !== `${gothicCanonical}#faq` || gothicFaqSchema.mainEntity?.length !== 6) throw new Error('gothic FAQPage must contain the six revised-copy questions');
 if (gothicNodes.some(node => hasSchemaType([node], 'AggregateRating') || hasSchemaType([node], 'Review')) || /aggregateRating|reviewCount/i.test(sourceGothic)) throw new Error('gothic structured data must not invent ratings or reviews');
 assertVisibleFaqMatchesSchema('gothic', gothic, gothicNodes);
 const visibleGothicFaq = getVisibleDetails('gothic', sourceGothic, 'gothic-faq-title');
@@ -475,33 +487,9 @@ const schemaGothicFaq = gothicFaqSchema.mainEntity.map(item => ({
   answer: normalizedVisibleText(item.acceptedAnswer?.text || '')
 }));
 if (JSON.stringify(visibleGothicFaq) !== JSON.stringify(schemaGothicFaq)) throw new Error('gothic visible FAQ and FAQPage schema must remain exactly synchronized');
-const gothicAnswerFirst = normalizedVisibleText(sourceGothic.match(/<p\b[^>]*class="gothic-answer-first"[^>]*>([\s\S]*?)<\/p>/i)?.[1] || '');
-const gothicAnswerWordCount = gothicAnswerFirst.split(/\s+/).filter(Boolean).length;
-if (gothicAnswerWordCount < 40 || gothicAnswerWordCount > 80) throw new Error(`gothic answer-first definition must be 40-80 words; found ${gothicAnswerWordCount}`);
 const gothicMain = sourceGothic.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || '';
-const gothicMainTokens = wordTokens(gothicMain);
-const gothicTwoWordPhrase = 'gothic font';
-const gothicTwoWordCount = countPhrase(gothicMainTokens, gothicTwoWordPhrase);
-const gothicTwoWordDensity = gothicTwoWordCount / gothicMainTokens.length;
-const gothicPrimaryPhrase = 'gothic font generator';
-const gothicPrimaryCount = countPhrase(gothicMainTokens, gothicPrimaryPhrase);
-const gothicPrimaryDensity = gothicPrimaryCount / gothicMainTokens.length;
-const gothicTrigramCounts = new Map();
-for (let index = 0; index <= gothicMainTokens.length - 3; index++) {
-  const phrase = gothicMainTokens.slice(index, index + 3).join(' ');
-  gothicTrigramCounts.set(phrase, (gothicTrigramCounts.get(phrase) || 0) + 1);
-}
-const highestOtherGothicTrigram = Math.max(
-  0,
-  ...[...gothicTrigramCounts.entries()]
-    .filter(([phrase]) => phrase !== gothicPrimaryPhrase)
-    .map(([, phraseCount]) => phraseCount)
-);
-if (gothicTwoWordDensity < 0.0275 || gothicTwoWordDensity > 0.0325) throw new Error(`gothic two-word phrase should remain naturally close to 3%; found ${(gothicTwoWordDensity * 100).toFixed(3)}%`);
-if (gothicPrimaryDensity < 0.009 || gothicPrimaryDensity > 0.011) throw new Error(`gothic primary three-word phrase should remain naturally close to 1%; found ${(gothicPrimaryDensity * 100).toFixed(3)}%`);
-if (gothicPrimaryCount <= highestOtherGothicTrigram) throw new Error(`gothic primary phrase must be the most frequent visible three-word phrase; found ${gothicPrimaryCount} versus ${highestOtherGothicTrigram}`);
-for (const phrase of ['decorated variant using', 'variant using classic', 'using classic fraktur']) {
-  if (countPhrase(gothicMainTokens, phrase) !== 0) throw new Error(`gothic visible copy must avoid the mechanical repeated phrase: ${phrase}`);
+for (const phrase of ['guide for real use', 'quality checklist', 'this is why the guidance repeats the core phrase', 'support AEO and GEO answers']) {
+  if (normalizedVisibleText(gothicMain).toLowerCase().includes(phrase.toLowerCase())) throw new Error(`gothic visible copy exposes removed implementation/SEO copy: ${phrase}`);
 }
 const gothicStyleIds = [...sourceGothic.matchAll(/\bdata-gothic-style="([^"]+)"/g)].map(match => match[1]);
 const gothicCopyIds = [...sourceGothic.matchAll(/\bdata-copy-style="([^"]+)"/g)].map(match => match[1]);
@@ -540,17 +528,13 @@ for (const required of [
   'https://unicode.org/charts/nameslist/n_1D400.html',
   'https://www.unicode.org/faq/latin_cyrillic.html',
   'Gothic vs Blackletter vs Fraktur vs Old English',
-  'Fraktur alphabets',
-  'Decorated Gothic variants',
+  'Fraktur Alphabets',
+  'Decorated Gothic Styles',
   'Gothic-style lettering',
-  '10 styles',
-  '4 styles',
-  'Thin spaces between Fraktur letters',
-  'Gothic Font Alphabet and Letters',
+  'Gothic Font Alphabet: A–Z and a–z',
   'Old English font generator',
-  'Gothic font numbers and symbols',
   'Gothic tattoo font draft',
-  'Cyrillic input stays unchanged',
+  'Unicode and Rendering Limits',
   'data-clarity-mask="true"',
   'role="status" aria-live="polite" aria-atomic="true"'
 ]) {
@@ -567,8 +551,9 @@ const gothicSectionOrder = [
   'id="gothic-terms-title"',
   'How to Use the Gothic Font Generator',
   'Where Gothic Font Text Works Best',
-  'id="gothic-faq-title"',
-  'id="gothic-related-title"'
+  'id="gothic-limits-title"',
+  'id="gothic-sources-title"',
+  'id="gothic-faq-title"'
 ].map(marker => sourceGothic.indexOf(marker));
 if (gothicSectionOrder.some(index => index < 0) || gothicSectionOrder.some((index, position) => position > 0 && index <= gothicSectionOrder[position - 1])) throw new Error('gothic visible sections must keep the approved answer-first content order');
 if (!sourceHome.includes('href="/gothic-font"') || !sourceMixer.includes('href="/gothic-font"')) throw new Error('homepage and Font Mixer must link to the Gothic Font Generator');
@@ -582,8 +567,8 @@ const bratPageContracts = [
     name: 'brat generator',
     html: brat,
     source: sourceBrat,
-    title: 'Brat Generator — Free Brat Text & Image Maker',
-    description: 'Create brat-style text images with this free brat font generator. Customize colors, blur, alignment and size, then download PNG, JPEG or WebP—no signup.',
+    title: 'Brat Generator – Create Brat Text Images & Memes Online Free',
+    description: 'Use our free Brat Generator to create brat-style text images with custom colors, blur, pixelation, alignment, transparent backgrounds, and PNG export.',
     h1: 'Brat Generator',
     canonical: 'https://fontgenerators.app/brat-generator',
     ogImage: 'https://fontgenerators.app/og/brat-generator.png',
@@ -673,7 +658,7 @@ const bratKeywordOwnershipContracts = [
     name: 'brat generator',
     html: brat,
     primary: 'brat generator',
-    secondary: ['brat font generator', 'brat text generator'],
+    secondary: ['brat-style image'],
     siblingPrimaries: ['brat font', 'brat green'],
     incidentalPhrases: ['does not', 'copy image']
   },
@@ -818,7 +803,7 @@ if (!sourceHome.includes('href="/brat-generator"') || !sourceHome.includes('Open
 for (const s of ['data-category="Favorites"', 'data-category="Bold"', 'data-category="Cursive"', 'data-category="Fancy"', 'data-category="Italic"', 'data-category="Stylish"', 'data-category="Cool"', 'data-category="Strikethrough"', 'data-category="Underline"', 'data-category="Cursed"', 'data-category="Big"']) if (!home.includes(s)) throw new Error(`home missing filter ${s}`);
 for (const s of ['data-category="Discord"', 'data-category="WhatsApp"', 'data-category="Twitter"']) if (sourceHome.includes(s)) throw new Error(`home should not expose platform tags as category filters: ${s}`);
 const toolPages = [
-  ['ascii', ascii, sourceAscii, asciiJs, ['ASCII Art Generator', 'Browse styles', 'Popular ASCII art results', 'Banner3-D', 'Bubble', 'Digital', 'Download Image', '.txt', 'Markdown', 'WeChat', 'Image to ASCII', 'ascii-art.js']],
+  ['ascii', ascii, sourceAscii, asciiJs, ['ASCII Art Generator', 'Browse styles', 'Popular ASCII Art Results', 'Banner3-D', 'Bubble', 'Digital', 'Download Image', '.txt', 'Markdown', 'WeChat', 'Image to ASCII', 'ascii-art.js']],
   ['mixer', mixer, sourceMixer, mixerJs, ['Font Mixer', 'Mix preset', 'Shuffle', 'font-mixer.js']],
   ['username', username, sourceUsername, usernameJs, ['Username Generator', 'Platform', 'Style vibe', 'username-generator.js']],
   ['changer', changer, sourceChanger, changerJs, ['Auto Font Changer', 'Scenario', 'Change intensity', 'auto-font-changer.js']]
@@ -891,12 +876,12 @@ for (const [name, html] of [['home', sourceHome], ['ascii', sourceAscii], ['mixe
 if (sourceHome.includes('Free Browser-Based Font Generator') || sourceHome.includes('answer-block')) throw new Error('home should not include the removed hero eyebrow or AEO answer block');
 if (sourceHome.includes('class="chips"') || homeJs.includes('style-new') || homeJs.includes('FONTB')) throw new Error('home should not include removed hero chips or temporary FontB badges');
 if (!sourceHome.includes('value="Make your profile text stand out"') || sourceHome.includes('value="Alex Plays"') || sourceHome.includes('value="font generator"')) throw new Error('homepage default text should use the current product-facing sample copy');
-if (!sourceHome.includes('Unicode styles in real time, <br />then copy')) throw new Error('home lede should use the requested two-line break with mobile-safe spacing');
-if (!sourceHome.includes('How do I copy and paste fonts from this generator?') || !sourceHome.includes('Is fancy text accessible?')) throw new Error('home missing visible AEO FAQ additions');
+if (!sourceHome.includes('compare dozens of Unicode styles in real time, then copy paste fonts')) throw new Error('home lede must match the revised task-focused copy');
+if (!sourceHome.includes('How do I copy and paste fonts?') || !sourceHome.includes('Is the font generator free?')) throw new Error('home missing revised visible FAQ questions');
 if (!sourceHome.includes('data-clarity-mask="true"') || !homeJs.includes('data-clarity-mask="true"')) throw new Error('homepage generator surfaces must be masked for Clarity');
 if (!homeJs.includes('fontgenerators.favoriteStyles.v1') || !homeJs.includes('localStorage') || !homeJs.includes("activeCategory === 'Favorites'")) throw new Error('homepage favorites should persist locally and expose a Favorites filter');
 if (!uiJs.includes('function fallbackCopyText') || !uiJs.includes("document.execCommand('copy')") || !uiJs.includes('async function copyText') || !homeJs.includes("addEventListener('pointerdown'")) throw new Error('homepage copy should fall back when Clipboard API is blocked');
-if (!sourceHome.includes('class="filter-icon"') || !sourceHome.includes('class="card-icon"') || !sourceHome.includes('<svg viewBox="0 0 24 24"')) throw new Error('homepage icons should render inline svg controls');
+if (!sourceHome.includes('class="filter-icon"') || !sourceHome.includes('<svg class="filter-icon"')) throw new Error('homepage generator controls should retain inline SVG icons');
 if (sourceHome.includes('Material+Symbols+Outlined') || sourceHome.includes('card-icon material-symbols-outlined') || sourceHome.includes('data-icon="format_size"') || styles.includes('.bento article:before')) throw new Error('homepage icons should not depend on Material Symbols ligature text');
 if (!styles.includes('.brand-mark') || !styles.includes('.brand.mini .brand-mark')) throw new Error('brand logo CSS missing');
 if (!styles.includes('backdrop-filter: blur(28px) saturate(180%) contrast(112%)') || !styles.includes('-webkit-backdrop-filter: blur(28px) saturate(180%) contrast(112%)')) throw new Error('topbar glass effect CSS missing');
@@ -916,7 +901,7 @@ if (!styles.includes('body:has([data-cookie-banner]) .status-line') || !styles.i
 if (!styles.includes(':where(a, button, summary, [tabindex]):focus-visible') || !styles.includes('outline: 3px solid #0b5d35;')) throw new Error('interactive controls must expose a high-contrast keyboard focus ring');
 if (!sourceTool.includes('ansi-code-table') || !sourceTool.includes('<code>30</code>') || !sourceTool.includes('<code>47</code>')) throw new Error('discord page missing visible ANSI code table');
 if (!sourceTool.includes('data-clarity-mask="true"')) throw new Error('discord editor/output surfaces must be masked for Clarity');
-if (!sourceTool.includes('data-preset="rainbow"') || !sourceTool.includes('31, 33, 32, 36, 34, and 35')) throw new Error('discord page missing rainbow ANSI preset UI/explanation');
+if (!sourceTool.includes('data-preset="rainbow"') || !sourceTool.includes('red, yellow, green, cyan, blue, and magenta')) throw new Error('discord page missing rainbow ANSI preset UI/explanation');
 if (sourceTool.includes('class="badge-row"') || sourceTool.includes('Limited ANSI palette')) throw new Error('discord main tool should not show low-value badge labels');
 if (sourceTool.indexOf('class="action-row"') < 0 || sourceTool.indexOf('class="action-row"') > sourceTool.indexOf('class="preview-grid"')) throw new Error('discord action buttons should appear above preview/output results');
 if (!sourceTool.includes('<main class="paper-grid">') || sourceTool.includes('class="tool-hero paper-grid"')) throw new Error('discord page background should span the full main, not only the tool card wrapper');
@@ -1053,9 +1038,6 @@ const canonicalOutputs = canonicalStyles.map(style => style.transform(alphabetPr
 if (new Set(canonicalOutputs).size !== canonicalOutputs.length) throw new Error('canonical homepage styles should not produce duplicate outputs for the alphabet probe');
 const homeDefaultValue = sourceHome.match(/<input\b(?=[^>]*id="font-input")[^>]*\svalue="([^"]*)"/i)?.[1] || 'Your Text';
 const renderedHomeText = `${stripHtml(home)} ${canonicalStyles.map(style => `${style.name} ${style.category} ${style.aliasNames.length ? `${style.aliasNames.length} aliases` : ''} ${style.transform(homeDefaultValue)}`).join(' ')}`;
-const renderedHomeTokens = wordTokens(renderedHomeText);
-const renderedHomeFontGeneratorDensity = (countPhrase(renderedHomeTokens, 'font generator') / renderedHomeTokens.length) * 100;
-if (renderedHomeFontGeneratorDensity < 3) throw new Error(`rendered home "font generator" density must be >=3%; found ${renderedHomeFontGeneratorDensity.toFixed(2)}%`);
 const unassignedMathGlyphs = new Set([0x1d455,0x1d49d,0x1d4a0,0x1d4a1,0x1d4a3,0x1d4a4,0x1d4a7,0x1d4a8,0x1d4ad,0x1d4ba,0x1d4bc,0x1d4c4]);
 function assertStyleOutputSupportsProbe(style, output, label) {
   if (!output || !output.trim()) throw new Error(`${label} ${style.id} produced empty output for A-Z/a-z/0-9 probe`);
@@ -1083,17 +1065,25 @@ const llmsIndexableUrls = [...llmsCanonicalLinks, ...llmsLegalLinks].map(link =>
 assertExactStringSet('indexable llms.txt page URLs', llmsIndexableUrls, sitemapLocs);
 if (rootSitemap !== publicSitemap || sitemap !== publicSitemap) throw new Error('root, public, and built sitemap.xml files must stay synchronized');
 const sitemapLastmods = new Map([...sitemap.matchAll(/<url><loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod><\/url>/g)].map(match => [match[1], match[2]]));
+const revisedCopyUrls = new Set([
+  'https://fontgenerators.app/',
+  'https://fontgenerators.app/ascii-art-generator',
+  'https://fontgenerators.app/font-mixer',
+  'https://fontgenerators.app/gothic-font',
+  'https://fontgenerators.app/username-generator',
+  'https://fontgenerators.app/auto-font-changer',
+  'https://fontgenerators.app/brat-generator',
+  'https://fontgenerators.app/discord-colored-text-generator'
+]);
 const approvedSitemapLastmods = new Map(approvedSitemapLocs.map(loc => [
   loc,
-  bratStructuredDates.has(loc)
+  revisedCopyUrls.has(loc)
+    ? '2026-09-13'
+    : bratStructuredDates.has(loc)
     ? bratStructuredDates.get(loc)
-    : loc === 'https://fontgenerators.app/gothic-font'
-      ? '2026-07-30'
-      : loc === 'https://fontgenerators.app/privacy' || loc === 'https://fontgenerators.app/terms-of-service'
+    : loc === 'https://fontgenerators.app/privacy' || loc === 'https://fontgenerators.app/terms-of-service'
         ? '2026-07-27'
-        : loc === 'https://fontgenerators.app/font-mixer'
-          ? '2026-07-04'
-          : '2026-06-29'
+        : '2026-07-27'
 ]));
 for (const [loc, expectedLastmod] of approvedSitemapLastmods) {
   const actualLastmod = sitemapLastmods.get(loc);

@@ -13,16 +13,12 @@ const colors = [
 const rainbowColors = ['red', 'yellow', 'green', 'cyan', 'blue', 'magenta'];
 
 const faq = [
-  { q: 'How do I make colored text in Discord?', a: 'Use an ansi code block in a supported Discord client. Type your message in this generator, select the text you want to style, choose supported ANSI colors or styles, then copy the full fenced ansi block and paste it into Discord.' },
-  { q: 'What is a Discord color text generator?', a: 'A Discord color text generator creates ANSI-formatted code blocks for Discord. Instead of typing escape codes manually, you choose colors in a visual editor and copy a ready-to-paste block.' },
-  { q: 'How do I make rainbow colored text in Discord?', a: 'Use the Rainbow quick effect in this tool. Select the text you want to color, or leave nothing selected to apply it to the whole message, then copy the generated ansi code block for Discord.' },
-  { q: 'Does Discord colored text work on mobile?', a: 'Mobile support may vary. Discord ANSI colored text generally works best in supported Discord desktop and web clients. Some mobile clients may show plain text or render styles differently.' },
-  { q: 'Can I use custom hex colors in Discord text?', a: 'No. Discord ANSI text uses a limited palette, not arbitrary hex, RGB, or brand colors. This tool should only offer colors that map to supported ANSI codes.' },
-  { q: 'Why is my Discord colored text not working?', a: 'Check that you pasted the full ansi code block, including the opening triple backticks, the ansi label, the generated escape sequences, and the closing triple backticks. Rendering can also vary by Discord client and version.' },
-  { q: 'What colors work in Discord ANSI code blocks?', a: 'Discord ANSI color blocks support a limited set of foreground and background colors based on ANSI codes. Preview colors are approximate because Discord rendering can vary by client and version.' },
-  { q: 'Is FontGenerators.app affiliated with Discord?', a: 'No. FontGenerators.app is an unofficial tool and is not made, endorsed, sponsored, or approved by Discord. Discord is a trademark of its respective owner.' },
-  { q: 'Is this Discord colored text generator free?', a: 'Yes for the MVP. The tool is a free browser-based utility with no sign-in, checkout, pricing page, Pro plan, or subscription in v0.' },
-  { q: 'Does FontGenerators.app save the text I type?', a: 'In this MVP, the editor runs in your browser and does not send your raw message text to a backend for processing. Do not paste sensitive or confidential text into any online tool.' }
+  { q: 'How do I make colored text in Discord?', a: 'Create an ANSI code block, apply supported ANSI color codes, then paste the complete fenced block into a supported Discord client.' },
+  { q: 'Does Discord support hex colors in chat?', a: 'No. Normal Discord ANSI text uses a limited terminal-style color palette rather than arbitrary hex or RGB colors.' },
+  { q: 'Does Discord colored text work on mobile?', a: 'Support can vary. Discord desktop and web clients are generally the better place to test ANSI colored text.' },
+  { q: 'Why is my Discord colored text showing as plain text?', a: 'Check that the full message is inside triple backticks with ansi immediately after the opening backticks. Also make sure the escape characters were not removed.' },
+  { q: 'Can I make rainbow text in Discord?', a: 'The Rainbow option can rotate through the supported ANSI foreground colors. It is not a full RGB gradient.' },
+  { q: 'Is this an official Discord tool?', a: 'No. This is an independent tool and is not affiliated with, endorsed by, sponsored by, or approved by Discord.' }
 ];
 
 const el = {

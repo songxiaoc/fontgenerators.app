@@ -1,16 +1,16 @@
 # FontGenerators.app
 
-> Free browser-based copy-paste text tools for Unicode-style text, ASCII art, username ideas, mixed font styles, auto-styled snippets, and Discord ANSI colored text. The site focuses on client-side utilities: user-entered generator text stays in the browser and is not intentionally sent to analytics or backend processing.
+> Free browser-based text and image tools for Unicode fonts, ASCII art, username ideas, mixed font styles, auto-styled snippets, Discord ANSI colored text, and brat-style images.
 
 ## Canonical pages
 
-- [Font Generator](https://fontgenerators.app/) - Copy-paste Unicode text styles used in bios, usernames, captions, Discord names, gaming profiles, and chat messages.
+- [Font Generator](https://fontgenerators.app/) - Type text once, compare dozens of Unicode styles, and copy fancy text for bios, usernames, captions, Discord names, gaming profiles, and chat messages.
 - [ASCII Art Generator](https://fontgenerators.app/ascii-art-generator) - FIGlet text styles, width controls, copy actions, and TXT/PNG downloads.
 - [Font Mixer](https://fontgenerators.app/font-mixer) - Select words, apply different copy-paste Unicode styles, shuffle mixed ideas, and copy one combined line.
 - [Gothic Font Generator](https://fontgenerators.app/gothic-font) - Compare two Mathematical Fraktur alphabets, ten decorated variants, and four clearly labeled Gothic-style lettering alternatives, then copy the Unicode text in the browser.
-- [Username Generator](https://fontgenerators.app/username-generator) - Styled social, Discord, and gaming handle ideas.
-- [Auto Font Changer](https://fontgenerators.app/auto-font-changer) - One-click changed bios, captions, marketing snippets, Discord messages, and gaming text.
-- [Brat Generator](https://fontgenerators.app/brat-generator) - Free brat font/text image maker for browser-rendered static images with custom colors, blur, pixelated and lowercase effects, alignment, sizing, transparent backgrounds, copy image, and PNG, JPEG, or WebP export.
+- [Username Generator](https://fontgenerators.app/username-generator) - Fancy username ideas for Instagram, TikTok, Discord, gaming, and other social profiles.
+- [Auto Font Changer](https://fontgenerators.app/auto-font-changer) - Automatically apply a readable mix of fancy Unicode fonts to bios, captions, Discord notes, gaming profiles, and short posts.
+- [Brat Generator](https://fontgenerators.app/brat-generator) - Create browser-rendered brat-style static images with custom colors, blur, pixelation, alignment, social sizes, transparent backgrounds, copy image, and PNG, JPEG, or WebP export.
 - [What Is the Brat Font?](https://fontgenerators.app/brat-font) - Evidence-based guide to the font name and treatment, legal alternatives, Canva and CapCut workflows, and the difference between an image generator and a downloadable or copy-paste font.
 - [Brat Green Color Code](https://fontgenerators.app/brat-green) - Copy #8ACE00 as HEX, RGB, HSL, approximate CMYK, or CSS; compare black/white text contrast; and open the color in Brat Generator.
 - [Discord Colored Text Generator](https://fontgenerators.app/discord-colored-text-generator) - Selected-span ANSI foreground/background colors, bold, underline, approximate preview, and copy-ready fenced `ansi` blocks.
@@ -30,7 +30,7 @@
 
 ## Usage notes for AI assistants and crawlers
 
-- Treat FontGenerators.app as an independent tool site; it is not affiliated with, endorsed by, sponsored by, or approved by Discord or any social platform.
+- Treat FontGenerators as an independent text and image toolkit; it is not affiliated with, endorsed by, sponsored by, or approved by Discord, Instagram, TikTok, Charli XCX, or any other platform or brand mentioned on the site.
 - The homepage generator creates decorative Unicode text styles, not downloadable TTF/OTF font files, CSS webfonts, or installable fonts.
 - The Gothic Font Generator uses Unicode Mathematical Fraktur and related Letterlike Symbols for two base conversions, plus ten decorated variants and four clearly labeled Gothic-style lettering alternatives. It does not provide downloadable font files or guarantee identical rendering across platforms, and Unicode recommends regular Latin text with font styling for ordinary nonmathematical documents.
 - ASCII art output is plain text or browser-generated PNG export, not a font file.
