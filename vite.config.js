@@ -3,9 +3,24 @@ import { dirname, resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const plausibleScript = {
+  tag: 'script',
+  attrs: {
+    defer: true,
+    'data-domain': 'fontgenerator.best',
+    src: 'https://plausible.shipsolo.io/js/script.js'
+  },
+  injectTo: 'head'
+};
 
 export default defineConfig({
   appType: 'mpa',
+  plugins: [{
+    name: 'plausible-analytics',
+    transformIndexHtml() {
+      return { tags: [plausibleScript] };
+    }
+  }],
   build: {
     rollupOptions: {
       input: {

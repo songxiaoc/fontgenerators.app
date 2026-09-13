@@ -1,11 +1,11 @@
 const CONSENT_KEY = 'fontgenerators_cookie_consent_v1';
 const ACCEPTED = 'accepted';
 const DECLINED = 'declined';
-const DEFAULT_GA_ID = 'G-JX2VGXPG5J';
-const DEFAULT_CLARITY_ID = 'x8r8lczazd';
+const DEFAULT_GA_ID = 'G-HED2BYNQW1';
+const DEFAULT_CLARITY_ID = 'yhqdamykpc';
 const DEFAULT_PLAUSIBLE_DOMAIN = '';
-const DEFAULT_PLAUSIBLE_SRC = 'https://plausible.shipsolo.io/js/pa-31uX2txOmuueW8_OZSa78.js';
-const DEFAULT_AHREFS_ANALYTICS_KEY = 'kWGc53rLUFEQEds4myn9rg';
+const DEFAULT_PLAUSIBLE_SRC = 'https://plausible.shipsolo.io/js/script.js';
+const DEFAULT_AHREFS_ANALYTICS_KEY = 'lNCuyIxmOUVpXCeo/fCb6w';
 const DEFAULT_AHREFS_SRC = 'https://analytics.ahrefs.com/analytics.js';
 
 const clean = (value) => String(value || '').trim();
@@ -78,13 +78,8 @@ function loadClarity() {
   loadScript('fg-clarity-script', `https://www.clarity.ms/tag/${encodeURIComponent(config.clarityId)}`);
 }
 
-function loadPlausible() {
-  if (!config.plausibleScriptSrc) return;
+function preparePlausible() {
   window.plausible = window.plausible || function plausible(){ (window.plausible.q = window.plausible.q || []).push(arguments); };
-  window.plausible.init = window.plausible.init || function init(options){ window.plausible.o = options || {}; };
-  const attrs = config.plausibleDomain ? { defer: 'defer', 'data-domain': config.plausibleDomain } : { defer: 'defer' };
-  loadScript('fg-plausible-script', config.plausibleScriptSrc, attrs);
-  window.plausible.init(config.plausibleDomain ? { domain: config.plausibleDomain } : undefined);
 }
 
 function loadAhrefsAnalytics() {
@@ -208,7 +203,8 @@ function bindMobileNavigation() {
 function init() {
   bindMobileNavigation();
   bindCookieControls();
-  loadPlausible();
+  // Vite injects the Plausible loader into every page; only prepare its event queue here.
+  preparePlausible();
   const consent = readConsent();
   if (consent === ACCEPTED) loadConsentAnalytics();
   if (!consent) renderBanner();

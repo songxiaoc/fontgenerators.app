@@ -84,6 +84,8 @@ const redirects = readFileSync('dist/_redirects', 'utf8');
 const llms = readFileSync('dist/llms.txt', 'utf8');
 const middleware = readFileSync('functions/_middleware.js', 'utf8');
 const viteConfig = readFileSync('vite.config.js', 'utf8');
+const plausibleScriptSrc = 'https://plausible.shipsolo.io/js/script.js';
+const plausibleDomain = 'fontgenerator.best';
 
 const seoPages = [
   ['privacy', privacy, 'privacy policy', 'browser privacy policy'],
@@ -232,6 +234,14 @@ for (const [name, html] of [
   if (html.includes('family=Noto+Sans+Math') && !html.includes('family=Noto+Sans+Math&display=optional')) throw new Error(`${name} math fallback font should use display=optional`);
   if (html.includes('family=Noto+Sans+Math&display=swap')) throw new Error(`${name} math fallback font should not use display=swap`);
   if (html.includes('Material+Symbols+Outlined') && !html.includes('Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&display=swap')) throw new Error(`${name} Material Symbols should keep display=swap so icons do not stay as ligature text`);
+}
+for (const [name, html] of [
+  ['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['brat font', bratFont],
+  ['brat green', bratGreen], ['gothic', gothic], ['tool', tool], ['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]
+]) {
+  if (!html.includes(plausibleScriptSrc) || !html.includes(`data-domain="${plausibleDomain}"`)) {
+    throw new Error(`${name} must include the Plausible Analytics script for ${plausibleDomain}`);
+  }
 }
 if (!styles.includes('src: url("/fonts/dm-sans-latin.woff2") format("woff2")') || !styles.includes('src: url("/fonts/dm-sans-latin-ext.woff2") format("woff2")') || !styles.includes('font-weight: 400 800;') || !styles.includes('font-display: swap;')) {
   throw new Error('global CSS should self-host DM Sans variable font subsets');
@@ -908,12 +918,16 @@ if (sourceTool.indexOf('class="action-row"') < 0 || sourceTool.indexOf('class="a
 if (!sourceTool.includes('<main class="paper-grid">') || sourceTool.includes('class="tool-hero paper-grid"')) throw new Error('discord page background should span the full main, not only the tool card wrapper');
 if (!styles.includes('width: min(100%, 1120px);')) throw new Error('discord tool card should use the compact shared tool width');
 if (!analyticsJs.includes('FONTGENERATORS_ANALYTICS_CONFIG') || !analyticsJs.includes('VITE_GA_MEASUREMENT_ID') || !analyticsJs.includes('VITE_CLARITY_PROJECT_ID') || !analyticsJs.includes('VITE_PLAUSIBLE_DOMAIN') || !analyticsJs.includes('VITE_AHREFS_ANALYTICS_KEY')) throw new Error('analytics module missing provider configuration hooks');
-for (const s of ['G-JX2VGXPG5J', 'x8r8lczazd', 'https://plausible.shipsolo.io/js/pa-31uX2txOmuueW8_OZSa78.js', 'kWGc53rLUFEQEds4myn9rg']) {
+for (const s of ['G-HED2BYNQW1', 'yhqdamykpc', plausibleScriptSrc, 'lNCuyIxmOUVpXCeo/fCb6w']) {
   if (!analyticsJs.includes(s)) throw new Error(`analytics module missing configured production ID/script: ${s}`);
 }
+for (const oldTrackingValue of ['G-JX2VGXPG5J', 'x8r8lczazd', 'pa-31uX2txOmuueW8_OZSa78.js', 'kWGc53rLUFEQEds4myn9rg']) {
+  if (analyticsJs.includes(oldTrackingValue)) throw new Error(`analytics module must not retain old tracking value: ${oldTrackingValue}`);
+}
 const consentFn = analyticsJs.match(/function loadConsentAnalytics\(\) \{([\s\S]*?)\n\}/)?.[1] || '';
-if (!consentFn || consentFn.includes('loadPlausible(')) throw new Error('Plausible must not be behind cookie consent');
-if (!analyticsJs.match(/function init\(\) \{[\s\S]*loadPlausible\(\);[\s\S]*const consent = readConsent\(\)/)) throw new Error('Plausible must load before checking cookie consent');
+if (!consentFn || consentFn.includes('preparePlausible(')) throw new Error('Plausible must not be behind cookie consent');
+if (!analyticsJs.match(/function init\(\) \{[\s\S]*preparePlausible\(\);[\s\S]*const consent = readConsent\(\)/)) throw new Error('Plausible event queue must be ready before checking cookie consent');
+if (analyticsJs.includes("loadScript('fg-plausible-script'")) throw new Error('analytics module must not inject a second Plausible loader');
 if (!analyticsJs.match(/if \(typeof window\.plausible === 'function'\) window\.plausible\(name, \{ props: safeProps \}\);[\s\S]*if \(readConsent\(\) !== ACCEPTED\) return;/)) throw new Error('Plausible events should fire before cookie-gated analytics return');
 if (!privacy.includes('Plausible Analytics is loaded as privacy-friendly analytics without requiring cookie consent')) throw new Error('privacy page must disclose Plausible no-consent behavior');
 if (!cookies.includes('Plausible Analytics may load without cookie consent')) throw new Error('cookie policy must disclose Plausible no-consent behavior');
