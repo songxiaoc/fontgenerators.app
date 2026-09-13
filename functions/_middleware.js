@@ -1,5 +1,6 @@
-const APEX_HOST = 'fontgenerators.app';
-const WWW_HOST = 'www.fontgenerators.app';
+const APEX_HOST = 'fontgenerator.best';
+const WWW_HOST = 'www.fontgenerator.best';
+const LEGACY_HOSTS = new Set(['fontgenerators.app', 'www.fontgenerators.app']);
 
 const CLEAN_PATHS = new Map([
   ['/ascii-art-generator/', '/ascii-art-generator'],
@@ -157,7 +158,10 @@ export async function onRequest(context) {
   const url = new URL(context.request.url);
   let shouldRedirect = false;
 
-  if (url.hostname === WWW_HOST) {
+  if (LEGACY_HOSTS.has(url.hostname)) {
+    url.hostname = APEX_HOST;
+    shouldRedirect = true;
+  } else if (url.hostname === WWW_HOST) {
     url.hostname = APEX_HOST;
     shouldRedirect = true;
   }

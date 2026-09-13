@@ -433,7 +433,7 @@ function getVisibleDetails(name, html, sectionLabelId) {
 const aboutNodes = getJsonLdNodes('about', about);
 const aboutTitle = decodeBasicEntities(about.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '');
 const aboutH1 = decodeBasicEntities(stripHtml(about.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || '').trim().replace(/\s+/g, ' '));
-const aboutCanonical = 'https://fontgenerators.app/about';
+const aboutCanonical = 'https://fontgenerator.best/about';
 if (aboutTitle !== 'About FontGenerators.app and Its Browser Tools') throw new Error(`about title mismatch: ${aboutTitle || 'missing'}`);
 if (aboutH1 !== 'About FontGenerators.app') throw new Error(`about H1 mismatch: ${aboutH1 || 'missing'}`);
 if (getCanonical(about) !== aboutCanonical) throw new Error('about canonical must use the clean production URL');
@@ -442,13 +442,13 @@ for (const type of ['Organization', 'WebSite', 'AboutPage']) if (!hasSchemaType(
 const aboutPageSchema = getSingleSchemaNode('about', aboutNodes, 'AboutPage');
 if (aboutPageSchema['@id'] !== `${aboutCanonical}#webpage` || aboutPageSchema.url !== aboutCanonical) throw new Error('about AboutPage @id and url must match its canonical');
 if (aboutPageSchema.name !== aboutTitle) throw new Error('about AboutPage name must match its title');
-if (aboutPageSchema.about?.['@id'] !== 'https://fontgenerators.app/#organization' || aboutPageSchema.author?.['@id'] !== 'https://fontgenerators.app/#organization' || aboutPageSchema.publisher?.['@id'] !== 'https://fontgenerators.app/#organization' || aboutPageSchema.isPartOf?.['@id'] !== 'https://fontgenerators.app/#website') throw new Error('about AboutPage must reference the shared Organization and WebSite entities');
+if (aboutPageSchema.about?.['@id'] !== 'https://fontgenerator.best/#organization' || aboutPageSchema.author?.['@id'] !== 'https://fontgenerator.best/#organization' || aboutPageSchema.publisher?.['@id'] !== 'https://fontgenerator.best/#organization' || aboutPageSchema.isPartOf?.['@id'] !== 'https://fontgenerator.best/#website') throw new Error('about AboutPage must reference the shared Organization and WebSite entities');
 if (!sourceAbout.includes('id="contact"') || !sourceAbout.includes('How factual claims are reviewed') || !sourceAbout.includes('contact<span class="email-at"')) throw new Error('about page must expose editorial policy and a visible contact section');
 if (wordTokens(about).length < 350) throw new Error(`about page should provide substantive publisher and editorial information; found ${wordTokens(about).length} visible words`);
 
 const gothicTitle = decodeBasicEntities(gothic.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '');
 const gothicDescription = getMetaContent(gothic, 'name', 'description');
-const gothicCanonical = 'https://fontgenerators.app/gothic-font';
+const gothicCanonical = 'https://fontgenerator.best/gothic-font';
 const gothicH1Matches = [...gothic.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
 const gothicH1 = normalizedVisibleText(gothicH1Matches[0]?.[1] || '');
 const gothicNodes = getJsonLdNodes('gothic', gothic);
@@ -458,7 +458,7 @@ if (getCanonical(gothic) !== gothicCanonical || gothic.includes(`${gothicCanonic
 if (gothicH1Matches.length !== 1 || gothicH1 !== 'Gothic Font Generator') throw new Error(`gothic page must expose one exact H1; found ${gothicH1Matches.length}: ${gothicH1 || 'missing'}`);
 if (!getMetaContent(gothic, 'name', 'robots').includes('index, follow')) throw new Error('gothic page must remain indexable');
 if (getMetaContent(gothic, 'property', 'og:url') !== gothicCanonical) throw new Error('gothic og:url must match the canonical');
-if (getMetaContent(gothic, 'property', 'og:image') !== 'https://fontgenerators.app/logo.png' || getMetaContent(gothic, 'name', 'twitter:image') !== 'https://fontgenerators.app/logo.png') throw new Error('gothic social images must use the existing brand image');
+if (getMetaContent(gothic, 'property', 'og:image') !== 'https://fontgenerator.best/logo.png' || getMetaContent(gothic, 'name', 'twitter:image') !== 'https://fontgenerator.best/logo.png') throw new Error('gothic social images must use the existing brand image');
 for (const type of ['Organization', 'WebSite', 'WebPage', 'WebApplication', 'BreadcrumbList', 'FAQPage']) {
   if (!hasSchemaType(gothicNodes, type)) throw new Error(`gothic page missing ${type} structured data`);
 }
@@ -467,7 +467,7 @@ const gothicAppSchema = getSingleSchemaNode('gothic', gothicNodes, 'WebApplicati
 const gothicBreadcrumbSchema = getSingleSchemaNode('gothic', gothicNodes, 'BreadcrumbList');
 const gothicFaqSchema = getSingleSchemaNode('gothic', gothicNodes, 'FAQPage');
 if (gothicPageSchema['@id'] !== `${gothicCanonical}#webpage` || gothicPageSchema.url !== gothicCanonical || gothicPageSchema.name !== gothicTitle) throw new Error('gothic WebPage identity must match the title and canonical');
-if (gothicPageSchema.isPartOf?.['@id'] !== 'https://fontgenerators.app/#website' || gothicPageSchema.author?.['@id'] !== 'https://fontgenerators.app/#organization' || gothicPageSchema.publisher?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error('gothic WebPage must reference the shared WebSite and Organization');
+if (gothicPageSchema.isPartOf?.['@id'] !== 'https://fontgenerator.best/#website' || gothicPageSchema.author?.['@id'] !== 'https://fontgenerator.best/#organization' || gothicPageSchema.publisher?.['@id'] !== 'https://fontgenerator.best/#organization') throw new Error('gothic WebPage must reference the shared WebSite and Organization');
 if (gothicPageSchema.mainEntity?.['@id'] !== `${gothicCanonical}#app` || gothicPageSchema.breadcrumb?.['@id'] !== `${gothicCanonical}#breadcrumb`) throw new Error('gothic WebPage must reference its app and breadcrumb');
 assertExactStringSet('gothic WebPage citations', gothicPageSchema.citation, ['https://unicode.org/charts/nameslist/n_1D400.html', 'https://www.unicode.org/faq/latin_cyrillic.html']);
 if (gothicPageSchema.datePublished !== '2026-07-30') throw new Error('gothic WebPage datePublished must preserve the original publication date');
@@ -475,7 +475,7 @@ for (const field of ['dateModified', 'lastReviewed']) {
   if (gothicPageSchema[field] !== '2026-09-13') throw new Error(`gothic WebPage ${field} must match the revised-copy publication date`);
 }
 if (gothicAppSchema['@id'] !== `${gothicCanonical}#app` || gothicAppSchema.url !== gothicCanonical || gothicAppSchema.name !== 'Gothic Font Generator') throw new Error('gothic WebApplication identity mismatch');
-if (gothicAppSchema.creator?.['@id'] !== 'https://fontgenerators.app/#organization' || gothicAppSchema.provider?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error('gothic WebApplication must reference the shared Organization');
+if (gothicAppSchema.creator?.['@id'] !== 'https://fontgenerator.best/#organization' || gothicAppSchema.provider?.['@id'] !== 'https://fontgenerator.best/#organization') throw new Error('gothic WebApplication must reference the shared Organization');
 if (gothicAppSchema.isAccessibleForFree !== true || gothicAppSchema.offers?.price !== '0' || gothicAppSchema.featureList?.length !== 6) throw new Error('gothic WebApplication must describe the free 16-result tool');
 if (gothicBreadcrumbSchema['@id'] !== `${gothicCanonical}#breadcrumb` || gothicBreadcrumbSchema.itemListElement?.length !== 2 || gothicBreadcrumbSchema.itemListElement[1]?.item !== gothicCanonical) throw new Error('gothic BreadcrumbList must resolve to the clean canonical');
 if (gothicFaqSchema['@id'] !== `${gothicCanonical}#faq` || gothicFaqSchema.mainEntity?.length !== 6) throw new Error('gothic FAQPage must contain the six revised-copy questions');
@@ -570,12 +570,12 @@ const bratPageContracts = [
     title: 'Brat Generator – Create Brat Text Images & Memes Online Free',
     description: 'Use our free Brat Generator to create brat-style text images with custom colors, blur, pixelation, alignment, transparent backgrounds, and PNG export.',
     h1: 'Brat Generator',
-    canonical: 'https://fontgenerators.app/brat-generator',
-    ogImage: 'https://fontgenerators.app/og/brat-generator.png',
+    canonical: 'https://fontgenerator.best/brat-generator',
+    ogImage: 'https://fontgenerator.best/og/brat-generator.png',
     schemaTypes: ['Organization', 'WebSite', 'WebPage', 'WebApplication', 'HowTo', 'FAQPage'],
-    pageId: 'https://fontgenerators.app/brat-generator#webpage',
+    pageId: 'https://fontgenerator.best/brat-generator#webpage',
     mainEntityType: 'WebApplication',
-    mainEntityId: 'https://fontgenerators.app/brat-generator#app',
+    mainEntityId: 'https://fontgenerator.best/brat-generator#app',
     links: ['/brat-font', '/brat-green']
   },
   {
@@ -585,13 +585,13 @@ const bratPageContracts = [
     title: 'What Is the Brat Font? Name, Canva, CapCut & Alternatives',
     description: 'What font does Brat use? See the Arial-based cover treatment, legal alternatives, Canva and CapCut workflows, and why no font file is needed.',
     h1: 'What Is the Brat Font?',
-    canonical: 'https://fontgenerators.app/brat-font',
-    ogImage: 'https://fontgenerators.app/og/brat-font.png',
+    canonical: 'https://fontgenerator.best/brat-font',
+    ogImage: 'https://fontgenerator.best/og/brat-font.png',
     schemaTypes: ['WebPage', 'Article', 'BreadcrumbList', 'FAQPage'],
-    pageId: 'https://fontgenerators.app/brat-font#webpage',
+    pageId: 'https://fontgenerator.best/brat-font#webpage',
     mainEntityType: 'Article',
-    mainEntityId: 'https://fontgenerators.app/brat-font#article',
-    breadcrumbId: 'https://fontgenerators.app/brat-font#breadcrumb',
+    mainEntityId: 'https://fontgenerator.best/brat-font#article',
+    breadcrumbId: 'https://fontgenerator.best/brat-font#breadcrumb',
     links: ['/brat-generator', '/brat-green']
   },
   {
@@ -601,13 +601,13 @@ const bratPageContracts = [
     title: 'Brat Green Color Code — #8ACE00 Hex, RGB, HSL & CMYK',
     description: 'Copy the Brat green color code #8ACE00 in HEX, RGB, HSL and CMYK. Compare black and white text contrast, copy CSS, and open it in the image editor.',
     h1: 'Brat Green Color Code: #8ACE00',
-    canonical: 'https://fontgenerators.app/brat-green',
-    ogImage: 'https://fontgenerators.app/og/brat-green.png',
+    canonical: 'https://fontgenerator.best/brat-green',
+    ogImage: 'https://fontgenerator.best/og/brat-green.png',
     schemaTypes: ['WebPage', 'WebApplication', 'BreadcrumbList', 'FAQPage'],
-    pageId: 'https://fontgenerators.app/brat-green#webpage',
+    pageId: 'https://fontgenerator.best/brat-green#webpage',
     mainEntityType: 'WebApplication',
-    mainEntityId: 'https://fontgenerators.app/brat-green#app',
-    breadcrumbId: 'https://fontgenerators.app/brat-green#breadcrumb',
+    mainEntityId: 'https://fontgenerator.best/brat-green#app',
+    breadcrumbId: 'https://fontgenerator.best/brat-green#breadcrumb',
     links: ['/brat-generator', '/brat-font']
   }
 ];
@@ -713,15 +713,15 @@ const bratOrganizationSchema = bratSchemaNodes.find(node => hasSchemaType([node]
 const bratWebsiteSchema = bratSchemaNodes.find(node => hasSchemaType([node], 'WebSite'));
 const bratWebPageSchema = bratSchemaNodes.find(node => hasSchemaType([node], 'WebPage'));
 const bratApplicationSchema = bratSchemaNodes.find(node => hasSchemaType([node], 'WebApplication'));
-if (bratOrganizationSchema?.['@id'] !== 'https://fontgenerators.app/#organization' || bratOrganizationSchema?.name !== 'FontGenerators.app' || bratOrganizationSchema?.alternateName !== 'FontGenerators') throw new Error('brat page must expose the stable FontGenerators.app Organization identity');
-if (bratWebsiteSchema?.['@id'] !== 'https://fontgenerators.app/#website' || bratWebsiteSchema?.publisher?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error('brat page must expose the stable WebSite identity and publisher relation');
+if (bratOrganizationSchema?.['@id'] !== 'https://fontgenerator.best/#organization' || bratOrganizationSchema?.name !== 'FontGenerators.app' || bratOrganizationSchema?.alternateName !== 'FontGenerators') throw new Error('brat page must expose the stable FontGenerators.app Organization identity');
+if (bratWebsiteSchema?.['@id'] !== 'https://fontgenerator.best/#website' || bratWebsiteSchema?.publisher?.['@id'] !== 'https://fontgenerator.best/#organization') throw new Error('brat page must expose the stable WebSite identity and publisher relation');
 const visibleBratPublished = getLabeledTime('brat generator', brat, '\\bPublished\\b');
 const visibleBratReviewed = getLabeledTime('brat generator', brat, '\\blast reviewed\\b');
 assertIsoDate('brat generator visible published date', visibleBratPublished);
 assertIsoDate('brat generator visible reviewed date', visibleBratReviewed);
 if (bratWebPageSchema?.datePublished !== visibleBratPublished || bratWebPageSchema?.dateModified !== visibleBratReviewed || bratWebPageSchema?.lastReviewed !== visibleBratReviewed) throw new Error('brat WebPage dates must match the visible Published and last reviewed dates');
-for (const field of ['author', 'publisher']) if (bratWebPageSchema?.[field]?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error(`brat WebPage ${field} must reference the stable Organization`);
-if (bratWebPageSchema?.isPartOf?.['@id'] !== 'https://fontgenerators.app/#website') throw new Error('brat WebPage must reference the stable WebSite');
+for (const field of ['author', 'publisher']) if (bratWebPageSchema?.[field]?.['@id'] !== 'https://fontgenerator.best/#organization') throw new Error(`brat WebPage ${field} must reference the stable Organization`);
+if (bratWebPageSchema?.isPartOf?.['@id'] !== 'https://fontgenerator.best/#website') throw new Error('brat WebPage must reference the stable WebSite');
 const bratCitations = [
   'https://abcdinamo.com/newsletter/the-dinamo-update-our-font-for-charli-xcxs-brat',
   'https://learn.microsoft.com/en-us/typography/font-list/arial-narrow',
@@ -745,12 +745,12 @@ for (const [name, html] of [['home', home], ['about', about], ['brat generator',
   const nodes = getJsonLdNodes(name, html);
   const organization = getSingleSchemaNode(name, nodes, 'Organization');
   const website = getSingleSchemaNode(name, nodes, 'WebSite');
-  if (organization['@id'] !== 'https://fontgenerators.app/#organization' || organization.name !== 'FontGenerators.app' || organization.alternateName !== 'FontGenerators' || organization.url !== 'https://fontgenerators.app/') throw new Error(`${name} must define the stable Organization identity`);
-  if (website['@id'] !== 'https://fontgenerators.app/#website' || website.name !== 'FontGenerators.app' || website.alternateName !== 'FontGenerators' || website.url !== 'https://fontgenerators.app/' || website.publisher?.['@id'] !== 'https://fontgenerators.app/#organization') throw new Error(`${name} must define the stable WebSite identity`);
+  if (organization['@id'] !== 'https://fontgenerator.best/#organization' || organization.name !== 'FontGenerators.app' || organization.alternateName !== 'FontGenerators' || organization.url !== 'https://fontgenerator.best/') throw new Error(`${name} must define the stable Organization identity`);
+  if (website['@id'] !== 'https://fontgenerator.best/#website' || website.name !== 'FontGenerators.app' || website.alternateName !== 'FontGenerators' || website.url !== 'https://fontgenerator.best/' || website.publisher?.['@id'] !== 'https://fontgenerator.best/#organization') throw new Error(`${name} must define the stable WebSite identity`);
 }
 for (const [name, html] of [['brat generator', brat], ['brat font', bratFont], ['brat green', bratGreen]]) {
   const page = getJsonLdNodes(name, html).find(node => hasSchemaType([node], 'WebPage'));
-  if (page?.author?.['@id'] !== 'https://fontgenerators.app/#organization' || page?.publisher?.['@id'] !== 'https://fontgenerators.app/#organization' || page?.isPartOf?.['@id'] !== 'https://fontgenerators.app/#website') throw new Error(`${name} must reference the shared site and publisher entities`);
+  if (page?.author?.['@id'] !== 'https://fontgenerator.best/#organization' || page?.publisher?.['@id'] !== 'https://fontgenerator.best/#organization' || page?.isPartOf?.['@id'] !== 'https://fontgenerator.best/#website') throw new Error(`${name} must reference the shared site and publisher entities`);
 }
 const visibleAboutReviewed = getLabeledTime('about', about, '\\blast reviewed\\b');
 assertIsoDate('about visible reviewed date', visibleAboutReviewed);
@@ -929,22 +929,22 @@ const llmsLegalSection = getMarkdownSection(llms, 'Legal and policy pages');
 const llmsBratSourcesSection = getMarkdownSection(llms, 'Brat topic sources');
 const llmsUsageSection = getMarkdownSection(llms, 'Usage notes for AI assistants and crawlers');
 const llmsCanonicalLinks = assertMarkdownLinkSection('Canonical pages', llmsCanonicalSection, [
-  { label: 'Font Generator', url: 'https://fontgenerators.app/' },
-  { label: 'ASCII Art Generator', url: 'https://fontgenerators.app/ascii-art-generator' },
-  { label: 'Font Mixer', url: 'https://fontgenerators.app/font-mixer' },
-  { label: 'Gothic Font Generator', url: 'https://fontgenerators.app/gothic-font' },
-  { label: 'Username Generator', url: 'https://fontgenerators.app/username-generator' },
-  { label: 'Auto Font Changer', url: 'https://fontgenerators.app/auto-font-changer' },
-  { label: 'Brat Generator', url: 'https://fontgenerators.app/brat-generator' },
-  { label: 'What Is the Brat Font?', url: 'https://fontgenerators.app/brat-font' },
-  { label: 'Brat Green Color Code', url: 'https://fontgenerators.app/brat-green' },
-  { label: 'Discord Colored Text Generator', url: 'https://fontgenerators.app/discord-colored-text-generator' }
+  { label: 'Font Generator', url: 'https://fontgenerator.best/' },
+  { label: 'ASCII Art Generator', url: 'https://fontgenerator.best/ascii-art-generator' },
+  { label: 'Font Mixer', url: 'https://fontgenerator.best/font-mixer' },
+  { label: 'Gothic Font Generator', url: 'https://fontgenerator.best/gothic-font' },
+  { label: 'Username Generator', url: 'https://fontgenerator.best/username-generator' },
+  { label: 'Auto Font Changer', url: 'https://fontgenerator.best/auto-font-changer' },
+  { label: 'Brat Generator', url: 'https://fontgenerator.best/brat-generator' },
+  { label: 'What Is the Brat Font?', url: 'https://fontgenerator.best/brat-font' },
+  { label: 'Brat Green Color Code', url: 'https://fontgenerator.best/brat-green' },
+  { label: 'Discord Colored Text Generator', url: 'https://fontgenerator.best/discord-colored-text-generator' }
 ]);
 const llmsLegalLinks = assertMarkdownLinkSection('Legal and policy pages', llmsLegalSection, [
-  { label: 'About and Contact', url: 'https://fontgenerators.app/about' },
-  { label: 'Privacy Policy', url: 'https://fontgenerators.app/privacy' },
-  { label: 'Cookie Policy', url: 'https://fontgenerators.app/cookies' },
-  { label: 'Terms of Service', url: 'https://fontgenerators.app/terms-of-service' }
+  { label: 'About and Contact', url: 'https://fontgenerator.best/about' },
+  { label: 'Privacy Policy', url: 'https://fontgenerator.best/privacy' },
+  { label: 'Cookie Policy', url: 'https://fontgenerator.best/cookies' },
+  { label: 'Terms of Service', url: 'https://fontgenerator.best/terms-of-service' }
 ]);
 assertMarkdownLinkSection('Brat topic sources', llmsBratSourcesSection, [
   { label: "Dinamo — The Dinamo Update: Our Font for Charli XCX's Brat", url: bratCitations[0] },
@@ -962,7 +962,7 @@ for (const path of heldLlmsPaths) {
   }
 }
 
-if (tool.includes('https://fontgenerators.app/discord-colored-text-generator/')) throw new Error('stale discord canonical slash present');
+if (tool.includes('https://fontgenerator.best/discord-colored-text-generator/')) throw new Error('stale discord canonical slash present');
 if (!tool.includes('<h1 id="tool-label">Discord Colored Text Generator</h1>')) throw new Error('discord page H1 must use search-facing primary phrase');
 if (tool.includes('Discord ANSI Generator - Light Lab')) throw new Error('discord page should not expose internal Light Lab H1 wording');
 if (!sourceTool.includes('Text color') || !sourceTool.includes('Highlight')) throw new Error('discord page missing user-friendly color labels');
@@ -1057,23 +1057,23 @@ for (const alias of styleAliases) {
 for (const forbidden of ['free font downloads', 'download TTF', 'install fonts', 'works everywhere', 'upgrade to pro', 'subscription plan']) {
   if (home.toLowerCase().includes(forbidden.toLowerCase())) throw new Error(`home contains forbidden claim: ${forbidden}`);
 }
-if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('Sitemap: https://fontgenerators.app/sitemap.xml')) throw new Error('robots missing noindex/ sitemap signals');
+if (!robots.includes('Disallow: /discord-font-generator/') || !robots.includes('Sitemap: https://fontgenerator.best/sitemap.xml')) throw new Error('robots missing noindex/ sitemap signals');
 const sitemapLocs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-const approvedSitemapLocs = ['https://fontgenerators.app/', 'https://fontgenerators.app/ascii-art-generator', 'https://fontgenerators.app/font-mixer', 'https://fontgenerators.app/gothic-font', 'https://fontgenerators.app/username-generator', 'https://fontgenerators.app/auto-font-changer', 'https://fontgenerators.app/brat-generator', 'https://fontgenerators.app/brat-font', 'https://fontgenerators.app/brat-green', 'https://fontgenerators.app/about', 'https://fontgenerators.app/discord-colored-text-generator', 'https://fontgenerators.app/privacy', 'https://fontgenerators.app/terms-of-service'];
+const approvedSitemapLocs = ['https://fontgenerator.best/', 'https://fontgenerator.best/ascii-art-generator', 'https://fontgenerator.best/font-mixer', 'https://fontgenerator.best/gothic-font', 'https://fontgenerator.best/username-generator', 'https://fontgenerator.best/auto-font-changer', 'https://fontgenerator.best/brat-generator', 'https://fontgenerator.best/brat-font', 'https://fontgenerator.best/brat-green', 'https://fontgenerator.best/about', 'https://fontgenerator.best/discord-colored-text-generator', 'https://fontgenerator.best/privacy', 'https://fontgenerator.best/terms-of-service'];
 assertExactStringSet('sitemap canonical URLs', sitemapLocs, approvedSitemapLocs);
-const llmsIndexableUrls = [...llmsCanonicalLinks, ...llmsLegalLinks].map(link => link.url).filter(url => url !== 'https://fontgenerators.app/cookies');
+const llmsIndexableUrls = [...llmsCanonicalLinks, ...llmsLegalLinks].map(link => link.url).filter(url => url !== 'https://fontgenerator.best/cookies');
 assertExactStringSet('indexable llms.txt page URLs', llmsIndexableUrls, sitemapLocs);
 if (rootSitemap !== publicSitemap || sitemap !== publicSitemap) throw new Error('root, public, and built sitemap.xml files must stay synchronized');
 const sitemapLastmods = new Map([...sitemap.matchAll(/<url><loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod><\/url>/g)].map(match => [match[1], match[2]]));
 const revisedCopyUrls = new Set([
-  'https://fontgenerators.app/',
-  'https://fontgenerators.app/ascii-art-generator',
-  'https://fontgenerators.app/font-mixer',
-  'https://fontgenerators.app/gothic-font',
-  'https://fontgenerators.app/username-generator',
-  'https://fontgenerators.app/auto-font-changer',
-  'https://fontgenerators.app/brat-generator',
-  'https://fontgenerators.app/discord-colored-text-generator'
+  'https://fontgenerator.best/',
+  'https://fontgenerator.best/ascii-art-generator',
+  'https://fontgenerator.best/font-mixer',
+  'https://fontgenerator.best/gothic-font',
+  'https://fontgenerator.best/username-generator',
+  'https://fontgenerator.best/auto-font-changer',
+  'https://fontgenerator.best/brat-generator',
+  'https://fontgenerator.best/discord-colored-text-generator'
 ]);
 const approvedSitemapLastmods = new Map(approvedSitemapLocs.map(loc => [
   loc,
@@ -1081,7 +1081,7 @@ const approvedSitemapLastmods = new Map(approvedSitemapLocs.map(loc => [
     ? '2026-09-13'
     : bratStructuredDates.has(loc)
     ? bratStructuredDates.get(loc)
-    : loc === 'https://fontgenerators.app/privacy' || loc === 'https://fontgenerators.app/terms-of-service'
+    : loc === 'https://fontgenerator.best/privacy' || loc === 'https://fontgenerator.best/terms-of-service'
         ? '2026-07-27'
         : '2026-07-27'
 ]));
@@ -1090,9 +1090,11 @@ for (const [loc, expectedLastmod] of approvedSitemapLastmods) {
   if (actualLastmod !== expectedLastmod) throw new Error(`sitemap lastmod for ${loc} must be ${expectedLastmod}; found ${actualLastmod || 'missing'}`);
 }
 for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler', '/brat-font-generator', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/gothic-font-generator', '/gothic-text-generator', '/blackletter-font', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator']) {
-  if (sitemap.includes(`https://fontgenerators.app${forbidden}`) && forbidden !== '/discord-colored-text-generator') throw new Error(`sitemap should not include non-indexable route ${forbidden}`);
+  if (sitemap.includes(`https://fontgenerator.best${forbidden}`) && forbidden !== '/discord-colored-text-generator') throw new Error(`sitemap should not include non-indexable route ${forbidden}`);
 }
-if (redirects.includes('www.fontgenerators.app')) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level www-to-apex redirects; Pages middleware handles host canonicalization instead');
+for (const host of ['www.fontgenerator.best', 'www.fontgenerators.app']) {
+  if (redirects.includes(host)) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level redirects; Pages middleware handles host canonicalization instead');
+}
 const redirectLines = redirects.split(/\r?\n/).map(line => line.trim()).filter(line => line && !line.startsWith('#'));
 assertExactStringSet('Cloudflare _redirects rules', redirectLines, [
   '/ascii-art-generator/ /ascii-art-generator 301',
@@ -1116,7 +1118,7 @@ assertExactStringSet('Cloudflare _redirects rules', redirectLines, [
 for (const s of ["bratGenerator: resolve(__dirname, 'brat-generator.html')", "bratFont: resolve(__dirname, 'brat-font.html')", "bratGreen: resolve(__dirname, 'brat-green.html')", "gothicFont: resolve(__dirname, 'gothic-font.html')", "about: resolve(__dirname, 'about.html')"]) {
   if (!viteConfig.includes(s)) throw new Error(`Vite MPA config missing page entry: ${s}`);
 }
-for (const s of ['www.fontgenerators.app', 'fontgenerators.app', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/gothic-font', '/about', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
+for (const s of ['www.fontgenerator.best', 'fontgenerator.best', 'www.fontgenerators.app', 'fontgenerators.app', 'LEGACY_HOSTS', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/gothic-font', '/about', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
   if (!middleware.includes(s)) throw new Error(`canonical/analytics middleware missing ${s}`);
 }
 
@@ -1128,35 +1130,39 @@ async function middlewareSmoke(url, options = {}) {
     next: options.next || (() => new Response('next ok', { status: 200, headers: { 'content-type': 'text/plain; charset=utf-8' } }))
   });
 }
-const wwwRedirect = await middlewareSmoke('https://www.fontgenerators.app/discord-colored-text-generator/?utm_source=test');
-if (wwwRedirect.status !== 301 || wwwRedirect.headers.get('location') !== 'https://fontgenerators.app/discord-colored-text-generator?utm_source=test') throw new Error('middleware must 301 www legacy tool URL to apex clean URL and preserve query');
-const slashRedirect = await middlewareSmoke('https://fontgenerators.app/terms/');
-if (slashRedirect.status !== 301 || slashRedirect.headers.get('location') !== 'https://fontgenerators.app/terms-of-service') throw new Error('middleware must preserve legacy clean-route redirects');
-const cookieSlashRedirect = await middlewareSmoke('https://fontgenerators.app/cookies/');
-if (cookieSlashRedirect.status !== 301 || cookieSlashRedirect.headers.get('location') !== 'https://fontgenerators.app/cookies') throw new Error('middleware must redirect cookie slash route to clean route');
-const passThrough = await middlewareSmoke('https://fontgenerators.app/');
+const wwwRedirect = await middlewareSmoke('https://www.fontgenerator.best/discord-colored-text-generator/?utm_source=test');
+if (wwwRedirect.status !== 301 || wwwRedirect.headers.get('location') !== 'https://fontgenerator.best/discord-colored-text-generator?utm_source=test') throw new Error('middleware must 301 new www tool URL to apex clean URL and preserve query');
+const legacyApexRedirect = await middlewareSmoke('https://fontgenerators.app/font-mixer?utm_source=legacy');
+if (legacyApexRedirect.status !== 301 || legacyApexRedirect.headers.get('location') !== 'https://fontgenerator.best/font-mixer?utm_source=legacy') throw new Error('middleware must 301 the legacy apex host to the new apex and preserve path and query');
+const legacyWwwRedirect = await middlewareSmoke('https://www.fontgenerators.app/discord-colored-text-generator/?utm_source=legacy');
+if (legacyWwwRedirect.status !== 301 || legacyWwwRedirect.headers.get('location') !== 'https://fontgenerator.best/discord-colored-text-generator?utm_source=legacy') throw new Error('middleware must 301 the legacy www host to the new apex, clean the path, and preserve query');
+const slashRedirect = await middlewareSmoke('https://fontgenerator.best/terms/');
+if (slashRedirect.status !== 301 || slashRedirect.headers.get('location') !== 'https://fontgenerator.best/terms-of-service') throw new Error('middleware must preserve legacy clean-route redirects');
+const cookieSlashRedirect = await middlewareSmoke('https://fontgenerator.best/cookies/');
+if (cookieSlashRedirect.status !== 301 || cookieSlashRedirect.headers.get('location') !== 'https://fontgenerator.best/cookies') throw new Error('middleware must redirect cookie slash route to clean route');
+const passThrough = await middlewareSmoke('https://fontgenerator.best/');
 if (passThrough.status !== 200 || await passThrough.text() !== 'next ok') throw new Error('middleware should pass canonical apex clean routes through');
-const approvedToolPassThrough = await middlewareSmoke('https://fontgenerators.app/discord-colored-text-generator');
+const approvedToolPassThrough = await middlewareSmoke('https://fontgenerator.best/discord-colored-text-generator');
 if (approvedToolPassThrough.status !== 200 || await approvedToolPassThrough.text() !== 'next ok') throw new Error('middleware should pass approved clean Discord route through');
 for (const path of ['/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/gothic-font', '/about']) {
-  const response = await middlewareSmoke(`https://fontgenerators.app${path}`);
+  const response = await middlewareSmoke(`https://fontgenerator.best${path}`);
   if (response.status !== 200 || await response.text() !== 'next ok') throw new Error(`middleware should pass approved clean route through: ${path}`);
-  const slash = await middlewareSmoke(`https://fontgenerators.app${path}/`);
-  if (slash.status !== 301 || slash.headers.get('location') !== `https://fontgenerators.app${path}`) throw new Error(`middleware should redirect slash route to clean route: ${path}`);
+  const slash = await middlewareSmoke(`https://fontgenerator.best${path}/`);
+  if (slash.status !== 301 || slash.headers.get('location') !== `https://fontgenerator.best${path}`) throw new Error(`middleware should redirect slash route to clean route: ${path}`);
 }
-const legacyAutoStylerRedirect = await middlewareSmoke('https://fontgenerators.app/auto-font-styler?from=old');
-if (legacyAutoStylerRedirect.status !== 301 || legacyAutoStylerRedirect.headers.get('location') !== 'https://fontgenerators.app/auto-font-changer?from=old') throw new Error('middleware should redirect legacy auto-font-styler route to auto-font-changer and preserve query');
-const legacyAutoStylerSlashRedirect = await middlewareSmoke('https://fontgenerators.app/auto-font-styler/');
-if (legacyAutoStylerSlashRedirect.status !== 301 || legacyAutoStylerSlashRedirect.headers.get('location') !== 'https://fontgenerators.app/auto-font-changer') throw new Error('middleware should redirect legacy auto-font-styler slash route to auto-font-changer');
-const approvedCookiesPassThrough = await middlewareSmoke('https://fontgenerators.app/cookies');
+const legacyAutoStylerRedirect = await middlewareSmoke('https://fontgenerator.best/auto-font-styler?from=old');
+if (legacyAutoStylerRedirect.status !== 301 || legacyAutoStylerRedirect.headers.get('location') !== 'https://fontgenerator.best/auto-font-changer?from=old') throw new Error('middleware should redirect legacy auto-font-styler route to auto-font-changer and preserve query');
+const legacyAutoStylerSlashRedirect = await middlewareSmoke('https://fontgenerator.best/auto-font-styler/');
+if (legacyAutoStylerSlashRedirect.status !== 301 || legacyAutoStylerSlashRedirect.headers.get('location') !== 'https://fontgenerator.best/auto-font-changer') throw new Error('middleware should redirect legacy auto-font-styler slash route to auto-font-changer');
+const approvedCookiesPassThrough = await middlewareSmoke('https://fontgenerator.best/cookies');
 if (approvedCookiesPassThrough.status !== 200 || await approvedCookiesPassThrough.text() !== 'next ok') throw new Error('middleware should pass approved clean cookie route through');
-const injectedResponse = await middlewareSmoke('https://fontgenerators.app/', {
+const injectedResponse = await middlewareSmoke('https://fontgenerator.best/', {
   env: {
     GOOGLE_SITE_VERIFICATION: 'gsc-test-token',
     AHREFS_SITE_VERIFICATION: 'ahrefs-test-token',
     GA_MEASUREMENT_ID: 'G-TEST123',
     CLARITY_PROJECT_ID: 'clarity-test',
-    PLAUSIBLE_DOMAIN: 'fontgenerators.app',
+    PLAUSIBLE_DOMAIN: 'fontgenerator.best',
     AHREFS_ANALYTICS_KEY: 'ahrefs-analytics-test'
   },
   next: () => new Response('<!doctype html><html><head><title>Home</title></head><body>ok</body></html>', { status: 200, headers: { 'content-type': 'text/html; charset=utf-8' } })
@@ -1167,15 +1173,15 @@ for (const s of ['google-site-verification', 'gsc-test-token', 'ahrefs-site-veri
 }
 const heldPaths = ['/pricing', '/pricing/', '/refund', '/refund/', '/brat-font-generator', '/brat-font-generator/', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/gothic-font-generator', '/gothic-font-generator/', '/gothic-text-generator', '/gothic-text-generator/', '/blackletter-font', '/blackletter-font/', '/discord-font-generator', '/discord-font-generator/', '/fancy-text-generator', '/fancy-text-generator/', '/discord-text-generator', '/not-a-real-mvp-route'];
 for (const path of heldPaths) {
-  const response = await middlewareSmoke(`https://fontgenerators.app${path}`);
+  const response = await middlewareSmoke(`https://fontgenerator.best${path}`);
   const body = await response.text();
   if (response.status !== 404) throw new Error(`held/non-MVP path ${path} should return 404, got ${response.status}`);
   if (!response.headers.get('x-robots-tag')?.includes('noindex')) throw new Error(`held/non-MVP path ${path} should send x-robots-tag noindex`);
   if (!body.includes('<meta name="robots" content="noindex, nofollow">')) throw new Error(`held/non-MVP path ${path} should include noindex meta`);
   if (body.includes('Font Generator for Copy-Paste Fancy Text Styles')) throw new Error(`held/non-MVP path ${path} returned homepage duplicate HTML`);
 }
-const staticPassThrough = await middlewareSmoke('https://fontgenerators.app/assets/home-test.js');
+const staticPassThrough = await middlewareSmoke('https://fontgenerator.best/assets/home-test.js');
 if (staticPassThrough.status !== 200 || await staticPassThrough.text() !== 'next ok') throw new Error('middleware should pass static asset requests through');
-const llmsPassThrough = await middlewareSmoke('https://fontgenerators.app/llms.txt');
+const llmsPassThrough = await middlewareSmoke('https://fontgenerator.best/llms.txt');
 if (llmsPassThrough.status !== 200 || await llmsPassThrough.text() !== 'next ok') throw new Error('middleware should pass llms.txt through');
 console.log(`smoke ok: pages, SEO/schema/legal/cookie/analytics routes present; homepage has ${canonicalStyles.length} unique styles from ${styleIds.length} raw definitions; ASCII/Mixer/Username/Auto Changer, Gothic Font, the three-page Brat cluster, and About trust page are live; held routes return 404 noindex`);

@@ -4,23 +4,23 @@
 
 ## Canonical pages
 
-- [Font Generator](https://fontgenerators.app/) - Type text once, compare dozens of Unicode styles, and copy fancy text for bios, usernames, captions, Discord names, gaming profiles, and chat messages.
-- [ASCII Art Generator](https://fontgenerators.app/ascii-art-generator) - FIGlet text styles, width controls, copy actions, and TXT/PNG downloads.
-- [Font Mixer](https://fontgenerators.app/font-mixer) - Select words, apply different copy-paste Unicode styles, shuffle mixed ideas, and copy one combined line.
-- [Gothic Font Generator](https://fontgenerators.app/gothic-font) - Compare two Mathematical Fraktur alphabets, ten decorated variants, and four clearly labeled Gothic-style lettering alternatives, then copy the Unicode text in the browser.
-- [Username Generator](https://fontgenerators.app/username-generator) - Fancy username ideas for Instagram, TikTok, Discord, gaming, and other social profiles.
-- [Auto Font Changer](https://fontgenerators.app/auto-font-changer) - Automatically apply a readable mix of fancy Unicode fonts to bios, captions, Discord notes, gaming profiles, and short posts.
-- [Brat Generator](https://fontgenerators.app/brat-generator) - Create browser-rendered brat-style static images with custom colors, blur, pixelation, alignment, social sizes, transparent backgrounds, copy image, and PNG, JPEG, or WebP export.
-- [What Is the Brat Font?](https://fontgenerators.app/brat-font) - Evidence-based guide to the font name and treatment, legal alternatives, Canva and CapCut workflows, and the difference between an image generator and a downloadable or copy-paste font.
-- [Brat Green Color Code](https://fontgenerators.app/brat-green) - Copy #8ACE00 as HEX, RGB, HSL, approximate CMYK, or CSS; compare black/white text contrast; and open the color in Brat Generator.
-- [Discord Colored Text Generator](https://fontgenerators.app/discord-colored-text-generator) - Selected-span ANSI foreground/background colors, bold, underline, approximate preview, and copy-ready fenced `ansi` blocks.
+- [Font Generator](https://fontgenerator.best/) - Type text once, compare dozens of Unicode styles, and copy fancy text for bios, usernames, captions, Discord names, gaming profiles, and chat messages.
+- [ASCII Art Generator](https://fontgenerator.best/ascii-art-generator) - FIGlet text styles, width controls, copy actions, and TXT/PNG downloads.
+- [Font Mixer](https://fontgenerator.best/font-mixer) - Select words, apply different copy-paste Unicode styles, shuffle mixed ideas, and copy one combined line.
+- [Gothic Font Generator](https://fontgenerator.best/gothic-font) - Compare two Mathematical Fraktur alphabets, ten decorated variants, and four clearly labeled Gothic-style lettering alternatives, then copy the Unicode text in the browser.
+- [Username Generator](https://fontgenerator.best/username-generator) - Fancy username ideas for Instagram, TikTok, Discord, gaming, and other social profiles.
+- [Auto Font Changer](https://fontgenerator.best/auto-font-changer) - Automatically apply a readable mix of fancy Unicode fonts to bios, captions, Discord notes, gaming profiles, and short posts.
+- [Brat Generator](https://fontgenerator.best/brat-generator) - Create browser-rendered brat-style static images with custom colors, blur, pixelation, alignment, social sizes, transparent backgrounds, copy image, and PNG, JPEG, or WebP export.
+- [What Is the Brat Font?](https://fontgenerator.best/brat-font) - Evidence-based guide to the font name and treatment, legal alternatives, Canva and CapCut workflows, and the difference between an image generator and a downloadable or copy-paste font.
+- [Brat Green Color Code](https://fontgenerator.best/brat-green) - Copy #8ACE00 as HEX, RGB, HSL, approximate CMYK, or CSS; compare black/white text contrast; and open the color in Brat Generator.
+- [Discord Colored Text Generator](https://fontgenerator.best/discord-colored-text-generator) - Selected-span ANSI foreground/background colors, bold, underline, approximate preview, and copy-ready fenced `ansi` blocks.
 
 ## Legal and policy pages
 
-- [About and Contact](https://fontgenerators.app/about) - Publisher identity, editorial/source policy, tool privacy boundaries, independence statement, and contact details.
-- [Privacy Policy](https://fontgenerators.app/privacy) - Browser processing, analytics, logs, and privacy boundaries.
-- [Cookie Policy](https://fontgenerators.app/cookies) - Cookie and optional analytics choices.
-- [Terms of Service](https://fontgenerators.app/terms-of-service) - Conditions and limitations for using the site.
+- [About and Contact](https://fontgenerator.best/about) - Publisher identity, editorial/source policy, tool privacy boundaries, independence statement, and contact details.
+- [Privacy Policy](https://fontgenerator.best/privacy) - Browser processing, analytics, logs, and privacy boundaries.
+- [Cookie Policy](https://fontgenerator.best/cookies) - Cookie and optional analytics choices.
+- [Terms of Service](https://fontgenerator.best/terms-of-service) - Conditions and limitations for using the site.
 
 ## Brat topic sources
 
