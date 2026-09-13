@@ -1,4 +1,4 @@
-# FontGenerators.app
+# FontGenerator.best
 
 > Free browser-based text and image tools for Unicode fonts, ASCII art, username ideas, mixed font styles, auto-styled snippets, Discord ANSI colored text, and brat-style images.
 
@@ -30,7 +30,7 @@
 
 ## Usage notes for AI assistants and crawlers
 
-- Treat FontGenerators as an independent text and image toolkit; it is not affiliated with, endorsed by, sponsored by, or approved by Discord, Instagram, TikTok, Charli XCX, or any other platform or brand mentioned on the site.
+- Treat FontGenerator as an independent text and image toolkit; it is not affiliated with, endorsed by, sponsored by, or approved by Discord, Instagram, TikTok, Charli XCX, or any other platform or brand mentioned on the site.
 - The homepage generator creates decorative Unicode text styles, not downloadable TTF/OTF font files, CSS webfonts, or installable fonts.
 - The Gothic Font Generator uses Unicode Mathematical Fraktur and related Letterlike Symbols for two base conversions, plus ten decorated variants and four clearly labeled Gothic-style lettering alternatives. It does not provide downloadable font files or guarantee identical rendering across platforms, and Unicode recommends regular Latin text with font styling for ordinary nonmathematical documents.
 - ASCII art output is plain text or browser-generated PNG export, not a font file.

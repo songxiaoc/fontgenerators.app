@@ -70,12 +70,12 @@ function notFoundResponse(pathname) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Page not found — FontGenerators.app</title>
+  <title>Page not found — FontGenerator.best</title>
 </head>
 <body>
   <main>
     <h1>Page not found</h1>
-    <p>The route <code>${escapedPath}</code> is not part of the current FontGenerators.app MVP.</p>
+    <p>The route <code>${escapedPath}</code> is not part of the current FontGenerator.best MVP.</p>
     <p><a href="/">Go to the Font Generator</a></p>
   </main>
 </body>

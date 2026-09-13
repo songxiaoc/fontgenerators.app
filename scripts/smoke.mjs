@@ -133,7 +133,7 @@ function assertSeoMetrics(name, html, twoWordKeyword, threeWordKeyword) {
   const description = html.match(/<meta name="description" content="([^"]*)"/i)?.[1] || '';
   const tokens = wordTokens(html);
   if (!title || title.length > 60) throw new Error(`${name} title must be present and <=60 characters; found ${title.length}`);
-  if (/(?:\||-|–|—)\s*FontGenerators(?:\.app)?\s*$/i.test(title) || /FontGenerators\.app/i.test(title)) throw new Error(`${name} title should not append the brand name`);
+  if (/(?:\||-|–|—)\s*FontGenerator(?:\.app)?\s*$/i.test(title) || /FontGenerator\.app/i.test(title)) throw new Error(`${name} title should not append the brand name`);
   if (description.length < 140 || description.length > 160) throw new Error(`${name} description must be 140-160 characters; found ${description.length}`);
   if (tokens.length < 1000) throw new Error(`${name} should have at least 1000 visible words; found ${tokens.length}`);
 }
@@ -434,8 +434,8 @@ const aboutNodes = getJsonLdNodes('about', about);
 const aboutTitle = decodeBasicEntities(about.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '');
 const aboutH1 = decodeBasicEntities(stripHtml(about.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || '').trim().replace(/\s+/g, ' '));
 const aboutCanonical = 'https://fontgenerator.best/about';
-if (aboutTitle !== 'About FontGenerators.app and Its Browser Tools') throw new Error(`about title mismatch: ${aboutTitle || 'missing'}`);
-if (aboutH1 !== 'About FontGenerators.app') throw new Error(`about H1 mismatch: ${aboutH1 || 'missing'}`);
+if (aboutTitle !== 'About FontGenerator.best and Its Browser Tools') throw new Error(`about title mismatch: ${aboutTitle || 'missing'}`);
+if (aboutH1 !== 'About FontGenerator.best') throw new Error(`about H1 mismatch: ${aboutH1 || 'missing'}`);
 if (getCanonical(about) !== aboutCanonical) throw new Error('about canonical must use the clean production URL');
 if (!getMetaContent(about, 'name', 'robots').includes('index, follow')) throw new Error('about page must remain indexable');
 for (const type of ['Organization', 'WebSite', 'AboutPage']) if (!hasSchemaType(aboutNodes, type)) throw new Error(`about page missing ${type} structured data`);
@@ -713,7 +713,7 @@ const bratOrganizationSchema = bratSchemaNodes.find(node => hasSchemaType([node]
 const bratWebsiteSchema = bratSchemaNodes.find(node => hasSchemaType([node], 'WebSite'));
 const bratWebPageSchema = bratSchemaNodes.find(node => hasSchemaType([node], 'WebPage'));
 const bratApplicationSchema = bratSchemaNodes.find(node => hasSchemaType([node], 'WebApplication'));
-if (bratOrganizationSchema?.['@id'] !== 'https://fontgenerator.best/#organization' || bratOrganizationSchema?.name !== 'FontGenerators.app' || bratOrganizationSchema?.alternateName !== 'FontGenerators') throw new Error('brat page must expose the stable FontGenerators.app Organization identity');
+if (bratOrganizationSchema?.['@id'] !== 'https://fontgenerator.best/#organization' || bratOrganizationSchema?.name !== 'FontGenerator.best' || bratOrganizationSchema?.alternateName !== 'FontGenerator') throw new Error('brat page must expose the stable FontGenerator.best Organization identity');
 if (bratWebsiteSchema?.['@id'] !== 'https://fontgenerator.best/#website' || bratWebsiteSchema?.publisher?.['@id'] !== 'https://fontgenerator.best/#organization') throw new Error('brat page must expose the stable WebSite identity and publisher relation');
 const visibleBratPublished = getLabeledTime('brat generator', brat, '\\bPublished\\b');
 const visibleBratReviewed = getLabeledTime('brat generator', brat, '\\blast reviewed\\b');
@@ -731,7 +731,7 @@ assertExactStringSet('brat WebPage citations', bratWebPageSchema?.citation, brat
 const bratSourcesSection = getSectionByClass('brat generator', brat, 'brat-sources');
 const visibleBratSourceUrls = getAnchors(bratSourcesSection).map(anchor => anchor.href).filter(href => /^https:\/\//.test(href));
 assertExactStringSet('brat visible source links', visibleBratSourceUrls, bratCitations);
-if (!sourceBrat.includes('<meta name="author" content="FontGenerators.app"') || !getAnchors(bratSourcesSection).some(anchor => anchor.href === '/about' && anchor.label === 'FontGenerators.app')) throw new Error('brat page must expose visible organization authorship in its sources section');
+if (!sourceBrat.includes('<meta name="author" content="FontGenerator.best"') || !getAnchors(bratSourcesSection).some(anchor => anchor.href === '/about' && anchor.label === 'FontGenerator.best')) throw new Error('brat page must expose visible organization authorship in its sources section');
 if (!sourceBrat.includes('<table class="brat-comparison-table">') || !sourceBrat.includes('<caption>Brat Generator export and clipboard format comparison</caption>') || !sourceBrat.includes('<th scope="col">Method</th>') || !sourceBrat.includes('<th scope="row">PNG download</th>') || !sourceBrat.includes('<th scope="row">JPEG download</th>') || !sourceBrat.includes('<th scope="row">WebP download</th>')) throw new Error('brat page must expose an accessible, practical export-format comparison table');
 const schemaPages = [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat generator', brat], ['brat font', bratFont], ['brat green', bratGreen], ['tool', tool], ['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]];
 for (const [name, html] of schemaPages) {
@@ -745,8 +745,8 @@ for (const [name, html] of [['home', home], ['about', about], ['brat generator',
   const nodes = getJsonLdNodes(name, html);
   const organization = getSingleSchemaNode(name, nodes, 'Organization');
   const website = getSingleSchemaNode(name, nodes, 'WebSite');
-  if (organization['@id'] !== 'https://fontgenerator.best/#organization' || organization.name !== 'FontGenerators.app' || organization.alternateName !== 'FontGenerators' || organization.url !== 'https://fontgenerator.best/') throw new Error(`${name} must define the stable Organization identity`);
-  if (website['@id'] !== 'https://fontgenerator.best/#website' || website.name !== 'FontGenerators.app' || website.alternateName !== 'FontGenerators' || website.url !== 'https://fontgenerator.best/' || website.publisher?.['@id'] !== 'https://fontgenerator.best/#organization') throw new Error(`${name} must define the stable WebSite identity`);
+  if (organization['@id'] !== 'https://fontgenerator.best/#organization' || organization.name !== 'FontGenerator.best' || organization.alternateName !== 'FontGenerator' || organization.url !== 'https://fontgenerator.best/') throw new Error(`${name} must define the stable Organization identity`);
+  if (website['@id'] !== 'https://fontgenerator.best/#website' || website.name !== 'FontGenerator.best' || website.alternateName !== 'FontGenerator' || website.url !== 'https://fontgenerator.best/' || website.publisher?.['@id'] !== 'https://fontgenerator.best/#organization') throw new Error(`${name} must define the stable WebSite identity`);
 }
 for (const [name, html] of [['brat generator', brat], ['brat font', bratFont], ['brat green', bratGreen]]) {
   const page = getJsonLdNodes(name, html).find(node => hasSchemaType([node], 'WebPage'));
@@ -859,10 +859,10 @@ for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], 
   if (html.includes('alt=""')) throw new Error('page should not contain empty image alt attributes');
   if (!html.includes('rel="icon" href="/favicon.png"')) throw new Error('page missing png favicon link');
   if (!html.includes('class="brand-mark" src="/logo.png"')) throw new Error('page missing logo brand mark');
-  if (!html.includes('alt="FontGenerators.app logo"')) throw new Error('page missing logo alt text');
+  if (!html.includes('alt="FontGenerator.best logo"')) throw new Error('page missing logo alt text');
   if (!html.includes('class="nav-toggle"') || !html.includes('id="primary-navigation"')) throw new Error('page missing mobile navigation toggle');
-  if (html.includes('/> FontGenerators.app</a>')) throw new Error('visible brand label should omit .app');
-  if (!html.includes('/> FontGenerators</a>')) throw new Error('visible brand label missing');
+  if (html.includes('/> FontGenerator.best</a>')) throw new Error('visible brand label should omit .app');
+  if (!html.includes('/> FontGenerator</a>')) throw new Error('visible brand label missing');
   if (html.includes('<span>Fg_</span>')) throw new Error('page should not use old text-only brand mark');
 }
 for (const [name, html] of [['home', home], ['ascii', ascii], ['mixer', mixer], ['username', username], ['changer', changer], ['brat', brat], ['brat font', bratFont], ['brat green', bratGreen], ['gothic', gothic], ['tool', tool], ['about', about], ['privacy', privacy], ['cookies', cookies], ['terms', terms]]) {
