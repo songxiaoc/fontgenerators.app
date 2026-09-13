@@ -1093,7 +1093,7 @@ for (const [loc, expectedLastmod] of approvedSitemapLastmods) {
 for (const forbidden of ['/pricing', '/refund', '/cookies', '/auto-font-styler', '/brat-font-generator', '/brat-text-generator', '/brat-color', '/brat-color-code', '/brat-video-generator', '/brat-lyric-generator', '/gothic-font-generator', '/gothic-text-generator', '/blackletter-font', '/discord-font-generator', '/fancy-text-generator', '/discord-text-generator']) {
   if (sitemap.includes(`https://fontgenerator.best${forbidden}`) && forbidden !== '/discord-colored-text-generator') throw new Error(`sitemap should not include non-indexable route ${forbidden}`);
 }
-for (const host of ['www.fontgenerator.best', 'www.fontgenerators.app']) {
+for (const host of ['www.fontgenerator.best']) {
   if (redirects.includes(host)) throw new Error('Cloudflare Pages _redirects cannot reliably enforce host-level redirects; Pages middleware handles host canonicalization instead');
 }
 const redirectLines = redirects.split(/\r?\n/).map(line => line.trim()).filter(line => line && !line.startsWith('#'));
@@ -1119,7 +1119,7 @@ assertExactStringSet('Cloudflare _redirects rules', redirectLines, [
 for (const s of ["bratGenerator: resolve(__dirname, 'brat-generator.html')", "bratFont: resolve(__dirname, 'brat-font.html')", "bratGreen: resolve(__dirname, 'brat-green.html')", "gothicFont: resolve(__dirname, 'gothic-font.html')", "about: resolve(__dirname, 'about.html')"]) {
   if (!viteConfig.includes(s)) throw new Error(`Vite MPA config missing page entry: ${s}`);
 }
-for (const s of ['www.fontgenerator.best', 'fontgenerator.best', 'www.fontgenerators.app', 'fontgenerators.app', 'LEGACY_HOSTS', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/gothic-font', '/about', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
+for (const s of ['www.fontgenerator.best', 'fontgenerator.best', 'Response.redirect', '/ascii-art-generator', '/font-mixer', '/username-generator', '/auto-font-changer', '/brat-generator', '/brat-font', '/brat-green', '/gothic-font', '/about', '/auto-font-styler', '/discord-colored-text-generator/', '/cookies/', '/terms-of-service/', 'GOOGLE_SITE_VERIFICATION', 'AHREFS_ANALYTICS_KEY']) {
   if (!middleware.includes(s)) throw new Error(`canonical/analytics middleware missing ${s}`);
 }
 
@@ -1133,12 +1133,6 @@ async function middlewareSmoke(url, options = {}) {
 }
 const wwwRedirect = await middlewareSmoke('https://www.fontgenerator.best/discord-colored-text-generator/?utm_source=test');
 if (wwwRedirect.status !== 301 || wwwRedirect.headers.get('location') !== 'https://fontgenerator.best/discord-colored-text-generator?utm_source=test') throw new Error('middleware must 301 new www tool URL to apex clean URL and preserve query');
-for (const legacyUrl of ['https://fontgenerators.app/font-mixer?utm_source=legacy', 'https://www.fontgenerators.app/discord-colored-text-generator/?utm_source=legacy']) {
-  const legacyResponse = await middlewareSmoke(legacyUrl);
-  if (legacyResponse.status !== 410) throw new Error('middleware must return 410 Gone for retired legacy web domains');
-  if (legacyResponse.headers.has('location')) throw new Error('retired legacy web domains must not redirect to the new domain');
-  if (!legacyResponse.headers.get('x-robots-tag')?.includes('noindex')) throw new Error('retired legacy web domains must send x-robots-tag noindex');
-}
 const slashRedirect = await middlewareSmoke('https://fontgenerator.best/terms/');
 if (slashRedirect.status !== 301 || slashRedirect.headers.get('location') !== 'https://fontgenerator.best/terms-of-service') throw new Error('middleware must preserve legacy clean-route redirects');
 const cookieSlashRedirect = await middlewareSmoke('https://fontgenerator.best/cookies/');
