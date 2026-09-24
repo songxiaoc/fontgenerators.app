@@ -35,7 +35,7 @@ export const fontPages = [
     howToHeading: 'Make a cursive name or phrase', faqHeading: 'Cursive character questions', relatedHeading: 'Other looks for a personal name',
     intro: 'The cursive font generator replaces supported letters with script and related decorative characters. Cursive text for names is easier to judge with your real spelling than with a sample, and a short name shows the curves more clearly than a paragraph.',
     useCases: ['A signature-like display name', 'A short invitation line', 'A decorative caption opener'],
-    howTo: ['Type a name or brief phrase.', 'Compare the cursive previews for legibility.', 'Copy the version that still reads clearly at its destination.'],
+    howTo: ['Type a name or brief phrase.', 'Compare the cursive previews for legibility.', 'Copy the version that still reads clearly after pasting.'],
     notes: ['Script characters can be harder to read for some people and assistive tools.', 'The result depends on Unicode support in the app where you paste it.'],
     faq: [
       { question: 'Can I use this as a handwriting font in a document?', answer: 'This tool copies styled characters. It does not install a font or change the document font menu.' },
@@ -99,7 +99,7 @@ export const fontPages = [
     intro: 'The stylish font generator favors structure: even-width letters, brackets, and patterned characters. Stylish text for labels works best when the full label fits on one line, so try your real wording before copying a framed result.',
     useCases: ['A compact profile label', 'A project or playlist title', 'A short graphic caption'],
     howTo: ['Enter a short label.', 'Compare the spacing and framing in each preview.', 'Copy a result that leaves enough room for your full message.'],
-    notes: ['Framed styles can substantially increase character length.', 'A receiving app may change the character shapes or spacing.'],
+    notes: ['Framed styles can substantially increase character length.', 'Character shapes and spacing may look slightly different after you paste the result.'],
     faq: [
       { question: 'Why does a stylish result take more space?', answer: 'Some variants add brackets or extra marks to each character, which makes the output longer than the original.' },
       { question: 'Can I use these as a website font?', answer: 'The output is styled text you can paste. For a whole website, choose a font through its design settings.' }
@@ -122,7 +122,7 @@ export const fontPages = [
     howTo: ['Enter your phrase in the input.', 'Look at how each treatment changes its footprint.', 'Copy the variant that suits your context.'],
     notes: ['Unusual characters may be less accessible than ordinary text.', 'Long outputs can wrap awkwardly in narrow fields.'],
     faq: [
-      { question: 'Which cool font is easiest to scan?', answer: 'Try a less decorated result first, then check readability after pasting. The best choice depends on your words and destination.' },
+      { question: 'Which cool font is easiest to scan?', answer: 'Try a less decorated result first, then check readability after pasting. The best choice depends on your words and where you plan to paste them.' },
       { question: 'Why do numbers change in some options but not others?', answer: 'Unicode style sets differ in whether they include number characters.' }
     ]
   },
@@ -141,7 +141,7 @@ export const fontPages = [
     intro: 'The cute font generator pairs friendly words with hearts, rounded letters, and script. Cute text for notes feels warmer when the decoration does not overpower the message; Heart King is playful, while Flower Crown is gentler.',
     useCases: ['A friendly note to a friend', 'A sweet nickname', 'A cheerful caption opening'],
     howTo: ['Type a short friendly phrase.', 'Compare accented and simpler previews.', 'Copy the result and check the pasted spacing.'],
-    notes: ['Hearts and surrounding symbols count as extra characters.', 'Emoji and Unicode glyph appearance can vary by device.'],
+    notes: ['Hearts and surrounding symbols count as extra characters.', 'Emoji and styled characters can look slightly different across devices.'],
     faq: [
       { question: 'Does the tool add emoji to every cute style?', answer: 'No. Some results use Unicode letter shapes or text symbols instead of emoji.' },
       { question: 'What if my phrase becomes too long?', answer: 'Use a shorter phrase or choose a preview with fewer decorative characters.' }

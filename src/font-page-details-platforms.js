@@ -11,7 +11,7 @@ export const platformPageDetails = {
       {
         heading: 'Match the treatment to the message',
         paragraphs: [
-          `Script letters can make a personal introduction or an art account feel softer, while a bold line can help a shop category or creator specialty stand out. Circled letters draw attention but take more visual room. Wide lettering can make a short phrase feel calm, yet it may break awkwardly if the destination field is narrow. The best choice is the one that makes your words easier to recognize at a glance, not simply the most elaborate output.`,
+          `Script letters can make a personal introduction or an art account feel softer, while a bold line can help a shop category or creator specialty stand out. Circled letters draw attention but take more visual room. Wide lettering can make a short phrase feel calm, yet it may break awkwardly if your Instagram bio or caption is narrow. The best choice is the one that makes your words easier to recognize at a glance, not simply the most elaborate output.`,
           `The preview uses the sample you enter, so replace it with the exact phrase you plan to publish. A style that looks neat with “hello” can be uneven with a long brand name, repeated letters, numbers, or punctuation. Keep an eye on capitals and symbols, because many Unicode substitutions cover ordinary Latin letters more completely than other characters. If a key word looks strange, shorten the line or pick a simpler treatment instead of forcing the effect.`
         ]
       },
@@ -25,7 +25,7 @@ export const platformPageDetails = {
       {
         heading: 'Preview the exact Instagram field',
         paragraphs: [
-          `A bio draft, display-name draft, and caption draft can behave differently. The Instagram Font Generator shows you the characters, but it cannot tell you what a particular editor will accept today. Paste into the exact field you intend to update and look for rejected characters, unexpected wrapping, or characters that appear as empty boxes. If you need to change the text later, keep a copy of the plain phrase so you can regenerate it cleanly.`,
+          `A bio draft, display-name draft, and caption draft can behave differently. The Instagram Font Generator shows you the characters, but it cannot tell you what a particular editor will accept today. Paste the result into your Instagram bio, display name, or caption and look for rejected characters, unexpected wrapping, or empty boxes. If you need to change the text later, keep a copy of the plain phrase so you can regenerate it cleanly.`,
           `Review the profile as a visitor would, not only in the editing box. Read the styled line next to the profile photo, account name, and neighboring plain text. Some lettering that looks balanced on a wide desktop preview feels cramped beside a small avatar. If a style makes a name difficult to pronounce or recognize, use it in a caption accent instead and keep the identifying text straightforward.`
         ]
       },
@@ -118,7 +118,7 @@ export const platformPageDetails = {
         heading: 'Draft with the channel around it',
         paragraphs: [
           `Paste a candidate into a Discord draft in the channel or profile field where it belongs. Check it against the theme you use, nearby messages, and the amount of space available. A line that looks balanced alone may wrap beside an avatar or next to a longer announcement. If you manage a server, inspect the message as a member would and keep essential instructions outside the decorative text.`,
-          `Different fields can have different acceptance rules or length limits, and the Discord Font Generator cannot predict them. A phrase that fits in a message may not fit in a profile or server text field. Test the copied result in the exact destination rather than assuming one successful paste proves every use. If a character is refused or drawn strangely, keep the plain original and try a less decorative option. There is no need to rebuild the whole message.`
+          `Different fields can have different acceptance rules or length limits, and the Discord Font Generator cannot predict them. A phrase that fits in a message may not fit in a profile or server text field. Test the copied result in the Discord message, profile, or server field you plan to use. If a character is refused or drawn strangely, keep the plain original and try a less decorative option. There is no need to rebuild the whole message.`
         ]
       },
       {
@@ -161,16 +161,16 @@ export const platformPageDetails = {
         ]
       },
       {
-        heading: 'Check the recipient-facing draft',
+        heading: 'Check how WhatsApp chat text looks after pasting',
         paragraphs: [
           `Paste the line into a WhatsApp draft and read it as if you had just received it. Does the greeting sound like you? Does the important information appear close enough to the opening? Does the line wrap in an odd place on your phone? The browser preview cannot reproduce every chat bubble or device font, so the draft is the right place to make the final choice. If the result is too dense, try a shorter phrase or a simpler style.`,
-          `A status draft is a different setting from a chat bubble. A line that looks pleasant on its own may become hard to read beside a photo or other status content. Test it there if that is your destination. You do not need to publish a test: paste, inspect, and revise in the draft. Keep a plain copy of the wording in a note so you can return to the WhatsApp Font Generator and try another style later.`
+          `A status draft is a different setting from a chat bubble. A line that looks pleasant on its own may become hard to read beside a photo or other status content. If you plan to use it as a status, test it in a WhatsApp draft first. You do not need to publish a test: paste, inspect, and revise in the draft. Keep a plain copy of the wording in a note so you can return to the WhatsApp Font Generator and try another style later.`
         ]
       },
       {
         heading: 'Preserve important details and names',
         paragraphs: [
-          `Use plain text for an address, phone number, date, price, or instruction that someone might copy into another app. Some decorative characters resemble ordinary letters but are encoded differently, which may affect selection, searching, or speech output. A styled “See you soon” above a normal address keeps the friendly tone without making the destination harder to use. The same principle applies to a group name that people need to find again.`,
+          `Use plain text for an address, phone number, date, price, or instruction that someone might copy into another app. Some decorative characters resemble ordinary letters but are encoded differently, which may affect selection, searching, or speech output. A styled “See you soon” above a normal address keeps the friendly tone without making the address harder to copy or read. The same principle applies to a group name that people need to find again.`,
           `Be mindful of recipients who use a different device or accessibility setting. You cannot guarantee that a generated character looks the same for everyone. If the message would be confusing when the accent is skipped, rewrite the ordinary text underneath. A decorative line should be optional to understanding. When you are sending urgent or sensitive information, plain wording is usually the strongest choice; save the visual effect for greetings, celebrations, and low-stakes labels.`
         ]
       },
@@ -255,7 +255,7 @@ export const platformPageDetails = {
       {
         heading: 'Test the exact place you plan to post',
         paragraphs: [
-          `A Facebook profile field, post draft, group contribution, and comment are different contexts. The generator shows characters in this browser but cannot promise acceptance or identical display in every field. Paste a candidate into the destination editor and inspect it there. Check for empty boxes, changed spacing, and line breaks that separate the heading from its explanation. Do this before publishing an update that includes details others will rely on.`,
+          `A Facebook profile field, post draft, group contribution, and comment are different contexts. The generator shows characters in this browser but cannot promise acceptance or identical display in every field. For a Facebook post, paste a candidate into the draft and inspect it there. Check for empty boxes, changed spacing, and line breaks that separate the heading from its explanation. Do this before publishing an update that includes details others will rely on.`,
           `Look at the draft with its surrounding photo or link preview as well. The Facebook Font Generator cannot show how a title will sit beside your own image or preview card. A highly decorated title that looked balanced alone may compete with a bright image. If the page already has a strong visual, choose a restrained bold line or no extra style. The goal is to guide attention toward the message. A quick comparison between the plain and styled draft can reveal whether the added lettering helps or merely makes the page busier.`
         ]
       },
