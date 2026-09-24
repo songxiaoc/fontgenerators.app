@@ -125,7 +125,7 @@ export const platformPageDetails = {
         heading: 'Make room for every reader',
         paragraphs: [
           `Unicode lookalikes can affect screen readers, search, and text selection. In a community space, those effects matter because people may rely on search to find an announcement later. Write the topic, date, or command in ordinary characters somewhere in the message. For example, a styled “Game night” heading can sit above a plain line with the game name and start time. That gives the message a visual cue while keeping its practical details discoverable.`,
-          `Be careful with @mentions, channel references, invite links, and commands. Decorative substitutions can make them stop behaving like the ordinary text a reader expects. Type those elements in the destination editor as normal characters. You can surround them with a copied heading if it helps the layout. The same applies to names that friends must recognize quickly: use the effect for a mood or label, not as the only way to identify someone.`
+          `Be careful with @mentions, channel references, invite links, and commands. Decorative substitutions can make them stop behaving like the ordinary text a reader expects. Type those elements normally in Discord instead of styling them. You can surround them with a copied heading if it helps the layout. The same applies to names that friends must recognize quickly: use the effect for a mood or label, not as the only way to identify someone.`
         ]
       },
       {
@@ -202,7 +202,7 @@ export const platformPageDetails = {
       {
         heading: 'Keep the post counter in view',
         paragraphs: [
-          `Some Unicode effects substitute one visible letter with another character, while others add marks or wrappers around it. The result may not behave like the same number of ordinary typed letters in a post draft. The browser preview cannot calculate the destination editor's current counting rules for every field. Paste the copied line into the actual draft and watch its counter. If the post becomes too long, shorten the hook or choose a cleaner style before cutting useful context.`,
+          `Some Unicode effects substitute one visible letter with another character, while others add marks or wrappers around it. The result may not behave like the same number of ordinary typed letters in a post draft. Character counts can change with some styled text, so check the counter after you paste it into your draft. If the post becomes too long, shorten the hook or choose a cleaner style before cutting useful context.`,
           `Line wrapping matters as much as the count. Wide or framed characters can make a short phrase take more horizontal room than expected. Check where the hook breaks on a phone and whether the next sentence starts clearly. If a decorative word occupies several lines, it may delay the useful point of the post. Try a two-word label instead of a full sentence, or use plain text when the post needs to move quickly from claim to explanation.`
         ]
       },

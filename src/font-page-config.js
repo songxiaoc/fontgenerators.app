@@ -219,10 +219,10 @@ export const fontPages = [
     sample: 'BIG IDEA',
     resultsHeading: 'Big text previews',
     styleIds: ['hit', 'big-brother', 'nut', 'doric', 'double-bubble'],
-    introHeading: 'A larger impression in ordinary text',
-    useCasesHeading: 'Brief words that need presence', notesHeading: 'Wide looks need space',
+    introHeading: 'Make short text stand out',
+    useCasesHeading: 'Good uses for big text', notesHeading: 'Wide looks need space',
     howToHeading: 'Make a word feel bigger', faqHeading: 'Big-looking text questions', relatedHeading: 'Other bold display looks',
-    intro: 'The big text generator changes the footprint of words with wide letters and surrounding symbols, while the actual font size stays under the destination app. Big text for headlines is most useful when only a few words need visual weight.',
+    intro: 'The big text generator uses wide letters and surrounding symbols to make short text look more prominent. It does not change the actual font size in the app where you paste it, so big text works best for short headlines, labels, and reactions.',
     useCases: ['A short announcement word', 'A dramatic chat reaction', 'A compact banner label'],
     howTo: ['Enter a brief headline.', 'Compare which preview reads at a glance.', 'Copy and check for wrapping where you paste it.'],
     notes: ['This does not increase the destination app font size.', 'Frames and wide forms can exceed field length limits sooner.'],
@@ -329,11 +329,11 @@ export const fontPages = [
     howToHeading: 'Give a line an eerie look', faqHeading: 'Creepy lettering questions', relatedHeading: 'More unsettling lettering',
     intro: 'The creepy text generator combines dark-looking letters with marks that seem to fray around them. Creepy text for titles sets the tone without tiring readers through a full paragraph of distressed lettering.',
     useCases: ['A horror story heading', 'A Halloween caption', 'A spooky game status'],
-    howTo: ['Enter a short eerie phrase.', 'Compare clean-dark and heavily marked versions.', 'Copy one that remains readable in context.'],
-    notes: ['Combining marks can spill into adjacent lines.', 'The visual effect can vary significantly with the rendering font.'],
+    howTo: ['Enter a short eerie phrase.', 'Compare subtle and more distorted versions.', 'Copy one that remains readable in context.'],
+    notes: ['Combining marks can spill into adjacent lines.', 'The effect may look different after you paste it into another app.'],
     faq: [
       { question: 'Can I use creepy text for a full story?', answer: 'It is most legible as a title or brief accent. Use ordinary text for long passages.' },
-      { question: 'Why do marks seem uneven?', answer: 'Each mark has its own placement rules, and receiving fonts render their combinations differently.' }
+      { question: 'Why do marks seem uneven?', answer: 'These marks can appear differently across apps, devices, and fonts.' }
     ]
   },
   {
@@ -371,10 +371,10 @@ export const fontPages = [
     introHeading: 'Style a small part of your Instagram text',
     useCasesHeading: 'Short profile and caption ideas', notesHeading: 'Check the exact Instagram field',
     howToHeading: 'Try a bio or caption draft', faqHeading: 'Instagram bio text questions', relatedHeading: 'More profile lettering ideas',
-    intro: 'A short Instagram bio line can carry script or circled letters without making the rest of your profile difficult to read. The Instagram font generator lets you compare your actual words; paste a candidate into the exact editable field you plan to use.',
+    intro: 'A short Instagram bio line can use script or circled letters without making the rest of your profile difficult to read. The Instagram font generator lets you compare your own words before copying a style into your bio or caption.',
     useCases: ['A brief bio opener', 'A highlighted word in a caption', 'A playful name idea'],
     howTo: ['Write the short line you want to try.', 'Compare readable and decorative previews.', 'Copy one and inspect it in an Instagram draft.'],
-    notes: ['Instagram can restrict characters or field length in some places.', 'Unicode glyphs may look different on another device.'],
+    notes: ['Instagram can restrict characters or field length in some places.', 'Styled characters may look slightly different on another device.'],
     faq: [
       { question: 'Will these styles work in every Instagram field?', answer: 'Fields can have different character rules. Paste a sample into the exact field you intend to use and check it there.' },
       { question: 'Is this connected to Instagram?', answer: 'No. This independent tool creates copyable Unicode text for you to try in your own draft.' }
@@ -397,9 +397,9 @@ export const fontPages = [
     intro: 'A brief TikTok profile line is easier to scan on a small screen than a fully decorated paragraph. The TikTok font generator lets you compare a bold opening with compact raised letters, then check the pasted result in your draft.',
     useCases: ['A short creator tagline', 'A caption opening phrase', 'A compact series label'],
     howTo: ['Enter a short creator line.', 'Compare how the styles scan on a small screen.', 'Copy and test one in your TikTok draft.'],
-    notes: ['Different TikTok text fields may accept different characters.', 'Stylized characters can affect search and accessibility.'],
+    notes: ['Some styled characters may not work in every TikTok profile or caption.', 'Stylized characters can affect search and accessibility.'],
     faq: [
-      { question: 'Does this change the TikTok app font?', answer: 'No. It gives you copyable Unicode characters to try in text fields that accept them.' },
+      { question: 'Does this change the TikTok app font?', answer: 'No. It creates styled text you can copy and paste into supported TikTok fields.' },
       { question: 'Why keep the phrase short?', answer: 'Decorative characters can take more space, and a short line is easier to read in a compact interface.' }
     ]
   },
