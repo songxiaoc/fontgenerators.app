@@ -26,12 +26,12 @@ export const effectPageDetailsA = {
         bullets: ['Test a real number if the final line includes one.', 'Inspect similar-looking letters at phone size.', 'Keep a plain copy for later edits or search.']
       },
       {
-        heading: 'Paste once, then inspect the destination',
+        heading: 'Paste once, then check the result',
         paragraphs: [
           'Copy the version that looks right in the preview, paste it into a draft, and pause before publishing. The app where you paste the text uses its own font, so the letter shapes and line height may look different from the preview here. Check whether the phrase wraps in a narrow column, whether the last character fits, and whether punctuation appears beside the expected word. If the field rejects the result, shorten the heading or try a simpler bold preview.',
           'Bold text for headings is especially sensitive to context. A line that looks balanced alone can become too loud next to an image, emoji, or another heading. Read the whole draft from the top as a new visitor would. If every line is competing for attention, reduce the styled area to one phrase. When a field offers its own bold formatting button, compare that option too; it may preserve ordinary letters for search and editing.'
         ],
-        bullets: ['Check the complete line after pasting, not just the first word.', 'Look for unexpected wrapping on a narrow screen.', 'Use the destination formatting control when it better fits the task.']
+        bullets: ['Check the complete line after pasting, not just the first word.', 'Look for unexpected wrapping on a narrow screen.', 'Use the app’s built-in bold formatting when it works better.']
       },
       {
         heading: 'Keep bold text readable for everyone',
@@ -39,7 +39,7 @@ export const effectPageDetailsA = {
           'Styled Unicode characters can be announced differently by assistive reading tools and may not match ordinary letters in search. Use bold text as a brief visual accent rather than the only way to communicate essential instructions. If a date, address, or safety detail must be understood exactly, put it in plain text nearby. Readers who copy your message later will also have a cleaner version to reuse.',
           'If a preview appears as empty boxes, uneven characters, or an unusually tall line after pasting, try Classic or Modern with the same text. If those still look wrong, ordinary text with built-in bold formatting may work better.'
         ],
-        bullets: ['Use plain text for details people may need to search.', 'Avoid styling long instructions or accessibility-critical information.', 'Prefer a simple result when the destination changes the letter shapes.']
+        bullets: ['Use plain text for details people may need to search.', 'Avoid styling long instructions or accessibility-critical information.', 'Prefer a simpler style if the pasted letters look different.']
       }
     ]
   },
@@ -199,7 +199,7 @@ export const effectPageDetailsA = {
           'Your original phrase can become much longer after styling. Kodak and Palmistry add characters around each letter, so the pasted result may exceed a text limit or wrap sooner than expected. Dicey uses a word-level frame and may be less crowded for multiword labels. Check a realistic sample with spaces, numbers, and punctuation because these can also receive decorative frames. The app counts the full pasted text toward its limit, not just the shorter phrase you typed.',
           'Stylish text for labels is easiest to manage when the label has a clear length budget. If a five-word idea becomes too wide, shorten the wording before choosing a different style. Removing a decorative bracket after pasting can break the pattern, so edit your original text and copy a fresh result instead. Keep the plain wording in your draft for fast changes or for a place where the same title should remain searchable.'
         ],
-        bullets: ['Inspect the actual copied length in a draft field.', 'Shorten the source phrase before editing individual wrappers.', 'Keep a plain version for later reuse.']
+        bullets: ['Inspect the actual copied length in a draft field.', 'Shorten your original phrase instead of editing individual frames.', 'Keep a plain version for later reuse.']
       },
       {
         heading: 'Inspect alignment after pasting',
@@ -207,13 +207,13 @@ export const effectPageDetailsA = {
           'The regular spacing of a preview can change after paste. A different font may draw brackets wider, position marks lower, or make a framed space look like an empty box. A stylish font look that depends on precise alignment may change more than an unframed line. Paste the label into the final context and view it beside the surrounding words. If the line feels lopsided, compare Silicon or another unframed choice. Test on a narrow screen as well as a wider one when the label may appear in a compact layout.',
           'The stylish font generator helps you compare options, but the app where you paste the text determines how it finally looks. Do not rely on a particular number of characters fitting just because the preview stays on one line here. If the app rejects a character, try a simpler treatment with fewer added marks. A label that stays intact through copying, pasting, and later editing is usually more useful than the most elaborate pattern.'
         ],
-        bullets: ['Check bracket spacing and marked letters in the destination.', 'Look for line breaks in narrow fields.', 'Choose a simpler style if the pattern breaks.']
+        bullets: ['Check bracket spacing and marked letters after pasting.', 'Look for line breaks in narrow fields.', 'Choose a simpler style if the pattern breaks.']
       },
       {
         heading: 'Make the label easy to recognize again',
         paragraphs: [
-          'Unusual Unicode letters can be harder to search for by typing the ordinary title, and assistive readers may announce them differently. If the label identifies a person, project, or important destination, repeat the name in plain text nearby. This lets the graphic version add character without becoming the only way to find or understand the information. Avoid using a heavily framed result for long instructions, addresses, or anything that must be copied exactly.',
-          'If you want a graphic look throughout a website or document, the destination design controls may serve you better than pasted text. This tool is for short, portable labels. The right stylish result is one that keeps the words legible, fits the available width, and still looks intentional after someone else opens it on another device. When those conditions conflict, let clarity decide.'
+          'Unusual Unicode letters can be harder to search for by typing the ordinary title, and assistive readers may announce them differently. If the label identifies a person, project, or place, repeat the name in plain text nearby. This lets the graphic version add character without becoming the only way to find or understand the information. Avoid using a heavily framed result for long instructions, addresses, or anything that must be copied exactly.',
+          'If you want a consistent graphic look throughout a website or document, its built-in font and design controls may work better than pasted text. This tool is for short, portable labels. The right stylish result is one that keeps the words legible, fits the available width, and still looks intentional after someone else opens it on another device. When those conditions conflict, let clarity decide.'
         ],
         bullets: ['Pair important labels with ordinary spelling.', 'Reserve frames for short names or section markers.', 'Test readability before choosing the most detailed pattern.']
       }

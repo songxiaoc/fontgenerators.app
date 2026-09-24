@@ -17,7 +17,7 @@ export const fontPages = [
     howTo: ['Enter the words you want to emphasize.', 'Compare the bold previews for shape and readability.', 'Copy one result and check the bold text after pasting.'],
     notes: ['These are Unicode characters, not a bold setting or downloadable font.', 'Some symbols, punctuation, and non-Latin characters may stay unchanged.'],
     faq: [
-      { question: 'Is bold text the same as applying bold formatting?', answer: 'No. The output substitutes Unicode characters, so it can be pasted as text where those characters are accepted.' },
+      { question: 'Is bold text the same as applying bold formatting?', answer: 'No. The result uses Unicode characters, so you can copy and paste it as text in apps that support those characters.' },
       { question: 'Why do some letters look different after I paste?', answer: 'Bold text can look slightly different across apps and devices, so check the pasted result before publishing.' }
     ]
   },
