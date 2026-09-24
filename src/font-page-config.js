@@ -290,7 +290,7 @@ export const fontPages = [
     howTo: ['Type the odd phrase you have in mind.', 'Compare the variants for readability and surprise.', 'Copy one and preview it in the place you will use it.'],
     notes: ['Altered characters can be harder to recognize at a glance.', 'Search and screen-reader behavior can differ from the original text.'],
     faq: [
-      { question: 'Is the weird output reversible?', answer: 'Keep your original phrase separately; the copied result is a character transformation rather than an editable style setting.' },
+      { question: 'Can I turn weird text back into normal text?', answer: 'Keep a copy of your original phrase, since some styled characters are not easy to convert back reliably.' },
       { question: 'Can punctuation look inconsistent?', answer: 'Yes. Many Unicode style sets focus on letters and leave punctuation unchanged.' }
     ]
   },
