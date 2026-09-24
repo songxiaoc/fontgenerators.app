@@ -37,7 +37,7 @@ export const platformPageDetails = {
         ]
       },
       {
-        heading: 'A practical bio drafting routine',
+        heading: 'Check how the styled text fits your Instagram bio',
         paragraphs: [
           `Start with one sentence that explains the account. Trim it to a short Instagram bio line, then enter that line here. Save one subtle result and one more expressive result, and paste both into separate drafts or notes. Look at them on the device you normally use. Check where the words wrap, whether punctuation sits in the right place, and whether the line still works next to the rest of your profile.`,
           `After choosing a version, read the whole bio aloud. The styled line should support a clear introduction, not substitute for one. Keep your original sentence in a note so a future edit does not require copying a transformed phrase and trying to reverse it. You can return to this generator whenever the account focus changes, type the new wording, and compare the same style family without guessing how a pasted character was made.`
@@ -129,7 +129,7 @@ export const platformPageDetails = {
         ]
       },
       {
-        heading: 'A short message workflow',
+        heading: 'Check the styled line in your Discord message',
         paragraphs: [
           `Write the whole Discord message in plain text first. Pull out one short Discord message line that could serve as a heading, then enter that line in this tool. Compare a restrained option with a playful one and copy both into separate drafts or a note. Check line breaks, the relationship between heading and body, and whether the message still makes sense if someone ignores the styled line. Keep the option that helps readers find the point faster.`,
           `Before sending, read the message on the device you normally use and verify any key facts. If you are posting to a group, a second reader can tell you whether the heading is recognizable without an explanation. Keep your original wording so you can edit future announcements easily. The generator is best treated as a quick way to test a small accent, not a requirement that every Discord message acquire a special alphabet.`
@@ -175,7 +175,7 @@ export const platformPageDetails = {
         ]
       },
       {
-        heading: 'A reliable way to try a chat accent',
+        heading: 'Try the styled text in a WhatsApp draft',
         paragraphs: [
           `Write the message normally, then select one short WhatsApp chat line to emphasize. Paste that phrase into the input and compare a bold option with a softer or more playful one. Copy the favorite into an unsent draft, and check the result next to the surrounding message. If the first line is harder to read than the rest, it is probably overstyled. Adjust the wording before trying another alphabet; shorter, concrete phrases often look better.`,
           `Finally, read the chat from the recipient's point of view. A greeting should feel personal, a group heading should be informative, and a status line should still make sense without a long explanation. Confirm that the text you need people to act on remains ordinary and easy to copy. Once the draft passes that check, you can use the styled line as a small accent and keep the rest of the conversation familiar.`
@@ -267,7 +267,7 @@ export const platformPageDetails = {
         ]
       },
       {
-        heading: 'A calm workflow for post titles',
+        heading: 'Try the title in your Facebook draft',
         paragraphs: [
           `Finish the ordinary post first and underline the phrase that names its topic. Enter only that phrase in the generator. Compare a clean option with one more expressive option, then paste each into an unsent Facebook draft. Read the first screen of the post: does the styled line help someone understand it, and does the body start promptly afterward? If the answer is unclear, edit the words before changing the style. A concise title is easier to fit than a decorative sentence.`,
           `Before posting, check the draft on a phone and keep a plain copy of the original wording. Make sure dates, places, prices, and calls to action remain ordinary text. If the heading looks different than expected, you can regenerate or remove it without rewriting the message. The Facebook Font Generator lets you test that title; the real measure is whether your audience can read and use the post.`
