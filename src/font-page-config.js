@@ -14,11 +14,11 @@ export const fontPages = [
     howToHeading: 'Make bold text you can paste', faqHeading: 'Bold text questions', relatedHeading: 'More ways to emphasize a phrase',
     intro: 'The bold text generator compares serif, sans, script, and blackletter shapes with your own words. Bold text for headings works best when the title is short enough to scan; choose a heavier look only if the letters remain clear.',
     useCases: ['A short profile headline', 'A label in a social post', 'A standout word in a message'],
-    howTo: ['Enter the words you want to emphasize.', 'Compare the bold previews for shape and readability.', 'Copy one result and paste it into your destination.'],
+    howTo: ['Enter the words you want to emphasize.', 'Compare the bold previews for shape and readability.', 'Copy one result and check the bold text after pasting.'],
     notes: ['These are Unicode characters, not a bold setting or downloadable font.', 'Some symbols, punctuation, and non-Latin characters may stay unchanged.'],
     faq: [
       { question: 'Is bold text the same as applying bold formatting?', answer: 'No. The output substitutes Unicode characters, so it can be pasted as text where those characters are accepted.' },
-      { question: 'Why do some letters look different after I paste?', answer: 'The destination app and device choose how to draw Unicode characters. Check the pasted result before publishing.' }
+      { question: 'Why do some letters look different after I paste?', answer: 'Bold text can look slightly different across apps and devices, so check the pasted result before publishing.' }
     ]
   },
   {
@@ -60,7 +60,7 @@ export const fontPages = [
     notes: ['Decorative symbols add characters and can use more space than plain text.', 'The style is made from Unicode substitutions, not a font file.'],
     faq: [
       { question: 'Can I remove the extra symbols?', answer: 'Choose a simpler preview such as Flower Crown or Swanky when you want decorated letters without a symbol around every character.' },
-      { question: 'Will the result look identical everywhere?', answer: 'Character shapes and spacing depend on the fonts available in the receiving app and device.' }
+      { question: 'Will the result look identical everywhere?', answer: 'Fancy text can look slightly different across apps and devices because available fonts vary.' }
     ]
   },
   {
@@ -81,7 +81,7 @@ export const fontPages = [
     notes: ['These characters do not turn on the italic button in a text editor.', 'Some alphabets and punctuation have no matching slanted form.'],
     faq: [
       { question: 'Does this preserve normal text for searching?', answer: 'The copied result uses different Unicode characters, so search and matching can behave differently from plain letters.' },
-      { question: 'Can I italicize a whole paragraph?', answer: 'You can enter longer text, but plain text or the destination editor italic control is usually easier to read and edit for paragraphs.' }
+      { question: 'Can I italicize a whole paragraph?', answer: "For long paragraphs, plain text with the app's built-in italic formatting is usually easier to read and edit." }
     ]
   },
   {

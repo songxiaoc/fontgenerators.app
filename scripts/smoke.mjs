@@ -1094,7 +1094,7 @@ for (const page of fontPages) {
   if (!built.includes('data-output') || !built.includes('/assets/') || !source.includes('/src/font-page.js')) throw new Error(`${name} must ship static results and its interaction module`);
   if (page.kind === 'platform' && (!source.includes('id="platform-preview"') || !source.includes(page.previewHint))) throw new Error(`${name} missing platform-specific preview and guidance`);
   if (name === 'zalgo-text-generator' && !source.includes('id="zalgo-intensity"')) throw new Error('Zalgo tool missing intensity control');
-  const sourceText = decodeBasicEntities(stripHtml(source)).replace(/\s+/g, ' ');
+  const sourceText = stripHtml(decodeBasicEntities(source)).replace(/\s+/g, ' ');
   for (const field of [page.lead, page.introHeading, page.intro, ...page.useCases, ...page.howTo, ...page.notes, ...page.faq.flatMap(item => [item.question, item.answer])]) {
     if (!sourceText.includes(field)) throw new Error(`${name} missing configured page-specific copy: ${field.slice(0, 48)}`);
   }

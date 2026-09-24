@@ -334,9 +334,9 @@ export const effectPageDetailsA = {
         bullets: ['Check spaces in multiword phrases.', 'Inspect dates and numbers carefully.', 'Remove sensitive old text rather than styling it.']
       },
       {
-        heading: 'Inspect the line in the receiving app',
+        heading: 'Check strikethrough text after pasting',
         paragraphs: [
-          'Paste a candidate into a draft and look closely at the line. The position of each mark depends on the font chosen by the destination. A slash may sit through the center of one letter but cover another almost completely. A horizontal line may appear uneven where letters have very different heights. Try more than one preview if the crossed-out word is hard to decipher, and check the result on a narrow screen when possible.',
+          'Paste a candidate into a draft and look closely at the line. The position of each mark depends on the font used by the app. A slash may sit through the center of one letter but cover another almost completely. A horizontal line may appear uneven where letters have very different heights. Try more than one preview if the crossed-out word is hard to decipher, and check the result on a narrow screen when possible.',
           'If the receiving editor offers a built-in strikethrough button, compare that result too. Editor formatting can be easier to maintain when you need to revise a long note later. The copyable Unicode version is useful when a field has no such control, but it can add extra characters that affect limits or search. Keep your source phrase so you can regenerate a clean result instead of repairing individual marks in a pasted line.'
         ],
         bullets: ['Check line position over letters and numbers.', 'Compare the destination formatting control when available.', 'Regenerate after a wording change.']
@@ -380,7 +380,7 @@ export const effectPageDetailsA = {
       {
         heading: 'Paste, then judge the real line',
         paragraphs: [
-          'A destination app chooses the font and line height, so the underline can move after you paste it. In one font it may sit neatly beneath the letters; in another it may look broken or too close to the next line. Paste into a draft and inspect the full sentence, not only the styled phrase. Check a narrow view for wrapping, since a break in the middle of an underlined phrase can make the emphasis feel accidental.',
+          'Underline text can look slightly different after pasting because each app controls its font and line height. In one font it may sit neatly beneath the letters; in another it may look broken or too close to the next line. Paste into a draft and inspect the full sentence, not only the styled phrase. Check a narrow view for wrapping, since a break in the middle of an underlined phrase can make the emphasis feel accidental.',
           'If the field offers its own underline formatting, compare that with the copied Unicode result. Built-in formatting may be easier to edit and may draw a more continuous line. The underline text generator lets you compare the phrase again after a wording change, since old marks will not move neatly with edits. The pasted version is useful when the receiving field has no such option, but it relies on its character support. If a mark appears as a separate symbol or an empty box, choose a simpler style or use plain text.'
         ],
         bullets: ['Inspect line height around the pasted result.', 'Check whether a line break splits the emphasis.', 'Use native formatting if it serves the destination better.']

@@ -218,7 +218,7 @@ export const effectPageDetailsB = {
         ]
       },
       {
-        heading: 'Check the destination before sharing',
+        heading: 'Check small text before sharing',
         paragraphs: [
           `Paste the chosen version into the field where it will actually appear and step back to a normal reading distance. Look for letters that disappear, ambiguous characters, or a word that seems to float too high beside ordinary text. A receiving app chooses its own font and may use substitute letter shapes for some symbols. If the destination is narrow, the label might wrap despite looking compact, because the copied output is still text with its own character widths. The only reliable test is the pasted result in that layout.`,
           `If a field rejects the output, try fewer words or a less decorative style. Keep the original spelling nearby rather than trying to reconstruct it from raised characters. Small-looking text can also be difficult for screen readers and search, since the replacement characters are not identical to the plain Latin letters they resemble. If the label carries a name, instruction, or fact people must find later, write that information in ordinary text as well. The effect should support the message, not hide it from readers using a different device or reading method.`
@@ -252,7 +252,7 @@ export const effectPageDetailsB = {
       {
         heading: 'Look closely at marks and letter shapes',
         paragraphs: [
-          `Several previews add small marks to letters rather than changing the whole word into an image. Those marks can sit above, below, or across a character, and the receiving font chooses their exact placement. A wide letter may hold them comfortably while a narrow one makes them look crowded. Other previews replace some letters with heavier or more unusual shapes before adding marks. This is why a phrase with your own spelling is a better test than the sample. Accented characters, numbers, and punctuation may not all receive the same treatment.`,
+          `Several previews add small marks to letters rather than changing the whole word into an image. In creepy text, those marks can sit above, below, or across a character, and their placement can vary across fonts and apps. A wide letter may hold them comfortably while a narrow one makes them look crowded. Other previews replace some letters with heavier or more unusual shapes before adding marks. This is why a phrase with your own spelling is a better test than the sample. Accented characters, numbers, and punctuation may not all receive the same treatment.`,
           `The output remains copyable text, but it can contain more characters than it appears to. Extra marks count as part of the copied sequence even if they look like one tangled letter. That may affect a field with a length limit or a line that already sits close to the next line. Spaces generally separate words without carrying the same marks, which can help a short title breathe. If the visual texture becomes uneven, shorten the phrase or compare a cleaner preview. A little irregularity can feel eerie; a missing or unreadable word simply loses the reader.`
         ]
       },
@@ -298,7 +298,7 @@ export const effectPageDetailsB = {
       {
         heading: 'Check line spacing after you paste',
         paragraphs: [
-          `The receiving app decides how high and low the marks can appear around a line. A result that has room in the generator can touch the text above it in a narrow chat bubble or a tightly spaced profile. Paste into a draft and inspect the actual layout, including the lines on either side. If the marks clip, lower the intensity or leave a plain line around the effect. Do not rely on the preview alone to judge a final post. Different fonts can position the same marks differently.`,
+          `Zalgo text can look different across apps because fonts position the added marks differently. A result that has room in the generator can touch the text above it in a narrow chat bubble or a tightly spaced profile. Paste into a draft and inspect the actual layout, including the lines on either side. If the marks clip, lower the intensity or leave a plain line around the effect. Do not rely on the preview alone to judge a final post. Different fonts can position the same marks differently.`,
           `Some fields may reject the copied sequence or remove parts of it. Start by checking whether a low-intensity version works. If not, use a simpler text effect or the original phrase. The clipboard can hold the output even when the destination cannot display it as expected. Check the pasted characters before sending, especially if the phrase is a name or an important instruction. A draft is also a chance to see whether the distortion changes the mood in the intended direction or merely makes the line tiring to read.`
         ]
       },
