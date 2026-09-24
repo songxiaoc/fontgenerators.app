@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "build": "node scripts/generate-font-pages.mjs && vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "check": "npm run build && node scripts/smoke.mjs"
+    "check": "npm run build && node scripts/smoke.mjs && npm run check:keywords",
+    "check:keywords": "node scripts/check-font-page-keywords.mjs"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "latest",

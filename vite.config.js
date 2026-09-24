@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { defineConfig } from 'vite';
+import { fontPages } from './src/font-page-config.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const plausibleScript = {
@@ -37,7 +38,8 @@ export default defineConfig({
         about: resolve(__dirname, 'about.html'),
         privacy: resolve(__dirname, 'privacy.html'),
         cookies: resolve(__dirname, 'cookies.html'),
-        termsOfService: resolve(__dirname, 'terms-of-service.html')
+        termsOfService: resolve(__dirname, 'terms-of-service.html'),
+        ...Object.fromEntries(fontPages.map(page => [page.slug, resolve(__dirname, `${page.slug}.html`)]))
       }
     }
   }

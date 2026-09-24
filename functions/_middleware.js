@@ -1,7 +1,10 @@
+import { fontPageSlugs } from './font-page-slugs.js';
+
 const APEX_HOST = 'fontgenerator.best';
 const WWW_HOST = 'www.fontgenerator.best';
 
 const CLEAN_PATHS = new Map([
+  ...fontPageSlugs.map(slug => [`/${slug}/`, `/${slug}`]),
   ['/ascii-art-generator/', '/ascii-art-generator'],
   ['/font-mixer/', '/font-mixer'],
   ['/username-generator/', '/username-generator'],
@@ -22,6 +25,7 @@ const CLEAN_PATHS = new Map([
 ]);
 
 const APPROVED_PAGE_PATHS = new Set([
+  ...fontPageSlugs.map(slug => `/${slug}`),
   '/',
   '/ascii-art-generator',
   '/font-mixer',

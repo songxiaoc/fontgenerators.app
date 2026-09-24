@@ -1,0 +1,26 @@
+// Generated from src/font-page-config.js by scripts/generate-font-pages.mjs.
+export const fontPageSlugs = [
+  "bold-text-generator",
+  "cursive-font-generator",
+  "fancy-text-generator",
+  "italic-text-generator",
+  "stylish-font-generator",
+  "cool-font-generator",
+  "cute-font-generator",
+  "strikethrough-text-generator",
+  "underline-text-generator",
+  "cursed-text-generator",
+  "big-text-generator",
+  "bubble-text-generator",
+  "glitch-text-generator",
+  "weird-text-generator",
+  "small-text-generator",
+  "creepy-text-generator",
+  "zalgo-text-generator",
+  "instagram-font-generator",
+  "tiktok-font-generator",
+  "discord-font-generator",
+  "whatsapp-font-generator",
+  "twitter-font-generator",
+  "facebook-font-generator"
+];

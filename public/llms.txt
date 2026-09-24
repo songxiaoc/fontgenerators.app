@@ -15,6 +15,35 @@
 - [Brat Green Color Code](https://fontgenerator.best/brat-green) - Copy #8ACE00 as HEX, RGB, HSL, approximate CMYK, or CSS; compare black/white text contrast; and open the color in Brat Generator.
 - [Discord Colored Text Generator](https://fontgenerator.best/discord-colored-text-generator) - Selected-span ANSI foreground/background colors, bold, underline, approximate preview, and copy-ready fenced `ansi` blocks.
 
+<!-- FONT PAGE LINKS START -->
+## Focused font generators
+- [Bold Text Generator](https://fontgenerator.best/bold-text-generator) - Try bold text for headings, names, or short callouts that need more weight.
+- [Cursive Font Generator](https://fontgenerator.best/cursive-font-generator) - Try cursive text for names or short lines that need a handwritten feel.
+- [Fancy Text Generator](https://fontgenerator.best/fancy-text-generator) - Explore fancy text for captions and short phrases that deserve a little decoration.
+- [Italic Text Generator](https://fontgenerator.best/italic-text-generator) - Try italic text for emphasis in a word or short line you can copy.
+- [Stylish Font Generator](https://fontgenerator.best/stylish-font-generator) - Build stylish text for labels, handle ideas, or short headlines with a crisp graphic look.
+- [Cool Font Generator](https://fontgenerator.best/cool-font-generator) - Try cool text for names or playful lines with circles, raised letters, and bold shapes.
+- [Cute Font Generator](https://fontgenerator.best/cute-font-generator) - Make cute text for notes and nicknames with hearts, rounded letters, and delicate details.
+- [Strikethrough Text Generator](https://fontgenerator.best/strikethrough-text-generator) - Make strikethrough text for corrections, revisions, or a playful second thought.
+- [Underline Text Generator](https://fontgenerator.best/underline-text-generator) - Use underline text for emphasis that travels with a copied word or short phrase.
+- [Cursed Text Generator](https://fontgenerator.best/cursed-text-generator) - Create cursed text for warnings or jokes with an uneasy, warped look.
+- [Big Text Generator](https://fontgenerator.best/big-text-generator) - Try big text for headlines that need wide letters, strong shapes, or frames.
+- [Bubble Text Generator](https://fontgenerator.best/bubble-text-generator) - Try bubble text for nicknames and short words in circles or soft enclosures.
+- [Glitch Text Generator](https://fontgenerator.best/glitch-text-generator) - Try glitch text for titles, reactions, or short lines with a broken-signal feel.
+- [Weird Text Generator](https://fontgenerator.best/weird-text-generator) - Try weird text for messages that need an unexpected, offbeat shape.
+- [Small Text Generator](https://fontgenerator.best/small-text-generator) - Try small text for labels, subtle tags, or compact lines.
+- [Creepy Text Generator](https://fontgenerator.best/creepy-text-generator) - Create creepy text for titles and short warnings with an uneasy, found-note feel.
+- [Zalgo Text Generator](https://fontgenerator.best/zalgo-text-generator) - Try Zalgo text for horror titles, from a slight wobble to a dense stack of marks.
+
+## Platform font tools
+- [Instagram Font Generator](https://fontgenerator.best/instagram-font-generator) - Try a short Instagram bio line with distinctive lettering before you paste it.
+- [TikTok Font Generator](https://fontgenerator.best/tiktok-font-generator) - Give a brief TikTok profile line a recognizable shape that stays easy to scan.
+- [Discord Font Generator](https://fontgenerator.best/discord-font-generator) - Try a short Discord message line with one styled phrase that stands apart.
+- [WhatsApp Font Generator](https://fontgenerator.best/whatsapp-font-generator) - Style a short WhatsApp chat line without changing the rest of your message.
+- [Twitter Font Generator](https://fontgenerator.best/twitter-font-generator) - Try a short Twitter post hook with a distinct shape before adding it to a draft.
+- [Facebook Font Generator](https://fontgenerator.best/facebook-font-generator) - Give a short Facebook post title a distinct shape without styling the whole post.
+<!-- FONT PAGE LINKS END -->
+
 ## Legal and policy pages
 
 - [About and Contact](https://fontgenerator.best/about) - Publisher identity, editorial/source policy, tool privacy boundaries, independence statement, and contact details.
@@ -41,7 +70,7 @@
 - Username ideas and auto-styled snippets may include decorative Unicode that some platforms can reject or render differently.
 - Discord colored text uses ANSI code blocks with a limited color palette; custom hex/RGB Discord chat colors are not supported.
 - Discord rendering can vary by client, version, platform, and device. The on-page preview is approximate.
-- Do not describe planned or intentionally withheld routes such as `/brat-font-generator`, `/brat-text-generator`, `/brat-color`, `/brat-color-code`, `/brat-video-generator`, `/brat-lyric-generator`, `/gothic-font-generator`, `/gothic-text-generator`, `/blackletter-font`, `/discord-font-generator`, `/fancy-text-generator`, `/discord-text-generator`, `/pricing`, or `/refund` as live tools unless they return real public pages.
+- Do not describe planned or intentionally withheld routes such as `/brat-font-generator`, `/brat-text-generator`, `/brat-color`, `/brat-color-code`, `/brat-video-generator`, `/brat-lyric-generator`, `/gothic-font-generator`, `/gothic-text-generator`, `/blackletter-font`, `/discord-text-generator`, `/pricing`, or `/refund` as live tools unless they return real public pages.
 
 ## Privacy boundary
 

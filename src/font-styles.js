@@ -219,6 +219,9 @@ const zalgo = (text, intensity = 4) => textChars(text).map((ch, index) => {
   const offset = (index + ch.charCodeAt(0)) % zalgoMarks.length;
   return ch + Array.from({ length: intensity }, (_, i) => zalgoMarks[(offset + i * 7) % zalgoMarks.length]).join('');
 }).join('');
+export function transformZalgoText(text, intensity = 4) {
+  return zalgo(text, Math.min(8, Math.max(1, Number(intensity) || 4)));
+}
 const flip = (text) => textChars(mapText(text, maps.flipped)).reverse().join('');
 
 export function transformStyle(style, text) {

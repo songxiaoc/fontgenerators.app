@@ -1,5 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /discord-font-generator/
-Disallow: /fancy-text-generator/
 Sitemap: https://fontgenerator.best/sitemap.xml

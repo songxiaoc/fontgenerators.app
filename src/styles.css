@@ -574,6 +574,54 @@ textarea:focus,
   border-radius: var(--radius);
 }
 
+.font-platform-preview,
+.font-intensity-control {
+  margin: 18px 0;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.font-platform-preview .style-output {
+  min-height: 0;
+  margin: 4px 0 10px;
+}
+.font-platform-preview .helper,
+.font-intensity-control .helper { margin: 0; }
+.font-intensity-control input[type="range"] {
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  accent-color: var(--primary);
+}
+#font-topics ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+#font-topics li { margin: 0; }
+#font-topics a {
+  display: block;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+#font-topics a:hover,
+#font-topics a:focus-visible { border-color: var(--primary); }
+@media (max-width: 700px) {
+  #font-topics ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  #font-topics ul { grid-template-columns: 1fr; }
+}
+
 .content-band,
 .cards-section {
   width: min(100%, var(--container));
