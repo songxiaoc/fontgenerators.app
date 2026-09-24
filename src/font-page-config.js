@@ -101,8 +101,8 @@ export const fontPages = [
     howTo: ['Enter a short label.', 'Compare the spacing and framing in each preview.', 'Copy a result that leaves enough room for your full message.'],
     notes: ['Framed styles can substantially increase character length.', 'Character shapes and spacing may look slightly different after you paste the result.'],
     faq: [
-      { question: 'Why does a stylish result take more space?', answer: 'Some variants add brackets or extra marks to each character, which makes the output longer than the original.' },
-      { question: 'Can I use these as a website font?', answer: 'The output is styled text you can paste. For a whole website, choose a font through its design settings.' }
+      { question: 'Why does a stylish result take more space?', answer: 'Some variants add brackets or extra marks to each character, which makes the copied text longer than the original.' },
+      { question: 'Can I use these as a website font?', answer: 'The result is styled text you can copy and paste. For a whole website, choose a font through its design settings.' }
     ]
   },
   {
@@ -243,13 +243,13 @@ export const fontPages = [
     introHeading: 'Pick a bubble shape',
     useCasesHeading: 'Names and words to enclose', notesHeading: 'Some characters stay plain',
     howToHeading: 'Enclose a short word', faqHeading: 'Bubble letter questions', relatedHeading: 'More rounded and framed text',
-    intro: 'The bubble text generator compares enclosed letters with decorative wrappers. Bubble text for nicknames works best with short Latin-letter words: Circle Back uses circled characters, while Double Bubble surrounds each character.',
+    intro: 'The bubble text generator compares enclosed letters with decorative frames. Bubble text for nicknames works best with short Latin-letter words: Circle Back uses circled characters, while Double Bubble surrounds each character.',
     useCases: ['A playful one-word label', 'A birthday message accent', 'A nickname with rounded letters'],
     howTo: ['Type a short word or phrase.', 'Compare enclosed letters with wrapped characters.', 'Copy the bubble treatment that reads best.'],
     notes: ['Some bubble alphabets have limited lowercase or punctuation coverage.', 'Bubble characters may look slightly different across apps and devices.'],
     faq: [
       { question: 'Why are some characters outside bubbles?', answer: 'Unicode does not provide a matching enclosed character for every symbol, so unsupported characters can remain plain.' },
-      { question: 'Is bubble text an image?', answer: 'No. The output is copyable text made with Unicode characters and symbols.' }
+      { question: 'Is bubble text an image?', answer: 'No. The Bubble Text Generator creates copyable text with Unicode characters and symbols.' }
     ]
   },
   {

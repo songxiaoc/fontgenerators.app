@@ -13,7 +13,7 @@ export const effectPageDetailsA = {
         heading: 'Write a heading that can stand alone',
         paragraphs: [
           'Begin with the words you actually need someone to notice: a date, a name, a short announcement, or a single call to action. Avoid turning an entire paragraph into bold characters. The contrast comes from placing a brief bold phrase beside ordinary text, such as a bold event name followed by plain details. This also makes it easier to revise the rest of a message later without rebuilding a long styled block.',
-          'For a profile line, compare the name on its own and then with a short descriptor. For a message, generate only the opening label, such as Schedule Update, and type the explanation normally after it. The bold text generator is useful here because every preview uses the same source words. You can see whether the meaning survives the change in shape before copying. If the title already contains many punctuation marks or emoji, a simpler bold option usually leaves less visual competition.'
+          'For a profile line, compare the name on its own and then with a short descriptor. For a message, generate only the opening label, such as Schedule Update, and type the explanation normally after it. The bold text generator is useful here because every preview uses the same words you typed. You can quickly see whether the phrase still reads clearly before copying it. If the title already contains many punctuation marks or emoji, a simpler bold option usually leaves less visual competition.'
         ],
         bullets: ['Keep the most important noun close to the start.', 'Put dates and instructions in plain text when clarity matters.', 'Copy only the phrase that needs emphasis.']
       },
@@ -28,7 +28,7 @@ export const effectPageDetailsA = {
       {
         heading: 'Paste once, then inspect the destination',
         paragraphs: [
-          'Copy the version that looks right in the preview, paste it into a draft, and pause before publishing. A destination app chooses its own font for Unicode characters, so its letter shapes and line height can differ from this page. Check whether the phrase wraps in a narrow column, whether the last character fits, and whether punctuation appears beside the expected word. If the field rejects the result, shorten the heading or try a simpler bold preview.',
+          'Copy the version that looks right in the preview, paste it into a draft, and pause before publishing. The app where you paste the text uses its own font, so the letter shapes and line height may look different from the preview here. Check whether the phrase wraps in a narrow column, whether the last character fits, and whether punctuation appears beside the expected word. If the field rejects the result, shorten the heading or try a simpler bold preview.',
           'Bold text for headings is especially sensitive to context. A line that looks balanced alone can become too loud next to an image, emoji, or another heading. Read the whole draft from the top as a new visitor would. If every line is competing for attention, reduce the styled area to one phrase. When a field offers its own bold formatting button, compare that option too; it may preserve ordinary letters for search and editing.'
         ],
         bullets: ['Check the complete line after pasting, not just the first word.', 'Look for unexpected wrapping on a narrow screen.', 'Use the destination formatting control when it better fits the task.']
@@ -37,7 +37,7 @@ export const effectPageDetailsA = {
         heading: 'Keep bold text readable for everyone',
         paragraphs: [
           'Styled Unicode characters can be announced differently by assistive reading tools and may not match ordinary letters in search. Use bold text as a brief visual accent rather than the only way to communicate essential instructions. If a date, address, or safety detail must be understood exactly, put it in plain text nearby. Readers who copy your message later will also have a cleaner version to reuse.',
-          'If a preview appears as empty boxes, inconsistent characters, or an unusually tall line after pasting, the receiving font may not support the chosen forms well. Return to the bold text generator and compare Classic or Modern with the same input. If those still fail, ordinary text with built-in formatting is a practical fallback. The goal is a visible cue that preserves the words, not a heavy effect at any cost.'
+          'If a preview appears as empty boxes, uneven characters, or an unusually tall line after pasting, try Classic or Modern with the same text. If those still look wrong, ordinary text with built-in bold formatting may work better.'
         ],
         bullets: ['Use plain text for details people may need to search.', 'Avoid styling long instructions or accessibility-critical information.', 'Prefer a simple result when the destination changes the letter shapes.']
       }
@@ -189,15 +189,15 @@ export const effectPageDetailsA = {
         heading: 'Use structure to separate a title from details',
         paragraphs: [
           'A graphic label can act like a signpost before a line of ordinary explanation. For a list of projects, style the project name and leave the description plain. For a playlist, use a framed two-word title and keep the song or mood notes readable. For a social profile, a compact label may work better than a full sentence in the same treatment. The styling has a job: show where one piece of information starts.',
-          'The stylish font generator previews the same words in several structures. Compare a label in title case and all capitals. Capitals can make a short label feel more like a badge, but in a frame they may also look dense. Avoid adding extra punctuation until you have seen the letters alone. Brackets, marks, and punctuation can compete for the same visual space, especially when the receiving field is narrow.'
+          'The stylish font generator previews the same words in several structures. Compare a label in title case and all capitals. Capitals can make a short label feel more like a badge, but in a frame they may also look dense. Avoid adding extra punctuation until you have seen the letters alone. Brackets, marks, and punctuation can compete for the same visual space, especially in a narrow text field.'
         ],
         bullets: ['Give the styled line one clear labeling purpose.', 'Compare title case with capitals before choosing.', 'Keep descriptive details outside heavy frames.']
       },
       {
         heading: 'Count the characters added by frames',
         paragraphs: [
-          'A source phrase can become much longer after transformation. Kodak and Palmistry add characters around each source character, so the pasted result may exceed a field limit or wrap sooner than expected. Dicey uses a word-level frame and may be less crowded for multiword labels. Check a realistic sample with spaces, numbers, and punctuation because these can also receive wrappers. The generated output is what the destination counts, not the short phrase you typed.',
-          'Stylish text for labels is easiest to manage when the label has a clear length budget. If a five-word idea becomes too wide, shorten the wording before choosing a different style. Removing a decorative bracket from a pasted output can break its visual pattern, so revise the source and copy a new result. Keep the plain wording in your draft for fast changes or for a place where the same title should remain searchable.'
+          'Your original phrase can become much longer after styling. Kodak and Palmistry add characters around each letter, so the pasted result may exceed a text limit or wrap sooner than expected. Dicey uses a word-level frame and may be less crowded for multiword labels. Check a realistic sample with spaces, numbers, and punctuation because these can also receive decorative frames. The app counts the full pasted text toward its limit, not just the shorter phrase you typed.',
+          'Stylish text for labels is easiest to manage when the label has a clear length budget. If a five-word idea becomes too wide, shorten the wording before choosing a different style. Removing a decorative bracket after pasting can break the pattern, so edit your original text and copy a fresh result instead. Keep the plain wording in your draft for fast changes or for a place where the same title should remain searchable.'
         ],
         bullets: ['Inspect the actual copied length in a draft field.', 'Shorten the source phrase before editing individual wrappers.', 'Keep a plain version for later reuse.']
       },
@@ -205,7 +205,7 @@ export const effectPageDetailsA = {
         heading: 'Inspect alignment after pasting',
         paragraphs: [
           'The regular spacing of a preview can change after paste. A different font may draw brackets wider, position marks lower, or make a framed space look like an empty box. A stylish font look that depends on precise alignment may change more than an unframed line. Paste the label into the final context and view it beside the surrounding words. If the line feels lopsided, compare Silicon or another unframed choice. Test on a narrow screen as well as a wider one when the label may appear in a compact layout.',
-          'The stylish font generator helps you compare options, but the receiving app decides the final appearance. Do not rely on a particular number of characters fitting just because the preview stays on one line here. If the destination rejects a character, try a simpler treatment with fewer added marks. A label that stays intact through copying, pasting, and later editing is usually more useful than the most elaborate pattern.'
+          'The stylish font generator helps you compare options, but the app where you paste the text determines how it finally looks. Do not rely on a particular number of characters fitting just because the preview stays on one line here. If the app rejects a character, try a simpler treatment with fewer added marks. A label that stays intact through copying, pasting, and later editing is usually more useful than the most elaborate pattern.'
         ],
         bullets: ['Check bracket spacing and marked letters in the destination.', 'Look for line breaks in narrow fields.', 'Choose a simpler style if the pattern breaks.']
       },
@@ -241,14 +241,14 @@ export const effectPageDetailsA = {
         heading: 'Notice which characters do not change',
         paragraphs: [
           'Enclosed alphabets and raised letters do not have matching forms for every character. Punctuation, symbols, or letters from another writing system may remain ordinary. Enter the full phrase, including spaces and digits, before judging a result. Circle Back can change common Latin letters and some digits, while another style may emphasize only the letters. A mixed line can look intentional, but it should be a choice you see rather than a surprise after paste.',
-          'Vogue and Starry Night add visible characters around the source, so the copied version can take more room than the input. Up Top may look shorter vertically but does not make the destination line physically smaller. Use the cool font previews as a guide to character shape, then check the actual length and spacing where you paste the result. Shortening a phrase often solves a layout problem faster than switching repeatedly among decorative styles.'
+          'Vogue and Starry Night add visible characters around your original text, so the copied version can take up more space. Up Top may look smaller, but it does not actually reduce the text size in the app where you paste it. Use the cool font previews as a guide to character shape, then check the actual length and spacing where you paste the result. Shortening a phrase often solves a layout problem faster than switching repeatedly among decorative styles.'
         ],
         bullets: ['Include your real digits and punctuation in the input.', 'Check whether a style wraps spaces as well as letters.', 'Shorten the source when added symbols crowd a field.']
       },
       {
         heading: 'Test the result where it will be seen',
         paragraphs: [
-          'Copy a candidate into a draft and read it at the size of the final display. A receiving app may draw enclosed characters with a different weight, place raised letters lower, or let marks overlap nearby text. Check the end of the phrase as carefully as the beginning. If the result is clipped or rejected, try a simpler version such as Circle Back or Up Top with a shorter input. Do not assume the preview and the destination use identical fonts.',
+          'Copy a candidate into a draft and read it at the size of the final display. The app where you paste the text may display enclosed characters with a different weight, place raised letters lower, or let marks overlap nearby text. Check the end of the phrase as carefully as the beginning. If the result is clipped or rejected, try a simpler version such as Circle Back or Up Top with a shorter input. Do not assume the preview will look exactly the same after pasting.',
           'Ask whether the decoration helps someone remember the phrase or merely slows them down. A playful name can withstand a little surprise; an instruction should be immediately understood. If you need to change a word later, return to the original input and copy a fresh result instead of editing symbols inside the pasted text. This keeps the pattern consistent and avoids leaving half-styled characters behind.'
         ],
         bullets: ['Inspect the first and last character after paste.', 'Check narrow layouts for clipping and wrapping.', 'Regenerate from plain words after a wording change.']
