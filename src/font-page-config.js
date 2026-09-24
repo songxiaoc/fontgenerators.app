@@ -225,9 +225,9 @@ export const fontPages = [
     intro: 'The big text generator uses wide letters and surrounding symbols to make short text look more prominent. It does not change the actual font size in the app where you paste it, so big text works best for short headlines, labels, and reactions.',
     useCases: ['A short announcement word', 'A dramatic chat reaction', 'A compact banner label'],
     howTo: ['Enter a brief headline.', 'Compare which preview reads at a glance.', 'Copy and check for wrapping where you paste it.'],
-    notes: ['This does not increase the destination app font size.', 'Frames and wide forms can exceed field length limits sooner.'],
+    notes: ['This changes the look of the text, not its actual font size.', 'Frames and wide forms can exceed field length limits sooner.'],
     faq: [
-      { question: 'Will big text be physically larger?', answer: 'The result uses characters that look wider or heavier, but the destination controls actual font size.' },
+      { question: 'Will big text be physically larger?', answer: 'The result uses characters that look wider or heavier, but the app where you paste them still controls the font size.' },
       { question: 'Why does a long sentence wrap quickly?', answer: 'Some results add surrounding characters or wider letter shapes, increasing the space needed.' }
     ]
   },
@@ -246,7 +246,7 @@ export const fontPages = [
     intro: 'The bubble text generator compares enclosed letters with decorative wrappers. Bubble text for nicknames works best with short Latin-letter words: Circle Back uses circled characters, while Double Bubble surrounds each character.',
     useCases: ['A playful one-word label', 'A birthday message accent', 'A nickname with rounded letters'],
     howTo: ['Type a short word or phrase.', 'Compare enclosed letters with wrapped characters.', 'Copy the bubble treatment that reads best.'],
-    notes: ['Some bubble alphabets have limited lowercase or punctuation coverage.', 'Enclosed character shapes depend on the receiving font.'],
+    notes: ['Some bubble alphabets have limited lowercase or punctuation coverage.', 'Bubble characters may look slightly different across apps and devices.'],
     faq: [
       { question: 'Why are some characters outside bubbles?', answer: 'Unicode does not provide a matching enclosed character for every symbol, so unsupported characters can remain plain.' },
       { question: 'Is bubble text an image?', answer: 'No. The output is copyable text made with Unicode characters and symbols.' }
@@ -306,13 +306,13 @@ export const fontPages = [
     introHeading: 'Compact shapes, normal text size',
     useCasesHeading: 'Compact details to try', notesHeading: 'Small-looking text can be hard to read',
     howToHeading: 'Make compact-looking text', faqHeading: 'Small-looking text questions', relatedHeading: 'Other compact text ideas',
-    intro: 'The small text generator uses raised forms and small-cap characters to create a compact impression. Small text for labels is easier to read than a whole tiny-looking paragraph; the receiving app still decides the actual font size.',
+    intro: 'The small text generator uses raised forms and small-cap characters to create a compact impression. Small text for labels is easier to read than a whole tiny-looking paragraph; the app where you paste it still controls the actual font size.',
     useCases: ['A subtle profile detail', 'A small-looking side note', 'A compact nickname'],
     howTo: ['Enter a short label.', 'Compare raised and small-cap looks.', 'Copy a result that stays readable on a phone.'],
     notes: ['This tool cannot reduce the font-size setting of another app.', 'Very small-looking characters can be hard to read, especially on mobile.'],
     faq: [
       { question: 'Why are some letters not equally small?', answer: 'Unicode offers an uneven collection of raised and small-cap forms, so some letters have approximate substitutes.' },
-      { question: 'Will a paste make the line height smaller?', answer: 'Usually not. Line height is controlled by the destination, even when characters look compact.' }
+      { question: 'Will a paste make the line height smaller?', answer: 'Usually not. The characters may look smaller, but the app still controls the line height.' }
     ]
   },
   {
@@ -376,7 +376,7 @@ export const fontPages = [
     howTo: ['Write the short line you want to try.', 'Compare readable and decorative previews.', 'Copy one and inspect it in an Instagram draft.'],
     notes: ['Instagram can restrict characters or field length in some places.', 'Styled characters may look slightly different on another device.'],
     faq: [
-      { question: 'Will these styles work in every Instagram field?', answer: 'Fields can have different character rules. Paste a sample into the exact field you intend to use and check it there.' },
+      { question: 'Will these styles work in every Instagram field?', answer: 'Not every Instagram field handles styled characters the same way. Try the result in your bio, display name, or caption before publishing.' },
       { question: 'Is this connected to Instagram?', answer: 'No. This independent tool creates copyable Unicode text for you to try in your own draft.' }
     ]
   },
@@ -423,7 +423,7 @@ export const fontPages = [
     notes: ['These characters are separate from Discord built-in text formatting.', 'Some app themes or system fonts may draw letters differently.'],
     faq: [
       { question: 'Is this the same as Discord message formatting?', answer: 'No. Discord can format supported messages; this tool copies alternate Unicode characters.' },
-      { question: 'Can I use it in a server name?', answer: 'Text fields can have their own rules and limits. Test the result in the exact field before relying on it.' }
+      { question: 'Can I use it in a server name?', answer: 'Server names and profile fields can have different limits, so check the pasted result before relying on it.' }
     ]
   },
   {
@@ -436,7 +436,7 @@ export const fontPages = [
     resultsHeading: 'WhatsApp message looks',
     styleIds: ['classic', 'flower-crown', 'underhill', 'heart-king', 'aesthetic'],
     previewLabel: 'Chat line preview',
-    previewHint: 'Try the copied line in a chat draft and check the recipient-facing look.',
+    previewHint: 'Try the copied line in a chat draft and check how it looks on your phone.',
     introHeading: 'Make one line memorable',
     useCasesHeading: 'Chats and status lines to style', notesHeading: 'Check the recipient view',
     howToHeading: 'Try a greeting in chat', faqHeading: 'WhatsApp chat text questions', relatedHeading: 'Other copyable chat accents',
@@ -468,7 +468,7 @@ export const fontPages = [
     howTo: ['Enter the brief text you want to emphasize.', 'Compare compact and decorative options.', 'Copy one and review it in a post draft.'],
     notes: ['Some styles add extra marks or frames, changing the character count.', 'Search and screen-reader interpretation may differ from plain letters.'],
     faq: [
-      { question: 'Will the styled text use the same number of characters?', answer: 'Not always. Some variants add extra marks or wrappers, so check the counter in the destination draft.' },
+      { question: 'Will the styled text use the same number of characters?', answer: 'Not always. Some variants add extra marks or wrappers, so check the character counter after pasting.' },
       { question: 'Is this an official Twitter tool?', answer: 'No. The Twitter Font Generator is an independent tool for making copyable Unicode text.' }
     ]
   },
