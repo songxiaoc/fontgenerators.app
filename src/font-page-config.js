@@ -207,7 +207,7 @@ export const fontPages = [
     notes: ['Combining marks can overlap nearby lines.', 'Screen readers may not announce stylized characters as expected.'],
     faq: [
       { question: 'Is cursed text a font file?', answer: 'No. The effect comes from altered Unicode letters and extra marks.' },
-      { question: 'Why does the text look different after paste?', answer: 'Rendering of marks depends on the receiving app, its font, and line spacing.' }
+      { question: 'Why does the text look different after paste?', answer: 'The marks may look slightly different after you paste the text because apps can use different fonts and line spacing.' }
     ]
   },
   {
@@ -288,7 +288,7 @@ export const fontPages = [
     intro: 'The weird text generator ranges from raised letters to framed words and unusual shapes. Weird text for messages is clearest when only the punch line is altered; a treatment that works on one word can confuse a full sentence.',
     useCases: ['An inside-joke message', 'An eccentric profile line', 'A surreal title idea'],
     howTo: ['Type the odd phrase you have in mind.', 'Compare the variants for readability and surprise.', 'Copy one and preview it in the place you will use it.'],
-    notes: ['Altered characters can be harder to recognize at a glance.', 'Search and screen-reader behavior can differ from the plain source text.'],
+    notes: ['Altered characters can be harder to recognize at a glance.', 'Search and screen-reader behavior can differ from the original text.'],
     faq: [
       { question: 'Is the weird output reversible?', answer: 'Keep your original phrase separately; the copied result is a character transformation rather than an editable style setting.' },
       { question: 'Can punctuation look inconsistent?', answer: 'Yes. Many Unicode style sets focus on letters and leave punctuation unchanged.' }
